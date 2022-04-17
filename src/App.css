@@ -1,38 +1,73 @@
 .App {
-  text-align: center;
+    height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.canvas-panel {
+    width: calc(100% - 250px);
+    height: 100%;
+    position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.control-panel {
+    background-color: #edeff2;
+    padding: 20px 10px 20px 20px;
+    border-radius: 6px;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow: auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.control-panel-group {
+    margin-bottom: 15px;
 }
 
-.App-link {
-  color: #61dafb;
+.position-control {
+    margin: 10px 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.position-control-select {
+    width: 130px;
+}
+
+.position-control-group {
+    margin-bottom: 30px;
+}
+
+.control-panel-group-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-panel-action-group:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.control-panel-action-group {
+}
+
+.control-panel-group-title-enabled {
+    margin-bottom: 0;
+}
+
+.control-panel-horizontal-layout {
+    display: flex;
+    justify-content: space-between;
+}
+
+.control-panel-horizontal-layout-item {
+    margin: 0 10px;
+}
+
+.control-panel-horizontal-layout-item:first-child {
+    margin-left: 0;
+}
+
+.control-panel-horizontal-layout-item:last-child {
+    margin-right: 0;
 }
