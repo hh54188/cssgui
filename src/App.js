@@ -17,43 +17,61 @@ import {
 } from '@blueprintjs/core'
 import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
 
+let idSeed = 1;
+
 function App() {
-  const target = useRef();
+  const canvasRef = useRef();
 
-  const [widthState, setWidthState] = useState(200)
-  const [heightState, setHeightState] = useState(200)
+  const [elementStateCollection, setElementStateCollection] = useState({})
+  const [target, setTarget] = useState(null)
+  const [targetId, setTargetId] = useState(null)
 
-  const [positionHorizontalValueState, setPositionHorizontalValue] = useState("Left")
-  const [positionVerticalValueState, setPositionVerticalValue] = useState("Top")
+  function addNewElement2() {
+    const id = idSeed++;
+    const newElementState = {
+      width: 200,
+      height: 200,
+      top: 100,
+      bottom: 0,
+      left: 100,
+      right: 0,
+      boxShadow: [{
+        enableInset: false,
+        offsetX: 5,
+        offsetY: 5,
+        blurRadius: 20,
+        spreadRadius: 0,
+        color: 'grey',
+        collapsePanel: false,
+        enabled: true
+      }]
+    }
+    setElementStateCollection({
+      ...elementStateCollection,
+      [id]: newElementState
+    })
+    console.log(elementStateCollection)
+  }
 
-  const [topState, setTopState] = useState(100)
-  const [bottomState, setBottomState] = useState(0)
-  const [leftState, setLeftState] = useState(100)
-  const [rightState, setRightState] = useState(0)
-
-  const [boxShadowState, setBoxShadowState] = useState([])
-
-
-  function recreateStyleString() {
-
+  function createBoxShadowString(boxShadowState) {
+    const enabledBoxShadowState = boxShadowState.filter(item => item.enabled);
     let boxShadowStr = ''
-    if (boxShadowState.length) {
-      boxShadowState.forEach(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color }, index) => {
-        boxShadowStr += `${enableInset ? 'inset' : ''} ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${color} ${index !== boxShadowState.length - 1 ? ',' : ''}`;
+    if (enabledBoxShadowState.length) {
+      enabledBoxShadowState.forEach(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color }, index) => {
+        boxShadowStr += `${enableInset ? 'inset' : ''} ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${color} ${index !== enabledBoxShadowState.length - 1 ? ',' : ''}`;
       })
     } else {
       boxShadowStr = 'none'
     }
+    return boxShadowStr
+  }
 
-    console.log(boxShadowStr)
-    target.current.style = `
-      width:${widthState}px;
-      height:${heightState}px;
-      border:1px solid lightgrey;
-      position:absolute;
-      top:${topState}px;
-      left:${leftState}px;
-      box-shadow: ${boxShadowStr};`
+  const [positionHorizontalValueState, setPositionHorizontalValue] = useState("Left")
+  const [positionVerticalValueState, setPositionVerticalValue] = useState("Top")
+  const [boxShadowState, setBoxShadowState] = useState([])
+
+
+  function recreateStyleString() {
   }
 
   function addShadow() {
@@ -69,53 +87,56 @@ function App() {
     }])
   }
 
+  function removeShadow(index) {
+    boxShadowState.splice(index, 1);
+    setBoxShadowState([...boxShadowState])
+  }
+
   function updateShadowProperty(index, name, value) {
     boxShadowState[index][name] = value;
     setBoxShadowState([...boxShadowState])
   }
 
-
-  useEffect(() => {
-    recreateStyleString();
-  }, [])
-
-  useEffect(() => {
-    recreateStyleString();
-  }, [
-    widthState, heightState,
-    topState, bottomState,
-    leftState, rightState,
-    boxShadowState
-  ])
-
-  function onSelected(event) {
-    const computedStyle = getComputedStyle(event.target);
-    console.log(computedStyle)
-
-    const width = parseInt(computedStyle['width'])
-    const height = parseInt(computedStyle['height'])
-
-    const top = parseInt(computedStyle['top'])
-    const bottom = parseInt(computedStyle['bottom'])
-    const left = parseInt(computedStyle['left'])
-    const right = parseInt(computedStyle['right'])
-
-    setWidthState(width)
-    setHeightState(height)
-
-    setTopState(top)
-    setBottomState(bottom)
-    setLeftState(left)
-    setRightState(right)
+  function getTargetProperty(name) {
+    if (!targetId) {
+      return 0;
+    }
+    return elementStateCollection[targetId][name];
   }
+
+  function updateTargetProperty(name, value) {
+    setElementStateCollection({
+      ...elementStateCollection,
+      [targetId]: {
+        ...elementStateCollection[targetId],
+        [name]: value
+      }
+    })
+    console.log(elementStateCollection)
+  }
+
+
+  useEffect(() => {
+    recreateStyleString();
+  }, [elementStateCollection])
+
   return (
     <div className="App">
-      <div className="canvas-panel">
-        <div className="box" ref={target} onClick={onSelected}></div>
-      </div>
+      <div className="canvas-panel" ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
+        const elementState = elementStateCollection[id];
+        return <div onClick={() => setTargetId(id)} key={id} style={{
+          width: elementState.width,
+          height: elementState.height,
+          top: elementState.top,
+          left: elementState.left,
+          position: 'absolute',
+          border: '1px solid gray',
+          boxShadow: createBoxShadowString(elementState.boxShadow)
+        }}></div>
+      })}</div>
       <div className="control-panel">
         <div className="control-panel-content">
-
+          <Button fill intent={Intent.PRIMARY} onClick={addNewElement2} icon="plus" className='add-new-element-btn'>Add Element</Button>
           <div className="control-panel-group"> <strong>SIZE</strong>
             <Divider></Divider>
             <div className="control-panel-horizontal-layout">
@@ -124,7 +145,7 @@ function App() {
                   label="Width"
                   labelFor="width-input"
                 >
-                  <NumericInput onValueChange={value => setWidthState(value)} fill={true} stepSize={1} buttonPosition="right" min={0} value={widthState} id="width-input" />
+                  <NumericInput onValueChange={value => updateTargetProperty('width', value)} fill={true} stepSize={1} buttonPosition="right" min={0} value={getTargetProperty('width')} id="width-input" />
                 </FormGroup>
               </div>
               <div className="control-panel-horizontal-layout-item">
@@ -132,7 +153,7 @@ function App() {
                   label="Height"
                   labelFor="height-input"
                 >
-                  <NumericInput onValueChange={value => setHeightState(value)} fill={true} stepSize={1} buttonPosition="right" min={0} value={heightState} id="height-input" />
+                  <NumericInput onValueChange={value => updateTargetProperty('height', value)} fill={true} stepSize={1} buttonPosition="right" min={0} value={getTargetProperty('height')} id="height-input" />
                 </FormGroup>
               </div>
             </div>
@@ -143,11 +164,11 @@ function App() {
             <Divider></Divider>
             <ControlGroup className='position-control' fill={true} vertical={false}>
               <HTMLSelect disabled className='position-control-select' onChange={event => setPositionHorizontalValue(event.currentTarget.value)} value={positionHorizontalValueState} options={['Right', 'Left']} />
-              <NumericInput fill={true} stepSize={1} buttonPosition="right" min={0} onValueChange={value => positionHorizontalValueState === "Right" ? setRightState(value) : setLeftState(value)} value={positionHorizontalValueState == "Right" ? rightState : leftState} id="position-horizaontal-value-input" />
+              <NumericInput fill={true} stepSize={1} buttonPosition="right" min={0} onValueChange={value => positionHorizontalValueState === "Right" ? updateTargetProperty('right', value) : updateTargetProperty('left', value)} value={positionHorizontalValueState == "Right" ? getTargetProperty('right') : getTargetProperty('left')} id="position-horizaontal-value-input" />
             </ControlGroup>
             <ControlGroup className='position-control' fill={true} vertical={false}>
               <HTMLSelect disabled className='position-control-select' onChange={event => setPositionVerticalValue(event.currentTarget.value)} value={positionVerticalValueState} options={['Top', 'Bottom']} />
-              <NumericInput fill={true} stepSize={1} buttonPosition="right" min={0} onValueChange={value => positionVerticalValueState === "Top" ? setTopState(value) : setBottomState(value)} value={positionVerticalValueState === "Top" ? topState : bottomState} id="position-vertical-value-input" />
+              <NumericInput fill={true} stepSize={1} buttonPosition="right" min={0} onValueChange={value => positionVerticalValueState === "Top" ? updateTargetProperty('top', value) : updateTargetProperty('bottom', value)} value={positionVerticalValueState === "Top" ? getTargetProperty('top') : getTargetProperty('bottom')} id="position-vertical-value-input" />
             </ControlGroup>
           </div>
 
@@ -171,7 +192,7 @@ function App() {
               </div>
             </div>
             <Divider></Divider>
-            {boxShadowState.map(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color, collapsePanel, enabled }, index) => {
+            {/* {boxShadowState.map(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color, collapsePanel, enabled }, index) => {
               return (
                 <div key={index}>
                   {!collapsePanel && <div>
@@ -231,17 +252,21 @@ function App() {
                     </div>
                   </div>}
                   <div className="control-panel-action-group">
-                    <Button style={{ float: 'left' }} icon="eye-off" minimal></Button>
+                    {enabled
+                      ? <Button style={{ float: 'left' }} icon="eye-off" minimal onClick={() => updateShadowProperty(index, 'enabled', false)}></Button>
+                      : <Button style={{ float: 'left' }} icon="eye-on" minimal onClick={() => updateShadowProperty(index, 'enabled', true)}></Button>
+                    }
+
                     <Button style={{ float: 'left' }} icon="duplicate" minimal></Button>
                     {collapsePanel
                       ? <Button style={{ float: 'left' }} icon="expand-all" minimal onClick={() => updateShadowProperty(index, 'collapsePanel', false)}></Button>
                       : <Button style={{ float: 'left' }} icon="collapse-all" minimal onClick={() => updateShadowProperty(index, 'collapsePanel', true)}></Button>}
-                    <Button style={{ float: 'right' }} icon="trash" minimal intent='danger'></Button>
+                    <Button style={{ float: 'right' }} icon="trash" minimal intent='danger' onClick={() => removeShadow(index)}></Button>
                   </div>
                   <Divider />
                 </div>
               )
-            })}
+            })} */}
           </div>
         </div>
       </div>
