@@ -1,8 +1,11 @@
 ## TODO
 
-- Delete Shadow 
-- Invisible Shadow 
-- Duplicate Shadow 
+- Input / Numberic Validation
+- ZINDEX
+- `Ctrl+C/Ctrl+V`
+- ~~Delete Shadow~~
+- ~~Invisible Shadow~~ 
+- ~~Duplicate Shadow~~ 
 
 # Getting Started with Create React App
 
