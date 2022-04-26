@@ -9,11 +9,13 @@ import {
   Checkbox,
   Icon,
   Button,
+  ButtonGroup,
   ControlGroup,
   HTMLSelect,
   Menu,
   MenuItem,
   Classes, Position, Intent,
+  Dialog,
   Tab, Tabs
 } from '@blueprintjs/core'
 import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
@@ -417,6 +419,20 @@ function App() {
 
   return (
     <div className="App">
+      <Dialog className='add-multiple-dialog' isOpen={true}>
+        <div className="add-multiple-dialog-content">
+          <FormGroup label="Element Count">
+            <NumericInput />
+          </FormGroup>
+          <FormGroup label="Apply current element style to all elements">
+            <Switch />
+          </FormGroup>
+        </div>
+        <div className="add-multiple-dialog-actions">
+          <Button className='add-multiple-dialog-actions-btn'>Cancel</Button>
+          <Button className='add-multiple-dialog-actions-btn' intent='primary' >Confirm</Button>
+        </div>
+      </Dialog>
       <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
         const elementState = elementStateCollection[id];
         const border = elementState.border;
@@ -435,7 +451,7 @@ function App() {
             borderBottom: !elementState.borderEnabled ? 'none' : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`,
             borderLeft: !elementState.borderEnabled ? 'none' : `${border.left.width}px ${border.left.style} ${border.left.color}`,
             borderRight: !elementState.borderEnabled ? 'none' : `${border.right.width}px ${border.right.style} ${border.right.color}`,
-            boxShadow:  createBoxShadowString(elementState.boxShadow)
+            boxShadow: createBoxShadowString(elementState.boxShadow)
           }}></div>
       })}</div>
       <div className="control-panel">
@@ -445,7 +461,14 @@ function App() {
           <Tabs.Expander />
         </Tabs> */}
         <div className="control-panel-content">
-          <Button fill intent={Intent.PRIMARY} onClick={addNewElement} icon="plus" className='add-new-element-btn'>Add Element</Button>
+          <div className="control-panel-actions">
+            <ButtonGroup fill>
+              <Button icon="plus">Add Single</Button>
+              <Button icon="new-object">Add Multiple</Button>
+            </ButtonGroup>
+            {/* <Button fill intent={Intent.PRIMARY} onClick={addNewElement} icon="plus" className='add-new-element-btn'>Add Element</Button>
+            <Button fill intent={Intent.PRIMARY} onClick={addNewElement} icon="plus" className='add-new-element-btn'>Add Element</Button> */}
+          </div>
           <SizePanel
             widthValue={getTargetProperty('width')}
             heightValue={getTargetProperty('height')}

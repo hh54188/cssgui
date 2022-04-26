@@ -28,6 +28,10 @@
     margin-bottom: 15px;
 }
 
+.control-panel-actions {
+    margin-bottom: 20px;
+}
+
 .control-panel-group-title-collapse-icon {
     margin-right: 5px;
     cursor: pointer;
@@ -157,4 +161,22 @@
     height: 70%;
     margin: 0 auto;
     margin-top: 4px;
+}
+
+.add-multiple-dialog {
+    background: #edeff2;
+}
+
+.add-multiple-dialog-content {
+    margin: 20px;
+}
+
+.add-multiple-dialog-actions {
+    margin: 0 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-multiple-dialog-actions-btn {
+    margin-left: 10px;
 }
