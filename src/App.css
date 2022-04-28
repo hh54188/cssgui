@@ -62,7 +62,7 @@
 .position-map {
     border: 2px dashed gray;
     width: 100%;
-    height: 110px;
+    height: 90px;
     position: relative;
 }
 
@@ -78,7 +78,7 @@
 }
 
 .position-map-center-row {
-    top: 39px;
+    top: 28px;
 }
 
 .position-map-bottom-row {

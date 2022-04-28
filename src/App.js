@@ -41,14 +41,17 @@ function App() {
   const [positionHorizontalValueState, setPositionHorizontalValue] = useState("Left")
   const [positionVerticalValueState, setPositionVerticalValue] = useState("Top")
 
-  function addNewElement() {
+  const [multipleElementsCount, setMultipleElementsCount] = useState(1000)
+  const [openAddMultipleElementsDialog, toggleAddMultipleElementsDialog] = useState(false)
+
+  function addNewElement({ left = 100, top = 100 }) {
     const id = idSeed++;
     const newElementState = {
       width: 200,
       height: 200,
-      top: 100,
+      top,
       bottom: 0,
-      left: 100,
+      left,
       right: 0,
       backgroundColor: '#FFFFFF',
 
@@ -417,20 +420,85 @@ function App() {
     })
   }
 
+  function generateElements(count) {
+    const originElementState = elementStateCollection[targetId];
+    const canvasPanel = document.querySelector('.canvas-panel');
+    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
+    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
+    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
+
+    const newElementCollection = {}
+
+    for (let i = 0; i < count; i++) {
+      const left = Math.floor(Math.random() * canvasPanelWidth);
+      const top = Math.floor(Math.random() * canvasPanelHeight);
+      newElementCollection[idSeed++] = {
+        width: 200,
+        height: 200,
+        top,
+        bottom: 0,
+        left,
+        right: 0,
+        backgroundColor: '#FFFFFF',
+
+        borderEnabled: true,
+        borderAllInOne: true,
+        border: {
+          top: {
+            width: 1,
+            style: 'solid',
+            color: 'gray'
+          },
+          bottom: {
+            width: 1,
+            style: 'solid',
+            color: 'gray'
+          },
+          left: {
+            width: 1,
+            style: 'solid',
+            color: 'gray'
+          },
+          right: {
+            width: 1,
+            style: 'solid',
+            color: 'gray'
+          },
+        },
+
+        boxShadow: [{
+          enableInset: false,
+          offsetX: 5,
+          offsetY: 5,
+          blurRadius: 20,
+          spreadRadius: 0,
+          color: 'grey',
+          collapsePanel: false,
+          enabled: true
+        }]
+      }
+    }
+
+    setElementStateCollection({
+      ...elementStateCollection,
+      ...newElementCollection,
+    })
+  }
+
   return (
     <div className="App">
-      <Dialog className='add-multiple-dialog' isOpen={true}>
+      <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
         <div className="add-multiple-dialog-content">
-          <FormGroup label="Element Count">
-            <NumericInput />
+          <FormGroup label="Element Count" inline>
+            <NumericInput value={multipleElementsCount} onValueChange={value => setMultipleElementsCount(value)} />
           </FormGroup>
-          <FormGroup label="Apply current element style to all elements">
+          <FormGroup label="Apply Selected Element Style To All Elements" inline>
             <Switch />
           </FormGroup>
         </div>
         <div className="add-multiple-dialog-actions">
-          <Button className='add-multiple-dialog-actions-btn'>Cancel</Button>
-          <Button className='add-multiple-dialog-actions-btn' intent='primary' >Confirm</Button>
+          <Button className='add-multiple-dialog-actions-btn' onClick={() => toggleAddMultipleElementsDialog(false)} >Cancel</Button>
+          <Button className='add-multiple-dialog-actions-btn' intent='primary' onClick={() => { generateElements(multipleElementsCount); toggleAddMultipleElementsDialog(false) }} >Confirm</Button>
         </div>
       </Dialog>
       <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
@@ -463,11 +531,9 @@ function App() {
         <div className="control-panel-content">
           <div className="control-panel-actions">
             <ButtonGroup fill>
-              <Button icon="plus">Add Single</Button>
-              <Button icon="new-object">Add Multiple</Button>
+              <Button onClick={addNewElement} icon="plus">Add Single</Button>
+              <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
             </ButtonGroup>
-            {/* <Button fill intent={Intent.PRIMARY} onClick={addNewElement} icon="plus" className='add-new-element-btn'>Add Element</Button>
-            <Button fill intent={Intent.PRIMARY} onClick={addNewElement} icon="plus" className='add-new-element-btn'>Add Element</Button> */}
           </div>
           <SizePanel
             widthValue={getTargetProperty('width')}
@@ -476,23 +542,6 @@ function App() {
             onWidthChange={value => updateTargetProperty('width', value)}
             onHeightChange={value => updateTargetProperty('height', value)}
           ></SizePanel>
-          <BorderPanel
-            enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
-            onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
-            borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
-            onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
-              ? enableBorderAllInOne()
-              : updateTargetProperty('borderAllInOne', event.target.checked)}
-            borders={targetId ? elementStateCollection[targetId].border : null}
-
-            onAllWidthChange={value => updateAllPositionBorderProperty('width', value)}
-            onAllStyleChange={event => updateAllPositionBorderProperty('style', event.target.value)}
-            onAllColorChange={value => updateAllPositionBorderProperty('color', value.hex)}
-
-            onWidthChange={(position, value) => updateBorderProperty(position, 'width', value)}
-            onStyleChange={(position, event) => updateBorderProperty(position, 'style', event.target.value)}
-            onColorChange={(position, value) => updateBorderProperty(position, 'color', value.hex)}
-          ></BorderPanel>
           <PositionPanel
             onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
             onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
@@ -515,6 +564,23 @@ function App() {
             onMoveBottomRight={moveBottomRight}
           >
           </PositionPanel>
+          <BorderPanel
+            enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
+            onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
+            borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
+            onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
+              ? enableBorderAllInOne()
+              : updateTargetProperty('borderAllInOne', event.target.checked)}
+            borders={targetId ? elementStateCollection[targetId].border : null}
+
+            onAllWidthChange={value => updateAllPositionBorderProperty('width', value)}
+            onAllStyleChange={event => updateAllPositionBorderProperty('style', event.target.value)}
+            onAllColorChange={value => updateAllPositionBorderProperty('color', value.hex)}
+
+            onWidthChange={(position, value) => updateBorderProperty(position, 'width', value)}
+            onStyleChange={(position, event) => updateBorderProperty(position, 'style', event.target.value)}
+            onColorChange={(position, value) => updateBorderProperty(position, 'color', value.hex)}
+          ></BorderPanel>
           <BackgroundPanel
             color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
             onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
