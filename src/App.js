@@ -25,6 +25,19 @@ import PositionPanel from './components/position-panel';
 import BoxShadowPanel from './components/box-shadow-panel';
 import BackgroundPanel from './components/background-panel';
 import BorderPanel from './components/border-panel';
+import { getNewState } from './element-state-template'
+import {
+  updateAllPositionBorderProperty,
+  updateBorderProperty,
+  enableBorderAllInOne,
+  createBoxShadowString,
+  addShadow,
+  removeShadow,
+  updateShadowProperty,
+  moveTopLeft, moveTopCenter, moveTopRight,
+  moveCenterLeft, moveCenterCenter, moveCenterRight,
+  moveBottomLeft, moveBottomCenter, moveBottomRight
+} from './util'
 
 let idSeed = 1;
 
@@ -43,157 +56,31 @@ function App() {
 
   const [multipleElementsCount, setMultipleElementsCount] = useState(1000)
   const [openAddMultipleElementsDialog, toggleAddMultipleElementsDialog] = useState(false)
+  const [cloneElementWhenAddMultipleElements, toggleCloneElementWhenAddMultipleElements] = useState(false)
 
-  function addNewElement({ left = 100, top = 100 }) {
+  function updateSingleElement(targetId, targetElementState) {
+    setElementStateCollection(oldState => {
+      return {
+        ...oldState,
+        [targetId]: {
+          ...targetElementState
+        }
+      }
+    })
+  }
+
+  function addNewElement({ height = 200, width = 200, left = 100, top = 100 }) {
     const id = idSeed++;
-    const newElementState = {
-      width: 200,
-      height: 200,
-      top,
-      bottom: 0,
-      left,
-      right: 0,
-      backgroundColor: '#FFFFFF',
-
-      borderEnabled: true,
-      borderAllInOne: true,
-      border: {
-        top: {
-          width: 1,
-          style: 'solid',
-          color: 'gray'
-        },
-        bottom: {
-          width: 1,
-          style: 'solid',
-          color: 'gray'
-        },
-        left: {
-          width: 1,
-          style: 'solid',
-          color: 'gray'
-        },
-        right: {
-          width: 1,
-          style: 'solid',
-          color: 'gray'
-        },
-      },
-
-      boxShadow: [{
-        enableInset: false,
-        offsetX: 5,
-        offsetY: 5,
-        blurRadius: 20,
-        spreadRadius: 0,
-        color: 'grey',
-        collapsePanel: false,
-        enabled: true
-      }]
-    }
     setTargetId(id)
-    setElementStateCollection({
-      ...elementStateCollection,
-      [id]: newElementState
-    })
+    updateSingleElement(id, getNewState({ width, height, left, top }));
   }
 
-  function updateAllPositionBorderProperty(property, value) {
-    const originElementState = elementStateCollection[targetId];
-    originElementState.border['top'][property] = value;
-    originElementState.border['bottom'][property] = value;
-    originElementState.border['left'][property] = value;
-    originElementState.border['right'][property] = value;
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
+  function cloneElement(targetElementState) {
+    const id = idSeed++;
+    setTargetId(id)
+    updateSingleElement(id, targetElementState)
   }
 
-  function updateBorderProperty(position, property, value) {
-    const originElementState = elementStateCollection[targetId];
-    originElementState.border[position][property] = value;
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
-  }
-
-  function enableBorderAllInOne() {
-    const originElementState = elementStateCollection[targetId];
-    const topBorder = originElementState.border.top;
-
-    originElementState.borderAllInOne = true;
-    originElementState.border.left = { ...topBorder }
-    originElementState.border.right = { ...topBorder }
-    originElementState.border.bottom = { ...topBorder }
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
-  }
-
-  function createBoxShadowString(boxShadowState) {
-    const enabledBoxShadowState = boxShadowState.filter(item => item.enabled);
-    let boxShadowStr = ''
-    if (enabledBoxShadowState.length) {
-      enabledBoxShadowState.forEach(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color }, index) => {
-        boxShadowStr += `${enableInset ? 'inset' : ''} ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${color} ${index !== enabledBoxShadowState.length - 1 ? ',' : ''}`;
-      })
-    } else {
-      boxShadowStr = 'none'
-    }
-    return boxShadowStr
-  }
-
-  function addShadow() {
-    const originElementState = elementStateCollection[targetId];
-    originElementState.boxShadow.push({
-      enableInset: false,
-      offsetX: 5,
-      offsetY: 5,
-      blurRadius: 20,
-      spreadRadius: 0,
-      color: 'grey',
-      collapsePanel: false,
-      enabled: true
-    })
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
-  }
-
-  function removeShadow(index) {
-    const originElementState = elementStateCollection[targetId];
-    originElementState.boxShadow.splice(index, 1)
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
-  }
-
-  function updateShadowProperty(index, name, value) {
-    const originElementState = elementStateCollection[targetId];
-    originElementState.boxShadow[index][name] = value;
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...originElementState
-      }
-    })
-  }
 
   function getTargetProperty(name) {
     if (!targetId) {
@@ -203,6 +90,9 @@ function App() {
   }
 
   function updateTargetProperty(name, value) {
+    if (!targetId) {
+      return;
+    }
     setElementStateCollection({
       ...elementStateCollection,
       [targetId]: {
@@ -212,180 +102,6 @@ function App() {
     })
   }
 
-  function moveTopLeft() {
-    if (!targetId) {
-      return;
-    }
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        left: 0,
-        top: 0
-      }
-    })
-  }
-
-  function moveTopCenter() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: 0,
-        left: canvasPanelWidth / 2 - originElementState.width / 2
-      }
-    })
-  }
-
-  function moveTopRight() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: 0,
-        left: canvasPanelWidth - originElementState.width
-      }
-    })
-  }
-
-  function moveCenterLeft() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight / 2 - originElementState.height / 2,
-        left: 0
-      }
-    })
-  }
-
-  function moveCenterCenter() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight / 2 - originElementState.height / 2,
-        left: canvasPanelWidth / 2 - originElementState.width / 2
-      }
-    })
-  }
-
-  function moveCenterRight() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight / 2 - originElementState.height / 2,
-        left: canvasPanelWidth - originElementState.width
-      }
-    })
-  }
-
-  function moveBottomLeft() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight - originElementState.height,
-        left: 0
-      }
-    })
-  }
-
-  function moveBottomCenter() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight - originElementState.height,
-        left: canvasPanelWidth / 2 - originElementState.width / 2
-      }
-    })
-  }
-
-  function moveBottomRight() {
-    if (!targetId) {
-      return;
-    }
-    const originElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        top: canvasPanelHeight - originElementState.height,
-        left: canvasPanelWidth - originElementState.width
-      }
-    })
-  }
 
 
   function recordMouseDownPosition(targetId, event) {
@@ -421,70 +137,28 @@ function App() {
   }
 
   function generateElements(count) {
-    const originElementState = elementStateCollection[targetId];
+    const selectedElementState = elementStateCollection[targetId];
     const canvasPanel = document.querySelector('.canvas-panel');
     const canvasPanelStyle = window.getComputedStyle(canvasPanel);
     const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
     const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
 
-    const newElementCollection = {}
-
     for (let i = 0; i < count; i++) {
       const left = Math.floor(Math.random() * canvasPanelWidth);
       const top = Math.floor(Math.random() * canvasPanelHeight);
-      newElementCollection[idSeed++] = {
-        width: 200,
-        height: 200,
-        top,
-        bottom: 0,
-        left,
-        right: 0,
-        backgroundColor: '#FFFFFF',
-
-        borderEnabled: true,
-        borderAllInOne: true,
-        border: {
-          top: {
-            width: 1,
-            style: 'solid',
-            color: 'gray'
-          },
-          bottom: {
-            width: 1,
-            style: 'solid',
-            color: 'gray'
-          },
-          left: {
-            width: 1,
-            style: 'solid',
-            color: 'gray'
-          },
-          right: {
-            width: 1,
-            style: 'solid',
-            color: 'gray'
-          },
-        },
-
-        boxShadow: [{
-          enableInset: false,
-          offsetX: 5,
-          offsetY: 5,
-          blurRadius: 20,
-          spreadRadius: 0,
-          color: 'grey',
-          collapsePanel: false,
-          enabled: true
-        }]
+      if (cloneElementWhenAddMultipleElements) {
+        cloneElement(JSON.parse(JSON.stringify({
+          ...selectedElementState,
+          left,
+          top
+        })))
+      } else {
+        addNewElement({ left, top })
       }
     }
-
-    setElementStateCollection({
-      ...elementStateCollection,
-      ...newElementCollection,
-    })
   }
 
+  const currentSelectedElement = targetId ? elementStateCollection[targetId] : null;
   return (
     <div className="App">
       <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
@@ -493,7 +167,7 @@ function App() {
             <NumericInput value={multipleElementsCount} onValueChange={value => setMultipleElementsCount(value)} />
           </FormGroup>
           <FormGroup label="Apply Selected Element Style To All Elements" inline>
-            <Switch />
+            <Switch disabled={!targetId} value={cloneElementWhenAddMultipleElements} onChange={event => toggleCloneElementWhenAddMultipleElements(event.target.checked)} />
           </FormGroup>
         </div>
         <div className="add-multiple-dialog-actions">
@@ -507,6 +181,7 @@ function App() {
         return <div
           onMouseDown={recordMouseDownPosition.bind(this, id)}
           onMouseUp={recordMouseUpPosition}
+          onClick={() => setTargetId(id)}
           key={id}
           style={{
             background: elementState.backgroundColor,
@@ -519,15 +194,15 @@ function App() {
             borderBottom: !elementState.borderEnabled ? 'none' : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`,
             borderLeft: !elementState.borderEnabled ? 'none' : `${border.left.width}px ${border.left.style} ${border.left.color}`,
             borderRight: !elementState.borderEnabled ? 'none' : `${border.right.width}px ${border.right.style} ${border.right.color}`,
-            boxShadow: createBoxShadowString(elementState.boxShadow)
-          }}></div>
+            boxShadow: createBoxShadowString(elementState.boxShadow),
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          {id == targetId && <div className="selected-element-cursor"></div>}
+        </div>
       })}</div>
       <div className="control-panel">
-        {/* <Tabs id="TabsExample" selectedTabId="rx">
-          <Tab id="ng" title="Angular" panel={<div />} />
-          <Tab id="mb" title="Ember" panel={<div />} panelClassName="ember-panel" />
-          <Tabs.Expander />
-        </Tabs> */}
         <div className="control-panel-content">
           <div className="control-panel-actions">
             <ButtonGroup fill>
@@ -551,54 +226,54 @@ function App() {
             onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetProperty('top', value) : updateTargetProperty('bottom', value)}
             disabled={!targetId}
 
-            onMoveTopLeft={moveTopLeft}
-            onMoveTopCenter={moveTopCenter}
-            onMoveTopRight={moveTopRight}
+            onMoveTopLeft={() => updateSingleElement(targetId, moveTopLeft(currentSelectedElement))}
+            onMoveTopCenter={() => updateSingleElement(targetId, moveTopCenter(currentSelectedElement))}
+            onMoveTopRight={() => updateSingleElement(targetId, moveTopRight(currentSelectedElement))}
 
-            onMoveCenterLeft={moveCenterLeft}
-            onMoveCenterCenter={moveCenterCenter}
-            onMoveCenterRight={moveCenterRight}
+            onMoveCenterLeft={() => updateSingleElement(targetId, moveCenterLeft(currentSelectedElement))}
+            onMoveCenterCenter={() => updateSingleElement(targetId, moveCenterCenter(currentSelectedElement))}
+            onMoveCenterRight={() => updateSingleElement(targetId, moveCenterRight(currentSelectedElement))}
 
-            onMoveBottomLeft={moveBottomLeft}
-            onMoveBottomCenter={moveBottomCenter}
-            onMoveBottomRight={moveBottomRight}
+            onMoveBottomLeft={() => updateSingleElement(targetId, moveBottomLeft(currentSelectedElement))}
+            onMoveBottomCenter={() => updateSingleElement(targetId, moveBottomCenter(currentSelectedElement))}
+            onMoveBottomRight={() => updateSingleElement(targetId, moveBottomRight(currentSelectedElement))}
           >
           </PositionPanel>
+          <BackgroundPanel
+            color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
+            onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
+          ></BackgroundPanel>
           <BorderPanel
             enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
             onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
             borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
             onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
-              ? enableBorderAllInOne()
+              ? updateSingleElement(targetId, enableBorderAllInOne(targetId, currentSelectedElement, updateSingleElement))
               : updateTargetProperty('borderAllInOne', event.target.checked)}
             borders={targetId ? elementStateCollection[targetId].border : null}
 
-            onAllWidthChange={value => updateAllPositionBorderProperty('width', value)}
-            onAllStyleChange={event => updateAllPositionBorderProperty('style', event.target.value)}
-            onAllColorChange={value => updateAllPositionBorderProperty('color', value.hex)}
+            onAllWidthChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'width', value))}
+            onAllStyleChange={event => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'style', event.target.value))}
+            onAllColorChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'color', value.hex))}
 
-            onWidthChange={(position, value) => updateBorderProperty(position, 'width', value)}
-            onStyleChange={(position, event) => updateBorderProperty(position, 'style', event.target.value)}
-            onColorChange={(position, value) => updateBorderProperty(position, 'color', value.hex)}
+            onWidthChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'width', value))}
+            onStyleChange={(position, event) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'style', event.target.value))}
+            onColorChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'color', value.hex))}
           ></BorderPanel>
-          <BackgroundPanel
-            color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
-            onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
-          ></BackgroundPanel>
           <BoxShadowPanel
             boxShadows={targetId ? elementStateCollection[targetId].boxShadow : []}
-            onAdd={addShadow}
-            onOffsetXChange={(index, value) => updateShadowProperty(index, 'offsetX', value)}
-            onOffsetYChange={(index, value) => updateShadowProperty(index, 'offsetY', value)}
-            onBlurRadiusChange={(index, value) => updateShadowProperty(index, 'blurRadius', value)}
-            onSpreadRadiusChange={(index, value) => updateShadowProperty(index, 'spreadRadius', value)}
-            onInsetChange={(index, event) => updateShadowProperty(index, 'enableInset', event.target.checked)}
-            onColorChange={(index, value) => updateShadowProperty(index, 'color', value.hex)}
-            onEnableShadow={(index) => updateShadowProperty(index, 'enabled', true)}
-            onDisableShadow={(index) => updateShadowProperty(index, 'enabled', false)}
-            onExpandPanel={(index) => updateShadowProperty(index, 'collapsePanel', false)}
-            onHidePanel={(index) => updateShadowProperty(index, 'collapsePanel', true)}
-            onDeleteShadow={index => removeShadow(index)}
+            onAdd={() => updateSingleElement(targetId, addShadow(currentSelectedElement))}
+            onOffsetXChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'offsetX', value))}
+            onOffsetYChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'offsetY', value))}
+            onBlurRadiusChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'blurRadius', value))}
+            onSpreadRadiusChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'spreadRadius', value))}
+            onInsetChange={(index, event) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enableInset', event.target.checked))}
+            onColorChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'color', value.hex))}
+            onEnableShadow={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enabled', true))}
+            onDisableShadow={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enabled', false))}
+            onExpandPanel={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'collapsePanel', false))}
+            onHidePanel={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'collapsePanel', true))}
+            onDeleteShadow={index => updateSingleElement(targetId, removeShadow(currentSelectedElement, index))}
           >
           </BoxShadowPanel>
         </div>
