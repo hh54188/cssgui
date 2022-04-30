@@ -2,24 +2,12 @@ import './App.css';
 import { useState, useEffect, useRef } from 'react'
 import {
   FormGroup,
-  InputGroup,
   NumericInput,
-  Divider,
   Switch,
-  Checkbox,
-  Icon,
   Button,
   ButtonGroup,
-  ControlGroup,
-  HTMLSelect,
-  Menu,
-  MenuItem,
-  Classes, Position, Intent,
   Dialog,
-  Tab, Tabs
 } from '@blueprintjs/core'
-import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
-import { SketchPicker } from 'react-color';
 import SizePanel from './components/size-panel';
 import PositionPanel from './components/position-panel';
 import BoxShadowPanel from './components/box-shadow-panel';
@@ -31,15 +19,18 @@ import {
   updateAllPositionBorderProperty,
   updateBorderProperty,
   enableBorderAllInOne,
-  createBoxShadowString,
   addShadow,
   removeShadow,
   updateShadowProperty,
   moveTopLeft, moveTopCenter, moveTopRight,
   moveCenterLeft, moveCenterCenter, moveCenterRight,
   moveBottomLeft, moveBottomCenter, moveBottomRight,
-  updateTransformProperty
-} from './util'
+  updateTransformProperty,
+  createStyleObj,
+  resetScale,
+  resetTranslate,
+  resetSkew
+} from './utils'
 
 let idSeed = 1;
 
@@ -95,10 +86,27 @@ function App() {
     updateSingleElement(id, getNewState({ width, height, left, top }));
   }
 
+  function copyElement() {
+    const targetElementState = elementStateCollection[targetId];
+    const id = idSeed++;
+    setTargetId(id)
+    updateSingleElement(id, {
+      ...JSON.parse(JSON.stringify(targetElementState)) ,
+      top: targetElementState.top + 20,
+      left: targetElementState.left + 20
+    });
+  }
+
   function cloneElement(targetElementState) {
     const id = idSeed++;
     setTargetId(id)
     updateSingleElement(id, targetElementState)
+  }
+
+  function deleteElement() {
+    delete elementStateCollection[targetId]
+    setTargetId(null)
+    setElementStateCollection(elementStateCollection)
   }
 
 
@@ -215,29 +223,12 @@ function App() {
       <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
         const elementState = elementStateCollection[id];
         const border = elementState.border;
-        console.log(elementState.transform.translate.x)
         return <div
           onMouseDown={recordMouseDownPosition.bind(this, id)}
           onMouseUp={recordMouseUpPosition}
           onClick={() => setTargetId(id)}
           key={id}
-          style={{
-            background: elementState.backgroundColor,
-            width: elementState.width,
-            height: elementState.height,
-            top: elementState.top,
-            left: elementState.left,
-            position: 'absolute',
-            borderTop: !elementState.borderEnabled ? 'none' : `${border.top.width}px ${border.top.style} ${border.top.color}`,
-            borderBottom: !elementState.borderEnabled ? 'none' : `${border.bottom.width}px ${border.bottom.style} ${border.bottom.color}`,
-            borderLeft: !elementState.borderEnabled ? 'none' : `${border.left.width}px ${border.left.style} ${border.left.color}`,
-            borderRight: !elementState.borderEnabled ? 'none' : `${border.right.width}px ${border.right.style} ${border.right.color}`,
-            boxShadow: createBoxShadowString(elementState.boxShadow),
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            transform: `translate3d(${elementState.transform.translate.x}px, ${elementState.transform.translate.y}px, ${elementState.transform.translate.z}px)`
-          }}>
+          style={createStyleObj(elementState)}>
           {id == targetId && <div className="selected-element-cursor"></div>}
         </div>
       })}</div>
@@ -247,6 +238,12 @@ function App() {
             <ButtonGroup fill>
               <Button onClick={addNewElement} icon="plus">Add Single</Button>
               <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
+            </ButtonGroup>
+            <ButtonGroup fill style={{marginTop: 10}}>
+              <Button icon="copy" onClick={copyElement} disabled={!targetId}>Copy Element</Button>
+            </ButtonGroup>
+            <ButtonGroup fill style={{marginTop: 10}}>
+              <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete Element</Button>
             </ButtonGroup>
             <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
               <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
@@ -285,9 +282,10 @@ function App() {
           <TransformPanel
             transform={currentSelectedElement ? currentSelectedElement.transform : null}
             disabled={!currentSelectedElement}
-            onTranslateXValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'x', value))}
-            onTranslateYValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'y', value))}
-            onTranslateZValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'z', value))}
+            onValueChange={(value, type, coord) => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, type, coord, value))}
+            onResetTranslate={() => updateSingleElement(targetId, resetTranslate(currentSelectedElement))}
+            onResetScale={() => updateSingleElement(targetId, resetScale(currentSelectedElement))}
+            onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
           ></TransformPanel>
           <BorderPanel
             enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}

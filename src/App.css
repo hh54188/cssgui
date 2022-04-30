@@ -193,3 +193,16 @@
 .add-multiple-dialog-actions-btn {
     margin-left: 10px;
 }
+
+.transform-slider-container {
+    width: 180px;
+    margin-left: 10px;
+    margin-top: 7px;
+}
+
+.control-panel-transform-group-subtitle {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
