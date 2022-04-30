@@ -13,6 +13,11 @@ export function updateBorderProperty(sourceElementState, position, property, val
   return sourceElementState
 }
 
+export function updateTransformProperty(sourceElementState, type, coord, value) {
+  sourceElementState.transform[type][coord] = value;
+  return sourceElementState
+}
+
 
 export function enableBorderAllInOne(sourceElementState) {
   const topBorder = sourceElementState.border.top;

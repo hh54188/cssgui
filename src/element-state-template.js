@@ -41,7 +41,30 @@ const stateTemlate = {
     color: 'grey',
     collapsePanel: false,
     enabled: true
-  }]
+  }],
+
+  transform: {
+    rotate: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    translate: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    scale: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    skew : {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+  }
 }
 
 export function getNewState({ height = 200, width = 200, left = 100, top = 100 }) {

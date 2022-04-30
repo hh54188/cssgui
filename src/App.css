@@ -14,10 +14,15 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    transform-style: preserve-3d;
+    perspective: 800px;
 }
 
 .add-new-element-btn {
     margin-bottom: 20px;
+}
+.apply-to-all-switch {
+    margin-top: 10px;
 }
 
 .control-panel {

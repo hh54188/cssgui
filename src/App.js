@@ -25,6 +25,7 @@ import PositionPanel from './components/position-panel';
 import BoxShadowPanel from './components/box-shadow-panel';
 import BackgroundPanel from './components/background-panel';
 import BorderPanel from './components/border-panel';
+import TransformPanel from './components/transform-panel';
 import { getNewState } from './element-state-template'
 import {
   updateAllPositionBorderProperty,
@@ -36,7 +37,8 @@ import {
   updateShadowProperty,
   moveTopLeft, moveTopCenter, moveTopRight,
   moveCenterLeft, moveCenterCenter, moveCenterRight,
-  moveBottomLeft, moveBottomCenter, moveBottomRight
+  moveBottomLeft, moveBottomCenter, moveBottomRight,
+  updateTransformProperty
 } from './util'
 
 let idSeed = 1;
@@ -58,15 +60,33 @@ function App() {
   const [openAddMultipleElementsDialog, toggleAddMultipleElementsDialog] = useState(false)
   const [cloneElementWhenAddMultipleElements, toggleCloneElementWhenAddMultipleElements] = useState(false)
 
+  const [applyToAll, toggleApplyToAll] = useState(false)
+
   function updateSingleElement(targetId, targetElementState) {
-    setElementStateCollection(oldState => {
-      return {
-        ...oldState,
-        [targetId]: {
-          ...targetElementState
+    if (applyToAll) {
+      Object.keys(elementStateCollection).forEach(id => {
+        const originElementState = elementStateCollection[id]
+        setElementStateCollection(oldState => {
+          return {
+            ...oldState,
+            [id]: {
+              ...targetElementState,
+              left: originElementState.left,
+              top: originElementState.top
+            }
+          }
+        })
+      })
+    } else {
+      setElementStateCollection(oldstate => {
+        return {
+          ...oldstate,
+          [targetId]: {
+            ...targetElementState
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   function addNewElement({ height = 200, width = 200, left = 100, top = 100 }) {
@@ -93,13 +113,30 @@ function App() {
     if (!targetId) {
       return;
     }
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
-        ...elementStateCollection[targetId],
-        [name]: value
-      }
-    })
+    if (applyToAll) {
+      Object.keys(elementStateCollection).forEach(id => {
+        const originElementState = elementStateCollection[id]
+        setElementStateCollection(oldState => {
+          return {
+            ...oldState,
+            [id]: {
+              ...originElementState,
+              [name]: value,
+              left: originElementState.left,
+              top: originElementState.top
+            }
+          }
+        })
+      })
+    } else {
+      setElementStateCollection({
+        ...elementStateCollection,
+        [targetId]: {
+          ...elementStateCollection[targetId],
+          [name]: value
+        }
+      })
+    }
   }
 
 
@@ -178,6 +215,7 @@ function App() {
       <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
         const elementState = elementStateCollection[id];
         const border = elementState.border;
+        console.log(elementState.transform.translate.x)
         return <div
           onMouseDown={recordMouseDownPosition.bind(this, id)}
           onMouseUp={recordMouseUpPosition}
@@ -197,7 +235,8 @@ function App() {
             boxShadow: createBoxShadowString(elementState.boxShadow),
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            transform: `translate3d(${elementState.transform.translate.x}px, ${elementState.transform.translate.y}px, ${elementState.transform.translate.z}px)`
           }}>
           {id == targetId && <div className="selected-element-cursor"></div>}
         </div>
@@ -209,6 +248,9 @@ function App() {
               <Button onClick={addNewElement} icon="plus">Add Single</Button>
               <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
             </ButtonGroup>
+            <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
+              <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
+            </FormGroup>
           </div>
           <SizePanel
             widthValue={getTargetProperty('width')}
@@ -225,15 +267,12 @@ function App() {
             onHorizontalValueChange={value => positionHorizontalValueState === "Right" ? updateTargetProperty('right', value) : updateTargetProperty('left', value)}
             onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetProperty('top', value) : updateTargetProperty('bottom', value)}
             disabled={!targetId}
-
             onMoveTopLeft={() => updateSingleElement(targetId, moveTopLeft(currentSelectedElement))}
             onMoveTopCenter={() => updateSingleElement(targetId, moveTopCenter(currentSelectedElement))}
             onMoveTopRight={() => updateSingleElement(targetId, moveTopRight(currentSelectedElement))}
-
             onMoveCenterLeft={() => updateSingleElement(targetId, moveCenterLeft(currentSelectedElement))}
             onMoveCenterCenter={() => updateSingleElement(targetId, moveCenterCenter(currentSelectedElement))}
             onMoveCenterRight={() => updateSingleElement(targetId, moveCenterRight(currentSelectedElement))}
-
             onMoveBottomLeft={() => updateSingleElement(targetId, moveBottomLeft(currentSelectedElement))}
             onMoveBottomCenter={() => updateSingleElement(targetId, moveBottomCenter(currentSelectedElement))}
             onMoveBottomRight={() => updateSingleElement(targetId, moveBottomRight(currentSelectedElement))}
@@ -243,19 +282,24 @@ function App() {
             color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
             onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
           ></BackgroundPanel>
+          <TransformPanel
+            transform={currentSelectedElement ? currentSelectedElement.transform : null}
+            disabled={!currentSelectedElement}
+            onTranslateXValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'x', value))}
+            onTranslateYValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'y', value))}
+            onTranslateZValueChange={value => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, 'translate', 'z', value))}
+          ></TransformPanel>
           <BorderPanel
             enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
             onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
             borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
             onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
-              ? updateSingleElement(targetId, enableBorderAllInOne(targetId, currentSelectedElement, updateSingleElement))
+              ? updateSingleElement(targetId, enableBorderAllInOne(currentSelectedElement))
               : updateTargetProperty('borderAllInOne', event.target.checked)}
             borders={targetId ? elementStateCollection[targetId].border : null}
-
             onAllWidthChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'width', value))}
             onAllStyleChange={event => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'style', event.target.value))}
             onAllColorChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'color', value.hex))}
-
             onWidthChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'width', value))}
             onStyleChange={(position, event) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'style', event.target.value))}
             onColorChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'color', value.hex))}
