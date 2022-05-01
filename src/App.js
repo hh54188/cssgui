@@ -1,4 +1,5 @@
 import './App.css';
+import 'react-linear-gradient-picker/dist/index.css';
 import { useState, useEffect, useRef } from 'react'
 import {
   FormGroup,
@@ -91,7 +92,7 @@ function App() {
     const id = idSeed++;
     setTargetId(id)
     updateSingleElement(id, {
-      ...JSON.parse(JSON.stringify(targetElementState)) ,
+      ...JSON.parse(JSON.stringify(targetElementState)),
       top: targetElementState.top + 20,
       left: targetElementState.left + 20
     });
@@ -198,7 +199,14 @@ function App() {
           top
         })))
       } else {
-        addNewElement({ left, top })
+        setElementStateCollection(oldstate => {
+          return {
+            ...oldstate,
+            [idSeed++]: {
+              ...getNewState({ left, top })
+            }
+          }
+        })
       }
     }
   }
@@ -239,10 +247,10 @@ function App() {
               <Button onClick={addNewElement} icon="plus">Add Single</Button>
               <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
             </ButtonGroup>
-            <ButtonGroup fill style={{marginTop: 10}}>
+            <ButtonGroup fill style={{ marginTop: 10 }}>
               <Button icon="copy" onClick={copyElement} disabled={!targetId}>Copy Element</Button>
             </ButtonGroup>
-            <ButtonGroup fill style={{marginTop: 10}}>
+            <ButtonGroup fill style={{ marginTop: 10 }}>
               <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete Element</Button>
             </ButtonGroup>
             <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
@@ -303,6 +311,7 @@ function App() {
             onColorChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'color', value.hex))}
           ></BorderPanel>
           <BoxShadowPanel
+            disabled={!targetId}
             boxShadows={targetId ? elementStateCollection[targetId].boxShadow : []}
             onAdd={() => updateSingleElement(targetId, addShadow(currentSelectedElement))}
             onOffsetXChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'offsetX', value))}

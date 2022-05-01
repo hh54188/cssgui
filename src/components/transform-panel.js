@@ -8,6 +8,7 @@ import {
   Collapse,
   Slider
 } from '@blueprintjs/core'
+import { AnglePicker } from 'react-linear-gradient-picker';
 function TransformPanel({
   transform,
   onValueChange,
@@ -17,6 +18,7 @@ function TransformPanel({
   disabled = true,
 }) {
   const [isOpen, setIsOpen] = useState(true)
+  const [angle, setAngle] = useState(25);
   const [slideValue, setSlideValue] = useState(1)
   return (
     <div className="control-panel-group">
@@ -66,24 +68,19 @@ function TransformPanel({
               <strong>Skew</strong>
               <Button minimal icon="reset" onClick={onResetSkew}>Reset</Button>
             </div>
-            {Object.keys(transform.skew).map(coord => {
-              return <FormGroup label={`Skew${coord.toLocaleUpperCase()}`} inline key={coord}>
-                <div className='transform-slider-container'>
-                  <Slider
-                    min={0}
-                    max={360}
-                    stepSize={1}
-                    labelStepSize={180}
-                    value={transform.skew[coord]}
-                    onChange={value => onValueChange(value, 'skew', coord)}
-                  />
-                </div>
-              </FormGroup>
-            })}
-            <div className='control-panel-transform-group-subtitle' style={{ paddingTop: 0 }}>
+            <div className='transform-skew-container'>
+              {Object.keys(transform.skew).map(coord => {
+                return <FormGroup key={coord} label={`Skew${coord.toLocaleUpperCase()}`} inlkey={coord}>
+                  <div>
+                    <AnglePicker angle={transform.skew[coord]} setAngle={value => onValueChange(value, 'skew', coord)} />
+                  </div>
+                </FormGroup>
+              })}
+            </div>
+            {/* <div className='control-panel-transform-group-subtitle' style={{ paddingTop: 0 }}>
               <strong>Rotate</strong>
               <Button minimal icon="reset" onClick={onResetSkew}>Reset</Button>
-            </div>
+            </div> */}
             {/* {Object.keys(transform.rotate).map(coord => {
               return <FormGroup label={`Rotate${coord.toLocaleUpperCase()}`} inline key={coord}>
                 <div className='transform-slider-container'>

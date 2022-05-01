@@ -200,6 +200,11 @@
     margin-top: 7px;
 }
 
+.transform-skew-container {
+    display: flex;
+    justify-content: space-around;
+}
+
 .control-panel-transform-group-subtitle {
     padding: 10px 0;
     display: flex;

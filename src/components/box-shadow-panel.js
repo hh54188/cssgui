@@ -18,6 +18,7 @@ import {
 import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 function BoxShadowPanel({
+  disabled = false,
   onAdd,
   boxShadows,
   onOffsetXChange,
@@ -32,7 +33,7 @@ function BoxShadowPanel({
   onHidePanel,
   onDeleteShadow
 }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   return (
     <div className="control-panel-group">
       <div className="control-panel-group-title">
@@ -44,10 +45,7 @@ function BoxShadowPanel({
         <div className="control-panel-group-title-action-group">
           <Popover2 content={
             <Menu>
-              <MenuItem onClick={onAdd} icon="plus" text="Add New" />
-              <MenuItem icon="disable" text="Disable" />
-              <MenuItem icon="duplicate" text="Copy Source Code" />
-              <MenuItem icon="clean" intent="danger" text="Remove All" />
+              <MenuItem disabled={disabled} onClick={onAdd} icon="plus" text="Add New" />
             </Menu>
           }
             interactionKind="click">
