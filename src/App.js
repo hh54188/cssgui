@@ -239,7 +239,9 @@ function App() {
           style={createStyleObj(elementState)}>
           {id == targetId && <div className="selected-element-cursor"></div>}
         </div>
-      })}</div>
+      })}
+      {/* <div className="animation-panel"></div> */}
+      </div>
       <div className="control-panel">
         <div className="control-panel-content">
           <div className="control-panel-actions">

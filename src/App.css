@@ -211,3 +211,13 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.animation-panel {
+    position: absolute;
+    bottom: 10px;
+    height: 120px;
+    width: 80%;
+    background-color: #edeff2;
+    margin-left: 10%;
+    z-index: 9999;
+}
