@@ -36,6 +36,12 @@ export function createStyleObj(elementState) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        transform: createTransformString(elementState.transform)
+        transform: createTransformString(elementState.transform),
+        animationDuration: `${elementState.animation.duration}s`, 
+        animationDelay: `${elementState.animation.delay}s`, 
+        animationDelay: `${elementState.animation.delay}s`, 
+        animationTimingFunction: elementState.animation.timing,
+        animationIterationCount: 'infinite',
+        animationName: elementState.animation.name,
     }
 }

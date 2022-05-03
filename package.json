@@ -14,6 +14,7 @@
     "react-draggable": "^4.4.4",
     "react-linear-gradient-picker": "^2.0.3",
     "react-scripts": "5.0.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

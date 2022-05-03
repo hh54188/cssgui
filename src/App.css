@@ -214,10 +214,42 @@
 
 .animation-panel {
     position: absolute;
-    bottom: 10px;
-    height: 120px;
-    width: 80%;
+    padding: 20px 10px 20px 20px;
+    height:96%;
+    width: 260px;
     background-color: #edeff2;
-    margin-left: 10%;
+    top: 2%;
+    right: 20px;
     z-index: 9999;
+    overflow: auto;
+}
+
+.animation-panel-content {
+    height: 100%;
+}
+.animation-slider {
+    width: 187px;
+    margin-left: 8px;
+    margin-top: 8px;
+}
+
+.animation-group {
+    margin-top: 10px;
+}
+
+.animation-property-selector {
+    padding: 10px 20px;
+}
+
+.animation-status-label {
+    display: block;
+    margin: 2px 0;
+}
+
+.animation-status-label:first-child {
+    margin-top: 5px;
+}
+
+.animation-timeline-group:last-child {
+    padding-bottom: 15px;
 }

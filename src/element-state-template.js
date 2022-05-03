@@ -9,6 +9,26 @@ const stateTemlate = {
 
   borderEnabled: true,
   borderAllInOne: true,
+
+  animation: {
+    duration: 0.3,
+    delay: 0,
+    timing: 'ease',
+    infinite: false,
+    name: '',
+    animatedProperties: {
+      size: false,
+      position: false,
+      background: false,
+      border: false,
+      boxShadow: false,
+      translate: false,
+      scale: false,
+      skew: false
+    },
+    animationTimeline:[]
+  },
+
   border: {
     top: {
       width: 1,
@@ -59,7 +79,7 @@ const stateTemlate = {
       y: 1,
       z: 1
     },
-    skew : {
+    skew: {
       x: 0,
       y: 0,
     },

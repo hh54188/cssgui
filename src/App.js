@@ -8,6 +8,7 @@ import {
   Button,
   ButtonGroup,
   Dialog,
+  Divider
 } from '@blueprintjs/core'
 import SizePanel from './components/size-panel';
 import PositionPanel from './components/position-panel';
@@ -15,6 +16,7 @@ import BoxShadowPanel from './components/box-shadow-panel';
 import BackgroundPanel from './components/background-panel';
 import BorderPanel from './components/border-panel';
 import TransformPanel from './components/transform-panel';
+import AnimationPanel from './components/animation-panel';
 import { getNewState } from './element-state-template'
 import {
   updateAllPositionBorderProperty,
@@ -30,7 +32,14 @@ import {
   createStyleObj,
   resetScale,
   resetTranslate,
-  resetSkew
+  resetSkew,
+  updateAnimationProperty,
+  updateAnimationAnimatedProperties,
+  getStatusByProperties,
+  saveAnimationEndStatus,
+  saveAnimationStartStatus,
+  playAnimation,
+  stopAnimation
 } from './utils'
 
 let idSeed = 1;
@@ -81,9 +90,21 @@ function App() {
     }
   }
 
-  function addNewElement({ height = 200, width = 200, left = 100, top = 100 }) {
+  function addNewElement() {
     const id = idSeed++;
     setTargetId(id)
+
+    const canvasPanel = document.querySelector('.canvas-panel');
+    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
+    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
+    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
+
+    const width = 200;
+    const height = 200;
+
+    const top = canvasPanelHeight / 2 - height / 2;
+    const left = canvasPanelWidth / 2 - width / 2
+  
     updateSingleElement(id, getNewState({ width, height, left, top }));
   }
 
@@ -240,7 +261,15 @@ function App() {
           {id == targetId && <div className="selected-element-cursor"></div>}
         </div>
       })}
-      {/* <div className="animation-panel"></div> */}
+      <AnimationPanel
+        animation={currentSelectedElement ? currentSelectedElement.animation : null} 
+        onMetaChange={(key, value) => updateSingleElement(targetId, updateAnimationProperty(currentSelectedElement, key, value))}
+        onPropertyChange={(name, value) => updateSingleElement(targetId, updateAnimationAnimatedProperties(currentSelectedElement, name, value)) }
+        onSaveStartStatus={() => updateSingleElement(targetId, saveAnimationStartStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
+        onSaveEndStatus={() => updateSingleElement(targetId, saveAnimationEndStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
+        onPlayAnimation={() => updateSingleElement(targetId, playAnimation(currentSelectedElement))}
+        onStopAnimation={() => updateSingleElement(targetId, stopAnimation(currentSelectedElement))}
+      ></AnimationPanel>
       </div>
       <div className="control-panel">
         <div className="control-panel-content">
