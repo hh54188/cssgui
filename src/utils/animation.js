@@ -44,7 +44,7 @@ export function getStatusByProperties(sourceElementState) {
                 result.push(`transform: translate3d(${sourceElementState.transform.translate.x}px, ${sourceElementState.transform.translate.y}px, ${sourceElementState.transform.translate.z}px)`)
                 break;
             case 'scale': 
-                result.push(`transform: translate3d(${sourceElementState.transform.scale.x}px, ${sourceElementState.transform.scale.y}px, ${sourceElementState.transform.scale.z}px)`)
+                result.push(`transform: scale3d(${sourceElementState.transform.scale.x}px, ${sourceElementState.transform.scale.y}px, ${sourceElementState.transform.scale.z}px)`)
                 break;
             case 'skew': 
                 result.push(`transform: skew(${sourceElementState.transform.skew.x}deg, ${sourceElementState.transform.skew.y}deg)`)

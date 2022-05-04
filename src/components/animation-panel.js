@@ -69,7 +69,7 @@ function AnimationPanel({
                   <HTMLSelect
                     value={animation.timing}
                     onChange={event => onMetaChange('timing', event.target.value)}
-                    options={['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'step-start', 'step-end']} />
+                    options={['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear']} />
                 </FormGroup>
               </div>
               <div className="control-panel-horizontal-layout-item">

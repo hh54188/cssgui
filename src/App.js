@@ -8,7 +8,10 @@ import {
   Button,
   ButtonGroup,
   Dialog,
-  Divider
+  Divider,
+  Tabs,
+  Tab,
+  Toaster
 } from '@blueprintjs/core'
 import SizePanel from './components/size-panel';
 import PositionPanel from './components/position-panel';
@@ -41,6 +44,7 @@ import {
   playAnimation,
   stopAnimation
 } from './utils'
+import Footer from './components/footer';
 
 let idSeed = 1;
 
@@ -62,6 +66,7 @@ function App() {
   const [cloneElementWhenAddMultipleElements, toggleCloneElementWhenAddMultipleElements] = useState(false)
 
   const [applyToAll, toggleApplyToAll] = useState(false)
+  const [showAnimationPanel, toggleAnimationPanel] = useState(false)
 
   function updateSingleElement(targetId, targetElementState) {
     if (applyToAll) {
@@ -104,8 +109,23 @@ function App() {
 
     const top = canvasPanelHeight / 2 - height / 2;
     const left = canvasPanelWidth / 2 - width / 2
-  
+
     updateSingleElement(id, getNewState({ width, height, left, top }));
+  }
+
+  function saveToLocal() {
+    localStorage.setItem('data', JSON.stringify(elementStateCollection))
+    Toaster.create({ position: 'top' }).show({ message: 'Save Successfully', intent: 'success' })
+  }
+
+  function loadFromLocal() {
+    try {
+      const result = JSON.parse(localStorage.getItem('data'))
+      setElementStateCollection(result)
+      Toaster.create({ position: 'top' }).show({ message: 'Load Successfully', intent: 'success' })
+    } catch (e) {
+      Toaster.create({ position: 'top' }).show({ message: 'Load Failed', intent: 'danger' })
+    }
   }
 
   function copyElement() {
@@ -130,7 +150,6 @@ function App() {
     setTargetId(null)
     setElementStateCollection(elementStateCollection)
   }
-
 
   function getTargetProperty(name) {
     if (!targetId) {
@@ -168,8 +187,6 @@ function App() {
       })
     }
   }
-
-
 
   function recordMouseDownPosition(targetId, event) {
     const { clientX, clientY } = event;
@@ -261,20 +278,25 @@ function App() {
           {id == targetId && <div className="selected-element-cursor"></div>}
         </div>
       })}
-      <AnimationPanel
-        animation={currentSelectedElement ? currentSelectedElement.animation : null} 
-        onMetaChange={(key, value) => updateSingleElement(targetId, updateAnimationProperty(currentSelectedElement, key, value))}
-        onPropertyChange={(name, value) => updateSingleElement(targetId, updateAnimationAnimatedProperties(currentSelectedElement, name, value)) }
-        onSaveStartStatus={() => updateSingleElement(targetId, saveAnimationStartStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
-        onSaveEndStatus={() => updateSingleElement(targetId, saveAnimationEndStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
-        onPlayAnimation={() => updateSingleElement(targetId, playAnimation(currentSelectedElement))}
-        onStopAnimation={() => updateSingleElement(targetId, stopAnimation(currentSelectedElement))}
-      ></AnimationPanel>
+        {showAnimationPanel && <AnimationPanel
+          animation={currentSelectedElement ? currentSelectedElement.animation : null}
+          onMetaChange={(key, value) => updateSingleElement(targetId, updateAnimationProperty(currentSelectedElement, key, value))}
+          onPropertyChange={(name, value) => updateSingleElement(targetId, updateAnimationAnimatedProperties(currentSelectedElement, name, value))}
+          onSaveStartStatus={() => updateSingleElement(targetId, saveAnimationStartStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
+          onSaveEndStatus={() => updateSingleElement(targetId, saveAnimationEndStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}
+          onPlayAnimation={() => updateSingleElement(targetId, playAnimation(currentSelectedElement))}
+          onStopAnimation={() => updateSingleElement(targetId, stopAnimation(currentSelectedElement))}
+        ></AnimationPanel>}
+        <Footer></Footer>
       </div>
       <div className="control-panel">
         <div className="control-panel-content">
           <div className="control-panel-actions">
             <ButtonGroup fill>
+              <Button icon="saved" onClick={saveToLocal}>Save</Button>
+              <Button icon="import" onClick={loadFromLocal}>Load</Button>
+            </ButtonGroup>
+            <ButtonGroup fill style={{ marginTop: 10 }}>
               <Button onClick={addNewElement} icon="plus">Add Single</Button>
               <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
             </ButtonGroup>
@@ -283,6 +305,10 @@ function App() {
             </ButtonGroup>
             <ButtonGroup fill style={{ marginTop: 10 }}>
               <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete Element</Button>
+            </ButtonGroup>
+            <ButtonGroup fill style={{ marginTop: 10 }}>
+              {!showAnimationPanel && <Button icon="drawer-right" onClick={() => toggleAnimationPanel(true)} disabled={!targetId}>Open Animation Panel</Button>}
+              {showAnimationPanel && <Button icon="drawer-left" onClick={() => toggleAnimationPanel(false)} disabled={!targetId}>Close Animation Panel</Button>}
             </ButtonGroup>
             <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
               <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
