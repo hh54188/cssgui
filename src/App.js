@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import 'react-linear-gradient-picker/dist/index.css';
 import { useState, useEffect, useRef } from 'react'
