@@ -21,6 +21,7 @@ import BackgroundPanel from './components/background-panel';
 import BorderPanel from './components/border-panel';
 import TransformPanel from './components/transform-panel';
 import AnimationPanel from './components/animation-panel';
+import {useStore} from './store'
 import { getNewState } from './element-state-template'
 import {
   updateAllPositionBorderProperty,
@@ -52,6 +53,9 @@ let idSeed = 1;
 function App() {
   const canvasRef = useRef();
 
+  const applyToAll = useStore((state) => state.applyToAll);
+  const toggleApplyToAll = useStore((state) => state.toggleApplyToAll);
+
   const [elementStateCollection, setElementStateCollection] = useState({})
   const [targetId, setTargetId] = useState(null)
 
@@ -66,7 +70,6 @@ function App() {
   const [openAddMultipleElementsDialog, toggleAddMultipleElementsDialog] = useState(false)
   const [cloneElementWhenAddMultipleElements, toggleCloneElementWhenAddMultipleElements] = useState(false)
 
-  const [applyToAll, toggleApplyToAll] = useState(false)
   const [showAnimationPanel, toggleAnimationPanel] = useState(false)
 
   function updateSingleElement(targetId, targetElementState) {
