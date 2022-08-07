@@ -52,25 +52,33 @@ let idSeed = 1;
 
 function App() {
   const canvasRef = useRef();
-
-  const applyToAll = useStore((state) => state.applyToAll);
-  const toggleApplyToAll = useStore((state) => state.toggleApplyToAll);
+  const state = useStore();
+  const {
+    targetId,
+    setTargetId,
+    positionHorizontalValueState,
+    setPositionHorizontalValue,
+    positionVerticalValueState,
+    setPositionVerticalValue,
+    applyToAll,
+    toggleApplyToAll,
+    dragStartPoint,
+    setDragStartPoint,
+    dragBegin,
+    setDragBegin,
+    dragStartElementPoint,
+    setDragStartElementPoint,
+    showAnimationPanel,
+    toggleAnimationPanel,
+    openAddMultipleElementsDialog,
+    toggleAddMultipleElementsDialog,
+    multipleElementsCount,
+    setMultipleElementsCount,
+    cloneElementWhenAddMultipleElements,
+    toggleCloneElementWhenAddMultipleElements
+  } = state;
 
   const [elementStateCollection, setElementStateCollection] = useState({})
-  const [targetId, setTargetId] = useState(null)
-
-  const [dragStartPoint, setDragStartPoint] = useState([0, 0])
-  const [dragStartElementPoint, setDragStartElementPoint] = useState([0, 0])
-  const [dragBegin, setDragBegin] = useState(false)
-
-  const [positionHorizontalValueState, setPositionHorizontalValue] = useState("Left")
-  const [positionVerticalValueState, setPositionVerticalValue] = useState("Top")
-
-  const [multipleElementsCount, setMultipleElementsCount] = useState(1000)
-  const [openAddMultipleElementsDialog, toggleAddMultipleElementsDialog] = useState(false)
-  const [cloneElementWhenAddMultipleElements, toggleCloneElementWhenAddMultipleElements] = useState(false)
-
-  const [showAnimationPanel, toggleAnimationPanel] = useState(false)
 
   function updateSingleElement(targetId, targetElementState) {
     if (applyToAll) {
