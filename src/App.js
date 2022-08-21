@@ -229,10 +229,7 @@ function App() {
             onMoveBottomRight={() => updateSingleElement(targetId, moveBottomRight(currentSelectedElement))}
           >
           </PositionPanel> */}
-          <BackgroundPanel
-            color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
-            onColorChange={value => updateTargetStyle('backgroundColor', value.hex)}
-          ></BackgroundPanel>
+          <BackgroundPanel />
           {/* <TransformPanel
             transform={currentSelectedElement ? currentSelectedElement.transform : null}
             disabled={!currentSelectedElement}
