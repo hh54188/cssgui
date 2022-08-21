@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import {
   FormGroup,
   InputGroup,
@@ -11,31 +11,9 @@ import {
 import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 import { useDataStore } from '../store/data'
+import { performanceOptimize } from './performance-optimize-wrap'
 
-function BackgroundPanelContainer() {
-  const dataState = useDataStore();
-  const { getTargetStyle, updateTargetStyle } = dataState;
-
-  const color = getTargetStyle("backgroundColor") || '#FFFFFF';
-  const onColorChange = value => updateTargetStyle('backgroundColor', value.hex);
-
-  return <BackgroundPanel
-    color={color}
-    onColorChange={onColorChange}
-  ></BackgroundPanel>
-}
-
-const areEqual = (prevProps, nextProps) => {
-  const { color: prevColor } = prevProps;
-  const { color: nextColor } = nextProps;
-
-  if (prevColor === nextColor) {
-    return true;
-  }
-  return false;
-}
-
-const BackgroundPanel = React.memo(({ color, onColorChange }) => {
+function BackgroundPanel({ color, onColorChange }) {
   const [isOpen, setIsOpen] = useState(true)
   return (
     <div className="control-panel-group">
@@ -62,6 +40,21 @@ const BackgroundPanel = React.memo(({ color, onColorChange }) => {
       </Collapse>
     </div>
   )
-}, areEqual)
+};
+
+const OptimizedBackgroundContainer = performanceOptimize(BackgroundPanel)(['color']);
+
+function BackgroundPanelContainer() {
+  const dataState = useDataStore();
+  const { getTargetStyle, updateTargetStyle } = dataState;
+
+  const color = getTargetStyle("backgroundColor") || '#FFFFFF';
+  const onColorChange = value => updateTargetStyle('backgroundColor', value.hex);
+
+  return <OptimizedBackgroundContainer
+    color={color}
+    onColorChange={onColorChange}>
+  </OptimizedBackgroundContainer>
+}
 
 export default BackgroundPanelContainer;
