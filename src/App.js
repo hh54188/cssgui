@@ -203,13 +203,7 @@ function App() {
               <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
             </FormGroup>
           </div>
-          <SizePanel
-            widthValue={getTargetStyle('width')}
-            heightValue={getTargetStyle('height')}
-            disabled={!targetId}
-            onWidthChange={value => updateTargetStyle('width', value)}
-            onHeightChange={value => updateTargetStyle('height', value)}
-          ></SizePanel>
+          <SizePanel />
           {/* <PositionPanel
             onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
             onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}

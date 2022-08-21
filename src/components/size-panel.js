@@ -2,22 +2,16 @@ import React from 'react';
 import { useState } from 'react'
 import {
   FormGroup,
-  InputGroup,
   NumericInput,
   Divider,
-  Switch,
-  Checkbox,
   Icon,
-  Button,
-  ControlGroup,
-  HTMLSelect,
-  Menu,
-  MenuItem,
   Collapse,
-  Classes, Position, Intent
 } from '@blueprintjs/core'
-import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
-import { SketchPicker } from 'react-color';
+
+import { useDataStore } from '../store/data'
+import { useUIStore } from '../store/ui'
+import { performanceOptimize } from './performance-optimize-wrap'
+
 function SizePanel({
   widthValue,
   heightValue,
@@ -74,4 +68,30 @@ function SizePanel({
   )
 }
 
-export default SizePanel
+const OptimizedSizePanelContainer = performanceOptimize(SizePanel)(
+  ['widthValue', 'heightValue', 'disabled']
+);
+
+function SizePanelContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const { getTargetStyle, updateTargetStyle } = dataState;
+  const { targetId } = UIState
+
+  const width = getTargetStyle("width");
+  const height = getTargetStyle("height");
+
+  const onWidthChange = value => updateTargetStyle('width', value);
+  const onHeightChange = value => updateTargetStyle('height', value);
+
+  return <OptimizedSizePanelContainer
+      widthValue={width}
+      heightValue={height}
+      onWidthChange={onWidthChange}
+      onHeightChange={onHeightChange}
+      disabled={!targetId}
+    >
+  </OptimizedSizePanelContainer>
+}
+
+export default SizePanelContainer
