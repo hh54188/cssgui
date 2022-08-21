@@ -84,11 +84,11 @@ function App() {
     setElementCollection,
     updateSingleElement,
     addNewElement,
-    getTargetProperty,
+    getTargetStyle,
     deleteElement,
     cloneElement,
     copyElement,
-    updateTargetProperty,
+    updateTargetStyle,
     generateElements
   } = dataState;
   const { randomElementCount, setRandomElementCount } = configState
@@ -204,19 +204,19 @@ function App() {
             </FormGroup>
           </div>
           <SizePanel
-            widthValue={getTargetProperty('width')}
-            heightValue={getTargetProperty('height')}
+            widthValue={getTargetStyle('width')}
+            heightValue={getTargetStyle('height')}
             disabled={!targetId}
-            onWidthChange={value => updateTargetProperty('width', value)}
-            onHeightChange={value => updateTargetProperty('height', value)}
+            onWidthChange={value => updateTargetStyle('width', value)}
+            onHeightChange={value => updateTargetStyle('height', value)}
           ></SizePanel>
           {/* <PositionPanel
             onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
             onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
-            horizontalValue={positionHorizontalValueState == "Right" ? getTargetProperty('right') : getTargetProperty('left')}
-            verticalValue={positionVerticalValueState === "Top" ? getTargetProperty('top') : getTargetProperty('bottom')}
-            onHorizontalValueChange={value => positionHorizontalValueState === "Right" ? updateTargetProperty('right', value) : updateTargetProperty('left', value)}
-            onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetProperty('top', value) : updateTargetProperty('bottom', value)}
+            horizontalValue={positionHorizontalValueState == "Right" ? getTargetStyle('right') : getTargetStyle('left')}
+            verticalValue={positionVerticalValueState === "Top" ? getTargetStyle('top') : getTargetStyle('bottom')}
+            onHorizontalValueChange={value => positionHorizontalValueState === "Right" ? updateTargetStyle('right', value) : updateTargetStyle('left', value)}
+            onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetStyle('top', value) : updateTargetStyle('bottom', value)}
             disabled={!targetId}
             onMoveTopLeft={() => updateSingleElement(targetId, moveTopLeft(currentSelectedElement))}
             onMoveTopCenter={() => updateSingleElement(targetId, moveTopCenter(currentSelectedElement))}
@@ -231,7 +231,7 @@ function App() {
           </PositionPanel> */}
           <BackgroundPanel
             color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
-            onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
+            onColorChange={value => updateTargetStyle('backgroundColor', value.hex)}
           ></BackgroundPanel>
           {/* <TransformPanel
             transform={currentSelectedElement ? currentSelectedElement.transform : null}
@@ -243,11 +243,11 @@ function App() {
           ></TransformPanel> */}
           {/* <BorderPanel
             enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
-            onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
+            onToggleEnabled={event => updateTargetStyle('borderEnabled', event.target.checked)}
             borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
             onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
               ? updateSingleElement(targetId, enableBorderAllInOne(currentSelectedElement))
-              : updateTargetProperty('borderAllInOne', event.target.checked)}
+              : updateTargetStyle('borderAllInOne', event.target.checked)}
             borders={targetId ? elementStateCollection[targetId].border : null}
             onAllWidthChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'width', value))}
             onAllStyleChange={event => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'style', event.target.value))}

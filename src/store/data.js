@@ -52,14 +52,14 @@ export const useDataStore = create((set, get) => ({
       get().updateSingleElement(getNewState({ width, height, left, top }));
     })
   },
-  getTargetProperty(name) {
+  getTargetStyle(name) {
     const targetId = useUIStore.getState().targetId;
     if (!targetId) {
       return 0;
     }
     return get().elementCollection[targetId][name];
   },
-  updateTargetProperty(name, value) {
+  updateTargetStyle(name, value) {
     const targetId = useUIStore.getState().targetId;
     if (!targetId) {
       return;
