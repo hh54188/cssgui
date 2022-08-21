@@ -21,7 +21,9 @@ import BackgroundPanel from './components/background-panel';
 import BorderPanel from './components/border-panel';
 import TransformPanel from './components/transform-panel';
 import AnimationPanel from './components/animation-panel';
-import {useStore} from './store'
+import {useDataStore} from './store/data'
+import {useUIStore} from './store/ui'
+import {useConfigStore} from './store/config'
 import { getNewState } from './element-state-template'
 import {
   updateAllPositionBorderProperty,
@@ -52,7 +54,9 @@ let idSeed = 1;
 
 function App() {
   const canvasRef = useRef();
-  const state = useStore();
+  const UIState = useUIStore();
+  const dataState = useDataStore();
+  const configState = useConfigStore();
   const {
     targetId,
     setTargetId,
@@ -72,58 +76,22 @@ function App() {
     toggleAnimationPanel,
     openAddMultipleElementsDialog,
     toggleAddMultipleElementsDialog,
-    multipleElementsCount,
-    setMultipleElementsCount,
     cloneElementWhenAddMultipleElements,
     toggleCloneElementWhenAddMultipleElements
-  } = state;
-
-  const [elementStateCollection, setElementStateCollection] = useState({})
-
-  function updateSingleElement(targetId, targetElementState) {
-    if (applyToAll) {
-      Object.keys(elementStateCollection).forEach(id => {
-        const originElementState = elementStateCollection[id]
-        setElementStateCollection(oldState => {
-          return {
-            ...oldState,
-            [id]: {
-              ...targetElementState,
-              left: originElementState.left,
-              top: originElementState.top
-            }
-          }
-        })
-      })
-    } else {
-      setElementStateCollection(oldstate => {
-        return {
-          ...oldstate,
-          [targetId]: {
-            ...targetElementState
-          }
-        }
-      })
-    }
-  }
-
-  function addNewElement() {
-    const id = idSeed++;
-    setTargetId(id)
-
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    const width = 200;
-    const height = 200;
-
-    const top = canvasPanelHeight / 2 - height / 2;
-    const left = canvasPanelWidth / 2 - width / 2
-
-    updateSingleElement(id, getNewState({ width, height, left, top }));
-  }
+  } = UIState;
+  const {
+    elementCollection: elementStateCollection,
+    setElementCollection,
+    updateSingleElement,
+    addNewElement,
+    getTargetProperty,
+    deleteElement,
+    cloneElement,
+    copyElement,
+    updateTargetProperty,
+    generateElements
+  } = dataState;
+  const { randomElementCount, setRandomElementCount } = configState
 
   function saveToLocal() {
     localStorage.setItem('data', JSON.stringify(elementStateCollection))
@@ -133,70 +101,10 @@ function App() {
   function loadFromLocal() {
     try {
       const result = JSON.parse(localStorage.getItem('data'))
-      setElementStateCollection(result)
+      setElementCollection(result)
       Toaster.create({ position: 'top' }).show({ message: 'Load Successfully', intent: 'success' })
     } catch (e) {
       Toaster.create({ position: 'top' }).show({ message: 'Load Failed', intent: 'danger' })
-    }
-  }
-
-  function copyElement() {
-    const targetElementState = elementStateCollection[targetId];
-    const id = idSeed++;
-    setTargetId(id)
-    updateSingleElement(id, {
-      ...JSON.parse(JSON.stringify(targetElementState)),
-      top: targetElementState.top + 20,
-      left: targetElementState.left + 20
-    });
-  }
-
-  function cloneElement(targetElementState) {
-    const id = idSeed++;
-    setTargetId(id)
-    updateSingleElement(id, targetElementState)
-  }
-
-  function deleteElement() {
-    delete elementStateCollection[targetId]
-    setTargetId(null)
-    setElementStateCollection(elementStateCollection)
-  }
-
-  function getTargetProperty(name) {
-    if (!targetId) {
-      return 0;
-    }
-    return elementStateCollection[targetId][name];
-  }
-
-  function updateTargetProperty(name, value) {
-    if (!targetId) {
-      return;
-    }
-    if (applyToAll) {
-      Object.keys(elementStateCollection).forEach(id => {
-        const originElementState = elementStateCollection[id]
-        setElementStateCollection(oldState => {
-          return {
-            ...oldState,
-            [id]: {
-              ...originElementState,
-              [name]: value,
-              left: originElementState.left,
-              top: originElementState.top
-            }
-          }
-        })
-      })
-    } else {
-      setElementStateCollection({
-        ...elementStateCollection,
-        [targetId]: {
-          ...elementStateCollection[targetId],
-          [name]: value
-        }
-      })
     }
   }
 
@@ -222,43 +130,12 @@ function App() {
     const [dragStartPointX, dragStartPointY] = dragStartPoint
     const [dragStartElementPointX, dragStartElementPointY] = dragStartElementPoint
 
-    setElementStateCollection({
-      ...elementStateCollection,
-      [targetId]: {
+    updateSingleElement({
         ...elementStateCollection[targetId],
         left: dragStartElementPointX + (clientX - dragStartPointX),
         top: dragStartElementPointY + (clientY - dragStartPointY),
-      }
     })
-  }
 
-  function generateElements(count) {
-    const selectedElementState = elementStateCollection[targetId];
-    const canvasPanel = document.querySelector('.canvas-panel');
-    const canvasPanelStyle = window.getComputedStyle(canvasPanel);
-    const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
-    const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-
-    for (let i = 0; i < count; i++) {
-      const left = Math.floor(Math.random() * canvasPanelWidth);
-      const top = Math.floor(Math.random() * canvasPanelHeight);
-      if (cloneElementWhenAddMultipleElements) {
-        cloneElement(JSON.parse(JSON.stringify({
-          ...selectedElementState,
-          left,
-          top
-        })))
-      } else {
-        setElementStateCollection(oldstate => {
-          return {
-            ...oldstate,
-            [idSeed++]: {
-              ...getNewState({ left, top })
-            }
-          }
-        })
-      }
-    }
   }
 
   const currentSelectedElement = targetId ? elementStateCollection[targetId] : null;
@@ -267,7 +144,7 @@ function App() {
       <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
         <div className="add-multiple-dialog-content">
           <FormGroup label="Element Count" inline>
-            <NumericInput value={multipleElementsCount} onValueChange={value => setMultipleElementsCount(value)} />
+            <NumericInput value={randomElementCount} onValueChange={value => setRandomElementCount(value)} />
           </FormGroup>
           <FormGroup label="Apply Selected Element Style To All Elements" inline>
             <Switch disabled={!targetId} value={cloneElementWhenAddMultipleElements} onChange={event => toggleCloneElementWhenAddMultipleElements(event.target.checked)} />
@@ -275,7 +152,7 @@ function App() {
         </div>
         <div className="add-multiple-dialog-actions">
           <Button className='add-multiple-dialog-actions-btn' onClick={() => toggleAddMultipleElementsDialog(false)} >Cancel</Button>
-          <Button className='add-multiple-dialog-actions-btn' intent='primary' onClick={() => { generateElements(multipleElementsCount); toggleAddMultipleElementsDialog(false) }} >Confirm</Button>
+          <Button className='add-multiple-dialog-actions-btn' intent='primary' onClick={() => { generateElements(); toggleAddMultipleElementsDialog(false) }} >Confirm</Button>
         </div>
       </Dialog>
       <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} ref={canvasRef}>{Object.keys(elementStateCollection).map(id => {
@@ -309,7 +186,7 @@ function App() {
               <Button icon="import" onClick={loadFromLocal}>Load</Button>
             </ButtonGroup>
             <ButtonGroup fill style={{ marginTop: 10 }}>
-              <Button onClick={addNewElement} icon="plus">Add Single</Button>
+              <Button onClick={() => addNewElement(setTargetId)} icon="plus">Add Single</Button>
               <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
             </ButtonGroup>
             <ButtonGroup fill style={{ marginTop: 10 }}>
@@ -333,7 +210,7 @@ function App() {
             onWidthChange={value => updateTargetProperty('width', value)}
             onHeightChange={value => updateTargetProperty('height', value)}
           ></SizePanel>
-          <PositionPanel
+          {/* <PositionPanel
             onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
             onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
             horizontalValue={positionHorizontalValueState == "Right" ? getTargetProperty('right') : getTargetProperty('left')}
@@ -351,20 +228,20 @@ function App() {
             onMoveBottomCenter={() => updateSingleElement(targetId, moveBottomCenter(currentSelectedElement))}
             onMoveBottomRight={() => updateSingleElement(targetId, moveBottomRight(currentSelectedElement))}
           >
-          </PositionPanel>
+          </PositionPanel> */}
           <BackgroundPanel
             color={targetId ? elementStateCollection[targetId].backgroundColor : '#FFFFFF'}
             onColorChange={value => updateTargetProperty('backgroundColor', value.hex)}
           ></BackgroundPanel>
-          <TransformPanel
+          {/* <TransformPanel
             transform={currentSelectedElement ? currentSelectedElement.transform : null}
             disabled={!currentSelectedElement}
             onValueChange={(value, type, coord) => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, type, coord, value))}
             onResetTranslate={() => updateSingleElement(targetId, resetTranslate(currentSelectedElement))}
             onResetScale={() => updateSingleElement(targetId, resetScale(currentSelectedElement))}
             onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
-          ></TransformPanel>
-          <BorderPanel
+          ></TransformPanel> */}
+          {/* <BorderPanel
             enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
             onToggleEnabled={event => updateTargetProperty('borderEnabled', event.target.checked)}
             borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
@@ -378,8 +255,8 @@ function App() {
             onWidthChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'width', value))}
             onStyleChange={(position, event) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'style', event.target.value))}
             onColorChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'color', value.hex))}
-          ></BorderPanel>
-          <BoxShadowPanel
+          ></BorderPanel> */}
+          {/* <BoxShadowPanel
             disabled={!targetId}
             boxShadows={targetId ? elementStateCollection[targetId].boxShadow : []}
             onAdd={() => updateSingleElement(targetId, addShadow(currentSelectedElement))}
@@ -395,7 +272,7 @@ function App() {
             onHidePanel={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'collapsePanel', true))}
             onDeleteShadow={index => updateSingleElement(targetId, removeShadow(currentSelectedElement, index))}
           >
-          </BoxShadowPanel>
+          </BoxShadowPanel> */}
         </div>
       </div>
     </div >

@@ -1,8 +1,6 @@
 ## TODO
 
-
-
-
+- Stop access canvas DOM element in data store
 - Input / Numberic Validation
 - ZINDEX
 - `Ctrl+C/Ctrl+V`

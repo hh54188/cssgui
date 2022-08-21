@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-export const useStore = create((set) => ({
+export const useUIStore = create((set) => ({
   targetId: null,
   setTargetId: (value) => set({ targetId: value }),
 
@@ -27,9 +27,6 @@ export const useStore = create((set) => ({
 
   openAddMultipleElementsDialog: false,
   toggleAddMultipleElementsDialog: value => set({ openAddMultipleElementsDialog: value }),
-
-  multipleElementsCount: 1000,
-  setMultipleElementsCount: value => set({ multipleElementsCount: value }),
 
   cloneElementWhenAddMultipleElements: false,
   toggleCloneElementWhenAddMultipleElements: value => set({ cloneElementWhenAddMultipleElements: value }),
