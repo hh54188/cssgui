@@ -233,21 +233,6 @@ function App() {
             onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
           ></TransformPanel> */}
           <BorderPanel></BorderPanel>
-          {/* <BorderPanel
-            enabled={targetId ? elementStateCollection[targetId].borderEnabled : false}
-            onToggleEnabled={event => updateTargetStyle('borderEnabled', event.target.checked)}
-            borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
-            onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne
-              ? updateSingleElement(targetId, enableBorderAllInOne(currentSelectedElement))
-              : updateTargetStyle('borderAllInOne', event.target.checked)}
-            borders={targetId ? elementStateCollection[targetId].border : null}
-            onAllWidthChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'width', value))}
-            onAllStyleChange={event => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'style', event.target.value))}
-            onAllColorChange={value => updateSingleElement(targetId, updateAllPositionBorderProperty(currentSelectedElement, 'color', value.hex))}
-            onWidthChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'width', value))}
-            onStyleChange={(position, event) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'style', event.target.value))}
-            onColorChange={(position, value) => updateSingleElement(targetId, updateBorderProperty(currentSelectedElement, position, 'color', value.hex))}
-          ></BorderPanel> */}
           {/* <BoxShadowPanel
             disabled={!targetId}
             boxShadows={targetId ? elementStateCollection[targetId].boxShadow : []}

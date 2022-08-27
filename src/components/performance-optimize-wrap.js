@@ -14,7 +14,6 @@ export function performanceOptimize(TargetComponent) {
           return propertiesToCheckEqual.some(propertyName => {
             const oldPropertyValue = this.props[propertyName];
             const newPropertyValue = nextProps[propertyName];
-            
             return oldPropertyValue !== newPropertyValue
           });
         }
