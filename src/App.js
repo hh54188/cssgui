@@ -233,23 +233,7 @@ function App() {
             onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
           ></TransformPanel> */}
           <BorderPanel></BorderPanel>
-          {/* <BoxShadowPanel
-            disabled={!targetId}
-            boxShadows={targetId ? elementStateCollection[targetId].boxShadow : []}
-            onAdd={() => updateSingleElement(targetId, addShadow(currentSelectedElement))}
-            onOffsetXChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'offsetX', value))}
-            onOffsetYChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'offsetY', value))}
-            onBlurRadiusChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'blurRadius', value))}
-            onSpreadRadiusChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'spreadRadius', value))}
-            onInsetChange={(index, event) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enableInset', event.target.checked))}
-            onColorChange={(index, value) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'color', value.hex))}
-            onEnableShadow={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enabled', true))}
-            onDisableShadow={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'enabled', false))}
-            onExpandPanel={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'collapsePanel', false))}
-            onHidePanel={(index) => updateSingleElement(targetId, updateShadowProperty(currentSelectedElement, index, 'collapsePanel', true))}
-            onDeleteShadow={index => updateSingleElement(targetId, removeShadow(currentSelectedElement, index))}
-          >
-          </BoxShadowPanel> */}
+          <BoxShadowPanel></BoxShadowPanel>
         </div>
       </div>
     </div >

@@ -3,38 +3,6 @@ export function updateTransformProperty(sourceElementState, type, coord, value) 
   sourceElementState.transform[type][coord] = value;
   return sourceElementState
 }
-export function createBoxShadowString(boxShadowState) {
-  const enabledBoxShadowState = boxShadowState.filter(item => item.enabled);
-  let boxShadowStr = ''
-  if (enabledBoxShadowState.length) {
-    enabledBoxShadowState.forEach(({ enableInset, offsetX, offsetY, blurRadius, spreadRadius, color }, index) => {
-      boxShadowStr += `${enableInset ? 'inset' : ''} ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${color} ${index !== enabledBoxShadowState.length - 1 ? ',' : ''}`;
-    })
-  } else {
-    boxShadowStr = 'none'
-  }
-  return boxShadowStr
-}
-
-export function addShadow(originElementState) {
-  originElementState.boxShadow.push({
-    enableInset: false,
-    offsetX: 5,
-    offsetY: 5,
-    blurRadius: 20,
-    spreadRadius: 0,
-    color: 'grey',
-    collapsePanel: false,
-    enabled: true
-  })
-  return originElementState
-}
-
-
-export function removeShadow(originElementState, index) {
-  originElementState.boxShadow.splice(index, 1)
-  return originElementState
-}
 
 export function updateShadowProperty(originElementState, index, name, value) {
   originElementState.boxShadow[index][name] = value;

@@ -6,18 +6,18 @@ import {
   NumericInput,
   Divider,
   Switch,
-  Checkbox,
   Icon,
   Button,
   ControlGroup,
-  HTMLSelect,
   Menu,
   MenuItem,
   Collapse,
-  Classes, Position, Intent
 } from '@blueprintjs/core'
-import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
+import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
+import { useDataStore } from '../store/data'
+import { useUIStore } from '../store/ui'
+
 function BoxShadowPanel({
   disabled = false,
   onAdd,
@@ -157,4 +157,30 @@ function BoxShadowPanel({
   )
 }
 
-export default BoxShadowPanel
+function BoxShadowContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const { getTargetStyle, removeShadow, addShadow, updateShadow} = dataState;
+  const { targetId } = UIState
+
+  return <BoxShadowPanel
+  disabled={!targetId}
+  boxShadows={targetId ? getTargetStyle("boxShadow") : []}
+  onAdd={addShadow}
+  onOffsetXChange={(index, value) => updateShadow(index, 'offsetX', value)}
+  onOffsetYChange={(index, value) => updateShadow(index, 'offsetY', value)}
+  onBlurRadiusChange={(index, value) => updateShadow(index, 'blurRadius', value)}
+  onSpreadRadiusChange={(index, value) => updateShadow(index, 'spreadRadius', value)}
+  onInsetChange={(index, event) => updateShadow(index, 'enableInset', event.target.checked)}
+  onColorChange={(index, value) => updateShadow(index, 'color', value.hex)}
+  onEnableShadow={(index) => updateShadow(index, 'enabled', true)}
+  onDisableShadow={(index) => updateShadow(index, 'enabled', false)}
+  onExpandPanel={(index) => updateShadow(index,'collapsePanel', false)}
+  onHidePanel={(index) => updateShadow( index,'collapsePanel', true)}
+  onDeleteShadow={index => removeShadow(index)}
+>
+</BoxShadowPanel>
+
+}
+
+export default BoxShadowContainer

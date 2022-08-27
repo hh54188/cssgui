@@ -156,6 +156,9 @@ export const useDataStore = create((set, get) => ({
   },
   updateBorder(name, value, position) {
     const targetId = useUIStore.getState().targetId;
+    if (!targetId) {
+      return;
+    }
     set(produce((state) => {
       if (state.elementCollection[targetId].borderAllInOne) {
         state.elementCollection[targetId].border['top'][name] = value;
@@ -165,6 +168,42 @@ export const useDataStore = create((set, get) => ({
       } else {
         state.elementCollection[targetId].border[position][name] = value;
       }
+    }));
+  },
+  removeShadow(index) {
+    const targetId = useUIStore.getState().targetId;
+    if (!targetId) {
+      return;
+    }
+    set(produce((state) => {
+      state.elementCollection[targetId].boxShadow.splice(index, 1)
+    }));
+  },
+  addShadow() {
+    const targetId = useUIStore.getState().targetId;
+    if (!targetId) {
+      return;
+    }
+    set(produce((state) => {
+      state.elementCollection[targetId].boxShadow.push({
+        enableInset: false,
+        offsetX: 5,
+        offsetY: 5,
+        blurRadius: 20,
+        spreadRadius: 0,
+        color: 'grey',
+        collapsePanel: false,
+        enabled: true
+      })
+    }));
+  },
+  updateShadow(index, name, value) {
+    const targetId = useUIStore.getState().targetId;
+    if (!targetId) {
+      return;
+    }
+    set(produce((state) => {
+      state.elementCollection[targetId].boxShadow[index][name] = value;
     }));
   }
 }))
