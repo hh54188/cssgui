@@ -5,7 +5,7 @@ export function updateAllPositionBorderProperty(sourceElementState, property, va
   sourceElementState.border['bottom'][property] = value;
   sourceElementState.border['left'][property] = value;
   sourceElementState.border['right'][property] = value;
-  return sourceElementState
+  return JSON.parse(JSON.stringify(sourceElementState))
 }
 
 export function updateBorderProperty(sourceElementState, position, property, value) {

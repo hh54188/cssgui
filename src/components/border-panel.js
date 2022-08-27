@@ -1,25 +1,15 @@
-import React from 'react';
-import { useState } from 'react'
-import {
-  FormGroup,
-  InputGroup,
-  NumericInput,
-  Divider,
-  Switch,
-  Checkbox,
-  Icon,
-  Button,
-  ControlGroup,
-  HTMLSelect,
-  Menu,
-  MenuItem,
-  Collapse,
-  Classes, Position, Intent
-} from '@blueprintjs/core'
-import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
-import { SketchPicker } from 'react-color';
+import React, {useState} from 'react';
+import {Collapse, ControlGroup, Divider, HTMLSelect, Icon, NumericInput, Switch} from '@blueprintjs/core'
+import {Popover2} from '@blueprintjs/popover2'
+import {SketchPicker} from 'react-color';
+import {enableBorderAllInOne, updateAllPositionBorderProperty, updateBorderProperty} from '../util'
+
+import {useDataStore} from '../store/data'
+import {useUIStore} from '../store/ui'
+import {performanceOptimize} from "./performance-optimize-wrap";
+
 function BorderPanel({
-  enabeld = false,
+  enabled = false,
   onToggleEnabled,
   borderAllInOne = true,
   onToggleAllInOne,
@@ -43,7 +33,7 @@ function BorderPanel({
           <div className="control-panel-horizontal-layout-item">
             <Switch
               disabled={!borders}
-              checked={enabeld}
+              checked={enabled}
               onChange={onToggleEnabled}
             >Enabled</Switch>
           </div>
@@ -141,4 +131,54 @@ function BorderPanel({
   )
 }
 
-export default BorderPanel
+const OptimizedBorderPanelContainer = performanceOptimize(BorderPanel)(null, function (prevProps, nextProps) {
+  const {borders: oldBorders} = prevProps;
+  const {borders: newBorders} = nextProps
+  if (!oldBorders || !newBorders) {
+    return true;
+  }
+  // console.log(prevProps.borders['top'], nextProps.borders['top'], prevProps.borders['top'] === nextProps.borders['top'])
+
+  const directions = ['top', 'bottom', 'left', 'right'];
+  for (let i = 0; i < directions.length; i++) {
+    const direction = directions[i];
+    if (oldBorders[direction].width !== newBorders[direction].width
+      || oldBorders[direction].style !== newBorders[direction].style
+      || oldBorders[direction].color !== newBorders[direction].color) {
+      return true
+    }
+  }
+  return false
+});
+
+function BorderPanelContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const {
+    elementCollection,
+    updateTargetStyle,
+    updateSingleElement
+  } = dataState;
+  const { targetId } = UIState
+  const targetElementState = elementCollection[targetId];
+  const borders = targetId ? JSON.parse(JSON.stringify(targetElementState.border)) : null;
+  // const borders = targetId ? {...targetElementState.border} : null;
+
+  return <OptimizedBorderPanelContainer
+    enabled={targetId ? targetElementState.borderEnabled : false}
+    onToggleEnabled={event => updateTargetStyle('borderEnabled', event.target.checked)}
+    borderAllInOne={targetId ? targetElementState.borderAllInOne : false}
+    onToggleAllInOne={event => !targetElementState.borderAllInOne
+      ? updateSingleElement(enableBorderAllInOne(targetElementState))
+      : updateTargetStyle('borderAllInOne', event.target.checked)}
+    borders={borders}
+    onAllWidthChange={value => updateSingleElement(updateAllPositionBorderProperty(targetElementState, 'width', value))}
+    onAllStyleChange={event => updateSingleElement(updateAllPositionBorderProperty(targetElementState, 'style', event.target.value))}
+    onAllColorChange={value => updateSingleElement(updateAllPositionBorderProperty(targetElementState, 'color', value.hex))}
+    onWidthChange={(position, value) => updateSingleElement(updateBorderProperty(targetElementState, position, 'width', value))}
+    onStyleChange={(position, event) => updateSingleElement(updateBorderProperty(targetElementState, position, 'style', event.target.value))}
+    onColorChange={(position, value) => updateSingleElement(updateBorderProperty(targetElementState, position, 'color', value.hex))}
+  ></OptimizedBorderPanelContainer>
+}
+
+export default BorderPanelContainer

@@ -232,8 +232,9 @@ function App() {
             onResetScale={() => updateSingleElement(targetId, resetScale(currentSelectedElement))}
             onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
           ></TransformPanel> */}
+          <BorderPanel></BorderPanel>
           {/* <BorderPanel
-            enabeld={targetId ? elementStateCollection[targetId].borderEnabled : false}
+            enabled={targetId ? elementStateCollection[targetId].borderEnabled : false}
             onToggleEnabled={event => updateTargetStyle('borderEnabled', event.target.checked)}
             borderAllInOne={targetId ? elementStateCollection[targetId].borderAllInOne : false}
             onToggleAllInOne={event => !elementStateCollection[targetId].borderAllInOne

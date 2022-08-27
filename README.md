@@ -1,5 +1,11 @@
+- Deep copy efficient
+    - https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript
+    - http://jsben.ch/GdASH
+
 ## TODO
 
+- `prevProps` and `nextProps` reference issue
+- Continue optimize performance
 - Stop access canvas DOM element in data store
 - Input / Numberic Validation
 - ZINDEX

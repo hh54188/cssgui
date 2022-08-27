@@ -7,19 +7,6 @@ let idSeed = 0;
 export const useDataStore = create((set, get) => ({
   elementCollection: {},
   setElementCollection: (value) => set({ elementCollection: value }),
-  deleteElement: (targetId, setTargetId) => {
-    set((state) => {
-      const originElementCollection = state.elementCollection;
-      delete originElementCollection[targetId];
-
-      setTargetId(null)
-      return {
-        elementCollection: {
-          ...originElementCollection
-        }
-      }
-    });
-  },
   updateSingleElement: (newState) => {
     set((state) => {
       const originElementCollection = state.elementCollection;
@@ -137,7 +124,7 @@ export const useDataStore = create((set, get) => ({
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
       const canvasPanelHeight = parseInt(canvasPanelStyle.height, 10);
-  
+
       for (let i = 0; i < randomElementCount; i++) {
         const left = Math.floor(Math.random() * canvasPanelWidth);
         const top = Math.floor(Math.random() * canvasPanelHeight);
