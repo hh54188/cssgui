@@ -17,6 +17,8 @@ import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 import { useDataStore } from '../store/data'
 import { useUIStore } from '../store/ui'
+import { createBoxShadowString } from '../utils/style'
+import {performanceOptimize} from "./performance-optimize-wrap";
 
 function BoxShadowPanel({
   disabled = false,
@@ -35,6 +37,7 @@ function BoxShadowPanel({
   onDeleteShadow
 }) {
   const [isOpen, setIsOpen] = useState(true)
+  console.log('RERENDER')
   return (
     <div className="control-panel-group">
       <div className="control-panel-group-title">
@@ -157,13 +160,23 @@ function BoxShadowPanel({
   )
 }
 
+const OptimizedBoxShadowContainer = performanceOptimize(BoxShadowPanel)(null, function (prevPops, nextProps) {
+  const { boxShadows: oldBoxShadows} = prevPops;
+  const { boxShadows: newBoxShadows} = nextProps;
+
+  if (createBoxShadowString(oldBoxShadows) !== createBoxShadowString(newBoxShadows)) {
+    return true
+  }
+  return false;
+})
+
 function BoxShadowContainer() {
   const dataState = useDataStore();
   const UIState = useUIStore()
   const { getTargetStyle, removeShadow, addShadow, updateShadow} = dataState;
   const { targetId } = UIState
 
-  return <BoxShadowPanel
+  return <OptimizedBoxShadowContainer
   disabled={!targetId}
   boxShadows={targetId ? getTargetStyle("boxShadow") : []}
   onAdd={addShadow}
@@ -179,7 +192,7 @@ function BoxShadowContainer() {
   onHidePanel={(index) => updateShadow( index,'collapsePanel', true)}
   onDeleteShadow={index => removeShadow(index)}
 >
-</BoxShadowPanel>
+</OptimizedBoxShadowContainer>
 
 }
 
