@@ -10,6 +10,10 @@ import {
   Slider
 } from '@blueprintjs/core'
 import { AnglePicker } from 'react-linear-gradient-picker';
+import {useDataStore} from "../store/data";
+import {useUIStore} from "../store/ui";
+import { createTransformString } from '../utils/style'
+import {performanceOptimize} from "./performance-optimize-wrap";
 function TransformPanel({
   transform,
   onValueChange,
@@ -31,19 +35,19 @@ function TransformPanel({
         <div className="control-panel-horizontal-layout">
           <div className="control-panel-horizontal-layout-item">
             <div className='control-panel-transform-group-subtitle'>
-              <strong>Tranlsate</strong>
+              <strong>Translate</strong>
               <Button minimal icon="reset" onClick={onResetTranslate}>Reset</Button>
             </div>
-            {Object.keys(transform.translate).map(coord => {
-              return <FormGroup label={`Translate${coord.toLocaleUpperCase()}`} inline key={coord}>
+            {Object.keys(transform.translate).map(coordinate => {
+              return <FormGroup label={`Translate${coordinate.toLocaleUpperCase()}`} inline key={coordinate}>
                 <NumericInput
                   disabled={disabled}
-                  onValueChange={value => onValueChange(value, 'translate', coord)}
+                  onValueChange={value => onValueChange(value, 'translate', coordinate)}
                   fill={true}
                   stepSize={1}
                   buttonPosition="right"
                   min={-9999}
-                  value={transform.translate[coord]}
+                  value={transform.translate[coordinate]}
                 />
               </FormGroup>
             })}
@@ -51,16 +55,16 @@ function TransformPanel({
               <strong>Scale</strong>
               <Button minimal icon="reset" onClick={onResetScale}>Reset</Button>
             </div>
-            {Object.keys(transform.scale).map(coord => {
-              return <FormGroup label={`Scale${coord.toLocaleUpperCase()}`} inline key={coord}>
+            {Object.keys(transform.scale).map(coordinate => {
+              return <FormGroup label={`Scale${coordinate.toLocaleUpperCase()}`} inline key={coordinate}>
                 <div className='transform-slider-container'>
                   <Slider
                     min={0}
                     max={20}
                     stepSize={0.1}
                     labelStepSize={10}
-                    value={transform.scale[coord]}
-                    onChange={value => onValueChange(value, 'scale', coord)}
+                    value={transform.scale[coordinate]}
+                    onChange={value => onValueChange(value, 'scale', coordinate)}
                   />
                 </div>
               </FormGroup>
@@ -70,10 +74,10 @@ function TransformPanel({
               <Button minimal icon="reset" onClick={onResetSkew}>Reset</Button>
             </div>
             <div className='transform-skew-container'>
-              {Object.keys(transform.skew).map(coord => {
-                return <FormGroup key={coord} label={`Skew${coord.toLocaleUpperCase()}`} inlkey={coord}>
+              {Object.keys(transform.skew).map(coordinate => {
+                return <FormGroup key={coordinate} label={`Skew${coordinate.toLocaleUpperCase()}`} inlkey={coordinate}>
                   <div>
-                    <AnglePicker angle={transform.skew[coord]} setAngle={value => onValueChange(value, 'skew', coord)} />
+                    <AnglePicker angle={transform.skew[coordinate]} setAngle={value => onValueChange(value, 'skew', coordinate)} />
                   </div>
                 </FormGroup>
               })}
@@ -82,16 +86,16 @@ function TransformPanel({
               <strong>Rotate</strong>
               <Button minimal icon="reset" onClick={onResetSkew}>Reset</Button>
             </div> */}
-            {/* {Object.keys(transform.rotate).map(coord => {
-              return <FormGroup label={`Rotate${coord.toLocaleUpperCase()}`} inline key={coord}>
+            {/* {Object.keys(transform.rotate).map(coordinate => {
+              return <FormGroup label={`Rotate${coordinate.toLocaleUpperCase()}`} inline key={coordinate}>
                 <div className='transform-slider-container'>
                   <Slider
                     min={0}
                     max={360}
                     stepSize={1}
                     labelStepSize={180}
-                    value={transform.rotate[coord]}
-                    onChange={value => onValueChange(value, 'rotate', coord)}
+                    value={transform.rotate[coordinate]}
+                    onChange={value => onValueChange(value, 'rotate', coordinate)}
                   />
                 </div>
               </FormGroup>
@@ -103,4 +107,32 @@ function TransformPanel({
   )
 }
 
-export default TransformPanel
+const OptimizedTransformPanelContainer = performanceOptimize(TransformPanel)(null, function (prevProps, nextProps) {
+  const {disabled: oldDisabled, transform: oldTransform} = prevProps;
+  const {disabled: newDisabled, transform: newTransform} = nextProps;
+
+  if (newDisabled !== oldDisabled) {
+    return true;
+  }
+  if (createTransformString(oldTransform) !== createTransformString(newTransform)) {
+    return true;
+  }
+  return false
+});
+
+function TransformPanelContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const {getTargetStyle, updateTransform, resetTranslate, resetScale, resetSkew} = dataState;
+  const { targetId } = UIState
+
+  return <OptimizedTransformPanelContainer
+    transform={targetId ? getTargetStyle("transform"): null}
+    disabled={!targetId}
+    onValueChange={(value, type, coordinate) => updateTransform(type, coordinate, value)}
+    onResetTranslate={resetTranslate}
+    onResetScale={resetScale}
+    onResetSkew={resetSkew}
+  ></OptimizedTransformPanelContainer>
+}
+export default TransformPanelContainer

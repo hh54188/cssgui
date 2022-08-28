@@ -1,15 +1,8 @@
 let idSeed = 1;
-export function updateTransformProperty(sourceElementState, type, coord, value) {
-  sourceElementState.transform[type][coord] = value;
+export function updateTransformProperty(sourceElementState, type, coordinate, value) {
+  sourceElementState.transform[type][coordinate] = value;
   return sourceElementState
 }
-
-export function updateShadowProperty(originElementState, index, name, value) {
-  originElementState.boxShadow[index][name] = value;
-  return originElementState
-}
-
-
 export function moveTopLeft(originElementState) {
   return {
     ...originElementState,

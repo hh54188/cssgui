@@ -224,14 +224,7 @@ function App() {
           >
           </PositionPanel> */}
           <BackgroundPanel />
-          {/* <TransformPanel
-            transform={currentSelectedElement ? currentSelectedElement.transform : null}
-            disabled={!currentSelectedElement}
-            onValueChange={(value, type, coord) => updateSingleElement(targetId, updateTransformProperty(currentSelectedElement, type, coord, value))}
-            onResetTranslate={() => updateSingleElement(targetId, resetTranslate(currentSelectedElement))}
-            onResetScale={() => updateSingleElement(targetId, resetScale(currentSelectedElement))}
-            onResetSkew={() => updateSingleElement(targetId, resetSkew(currentSelectedElement))}
-          ></TransformPanel> */}
+          <TransformPanel ></TransformPanel>
           <BorderPanel></BorderPanel>
           <BoxShadowPanel></BoxShadowPanel>
         </div>
