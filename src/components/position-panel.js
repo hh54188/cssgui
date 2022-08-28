@@ -1,23 +1,17 @@
 import React from 'react';
 import { useState } from 'react'
 import {
-  FormGroup,
-  InputGroup,
   NumericInput,
   Divider,
-  Switch,
-  Checkbox,
   Icon,
   Button,
   ControlGroup,
   HTMLSelect,
-  Menu,
-  MenuItem,
   Collapse,
-  Classes, Position, Intent
 } from '@blueprintjs/core'
-import { Tooltip2, Popover2 } from '@blueprintjs/popover2'
-import { SketchPicker } from 'react-color';
+import {useDataStore} from "../store/data";
+import {useUIStore} from "../store/ui";
+import {performanceOptimize} from "./performance-optimize-wrap";
 function PositionPanel({
   onHorizontalTypeChange,
   onVerticalTypeChange,
@@ -105,4 +99,53 @@ function PositionPanel({
   )
 }
 
-export default PositionPanel
+const OptimizedPositionPanelContainer = performanceOptimize(PositionPanel)(
+  ['horizontalValue', 'verticalValue']
+);
+
+function PositionPanelContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const {
+    getTargetStyle,
+    updateTargetStyle,
+    moveTopLeft,
+    moveTopCenter,
+    moveTopRight,
+    moveCenterLeft,
+    moveCenterCenter,
+    moveCenterRight,
+    moveBottomLeft,
+    moveBottomCenter,
+    moveBottomRight
+  } = dataState;
+  const {
+    setPositionHorizontalValue,
+    setPositionVerticalValue,
+    positionHorizontalValueState,
+    positionVerticalValueState,
+  } = UIState;
+  const { targetId } = UIState
+
+  return <OptimizedPositionPanelContainer
+    onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
+    onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
+    horizontalValue={positionHorizontalValueState == "Right" ? getTargetStyle('right') : getTargetStyle('left')}
+    verticalValue={positionVerticalValueState === "Top" ? getTargetStyle('top') : getTargetStyle('bottom')}
+    onHorizontalValueChange={value => positionHorizontalValueState === "Right" ? updateTargetStyle('right', value) : updateTargetStyle('left', value)}
+    onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetStyle('top', value) : updateTargetStyle('bottom', value)}
+    disabled={!targetId}
+    onMoveTopLeft={moveTopLeft}
+    onMoveTopCenter={moveTopCenter}
+    onMoveTopRight={moveTopRight}
+    onMoveCenterLeft={moveCenterLeft}
+    onMoveCenterCenter={moveCenterCenter}
+    onMoveCenterRight={moveCenterRight}
+    onMoveBottomLeft={moveBottomLeft}
+    onMoveBottomCenter={moveBottomCenter}
+    onMoveBottomRight={moveBottomRight}
+  >
+  </OptimizedPositionPanelContainer>
+}
+
+export default PositionPanelContainer

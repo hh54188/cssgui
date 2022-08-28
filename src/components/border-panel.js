@@ -164,7 +164,7 @@ function BorderPanelContainer() {
   } = dataState;
   const { targetId } = UIState
   const targetElementState = elementCollection[targetId];
-  const borders = targetId ? JSON.parse(JSON.stringify(targetElementState.border)) : null;
+  const borders = targetId ? targetElementState.border : null;
 
   return <OptimizedBorderPanelContainer
     enabled={targetId ? targetElementState.borderEnabled : false}

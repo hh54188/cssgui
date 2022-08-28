@@ -37,7 +37,6 @@ function BoxShadowPanel({
   onDeleteShadow
 }) {
   const [isOpen, setIsOpen] = useState(true)
-  console.log('RERENDER')
   return (
     <div className="control-panel-group">
       <div className="control-panel-group-title">
@@ -177,22 +176,22 @@ function BoxShadowContainer() {
   const { targetId } = UIState
 
   return <OptimizedBoxShadowContainer
-  disabled={!targetId}
-  boxShadows={targetId ? getTargetStyle("boxShadow") : []}
-  onAdd={addShadow}
-  onOffsetXChange={(index, value) => updateShadow(index, 'offsetX', value)}
-  onOffsetYChange={(index, value) => updateShadow(index, 'offsetY', value)}
-  onBlurRadiusChange={(index, value) => updateShadow(index, 'blurRadius', value)}
-  onSpreadRadiusChange={(index, value) => updateShadow(index, 'spreadRadius', value)}
-  onInsetChange={(index, event) => updateShadow(index, 'enableInset', event.target.checked)}
-  onColorChange={(index, value) => updateShadow(index, 'color', value.hex)}
-  onEnableShadow={(index) => updateShadow(index, 'enabled', true)}
-  onDisableShadow={(index) => updateShadow(index, 'enabled', false)}
-  onExpandPanel={(index) => updateShadow(index,'collapsePanel', false)}
-  onHidePanel={(index) => updateShadow( index,'collapsePanel', true)}
-  onDeleteShadow={index => removeShadow(index)}
->
-</OptimizedBoxShadowContainer>
+    disabled={!targetId}
+    boxShadows={targetId ? getTargetStyle("boxShadow") : []}
+    onAdd={addShadow}
+    onOffsetXChange={(index, value) => updateShadow(index, 'offsetX', value)}
+    onOffsetYChange={(index, value) => updateShadow(index, 'offsetY', value)}
+    onBlurRadiusChange={(index, value) => updateShadow(index, 'blurRadius', value)}
+    onSpreadRadiusChange={(index, value) => updateShadow(index, 'spreadRadius', value)}
+    onInsetChange={(index, event) => updateShadow(index, 'enableInset', event.target.checked)}
+    onColorChange={(index, value) => updateShadow(index, 'color', value.hex)}
+    onEnableShadow={(index) => updateShadow(index, 'enabled', true)}
+    onDisableShadow={(index) => updateShadow(index, 'enabled', false)}
+    onExpandPanel={(index) => updateShadow(index, 'collapsePanel', false)}
+    onHidePanel={(index) => updateShadow(index, 'collapsePanel', true)}
+    onDeleteShadow={index => removeShadow(index)}
+  >
+  </OptimizedBoxShadowContainer>
 
 }
 

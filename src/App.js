@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'react-linear-gradient-picker/dist/index.css';
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import {
   FormGroup,
   NumericInput,
@@ -9,9 +9,6 @@ import {
   Button,
   ButtonGroup,
   Dialog,
-  Divider,
-  Tabs,
-  Tab,
   Toaster
 } from '@blueprintjs/core'
 import SizePanel from './components/size-panel';
@@ -24,22 +21,8 @@ import AnimationPanel from './components/animation-panel';
 import {useDataStore} from './store/data'
 import {useUIStore} from './store/ui'
 import {useConfigStore} from './store/config'
-import { getNewState } from './element-state-template'
 import {
-  updateAllPositionBorderProperty,
-  updateBorderProperty,
-  enableBorderAllInOne,
-  addShadow,
-  removeShadow,
-  updateShadowProperty,
-  moveTopLeft, moveTopCenter, moveTopRight,
-  moveCenterLeft, moveCenterCenter, moveCenterRight,
-  moveBottomLeft, moveBottomCenter, moveBottomRight,
-  updateTransformProperty,
   createStyleObj,
-  resetScale,
-  resetTranslate,
-  resetSkew,
   updateAnimationProperty,
   updateAnimationAnimatedProperties,
   getStatusByProperties,
@@ -50,8 +33,6 @@ import {
 } from './utils'
 import Footer from './components/footer';
 
-let idSeed = 1;
-
 function App() {
   const canvasRef = useRef();
   const UIState = useUIStore();
@@ -60,10 +41,6 @@ function App() {
   const {
     targetId,
     setTargetId,
-    positionHorizontalValueState,
-    setPositionHorizontalValue,
-    positionVerticalValueState,
-    setPositionVerticalValue,
     applyToAll,
     toggleApplyToAll,
     dragStartPoint,
@@ -84,11 +61,8 @@ function App() {
     setElementCollection,
     updateSingleElement,
     addNewElement,
-    getTargetStyle,
     deleteElement,
-    cloneElement,
     copyElement,
-    updateTargetStyle,
     generateElements
   } = dataState;
   const { randomElementCount, setRandomElementCount } = configState
@@ -204,25 +178,7 @@ function App() {
             </FormGroup>
           </div>
           <SizePanel />
-          {/* <PositionPanel
-            onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
-            onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
-            horizontalValue={positionHorizontalValueState == "Right" ? getTargetStyle('right') : getTargetStyle('left')}
-            verticalValue={positionVerticalValueState === "Top" ? getTargetStyle('top') : getTargetStyle('bottom')}
-            onHorizontalValueChange={value => positionHorizontalValueState === "Right" ? updateTargetStyle('right', value) : updateTargetStyle('left', value)}
-            onVerticalValueChange={value => positionVerticalValueState === "Top" ? updateTargetStyle('top', value) : updateTargetStyle('bottom', value)}
-            disabled={!targetId}
-            onMoveTopLeft={() => updateSingleElement(targetId, moveTopLeft(currentSelectedElement))}
-            onMoveTopCenter={() => updateSingleElement(targetId, moveTopCenter(currentSelectedElement))}
-            onMoveTopRight={() => updateSingleElement(targetId, moveTopRight(currentSelectedElement))}
-            onMoveCenterLeft={() => updateSingleElement(targetId, moveCenterLeft(currentSelectedElement))}
-            onMoveCenterCenter={() => updateSingleElement(targetId, moveCenterCenter(currentSelectedElement))}
-            onMoveCenterRight={() => updateSingleElement(targetId, moveCenterRight(currentSelectedElement))}
-            onMoveBottomLeft={() => updateSingleElement(targetId, moveBottomLeft(currentSelectedElement))}
-            onMoveBottomCenter={() => updateSingleElement(targetId, moveBottomCenter(currentSelectedElement))}
-            onMoveBottomRight={() => updateSingleElement(targetId, moveBottomRight(currentSelectedElement))}
-          >
-          </PositionPanel> */}
+          <PositionPanel></PositionPanel>
           <BackgroundPanel />
           <TransformPanel ></TransformPanel>
           <BorderPanel></BorderPanel>
