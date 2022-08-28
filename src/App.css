@@ -260,4 +260,5 @@
     bottom: 15px;
     left: 50%;
     color: lightgray;
+    z-index: 1;
 }

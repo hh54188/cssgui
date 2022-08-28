@@ -6,6 +6,7 @@ const stateTemlate = {
   left: 100,
   right: 0,
   backgroundColor: '#FFFFFF',
+  zIndex: 2,
 
   borderEnabled: true,
   borderAllInOne: true,

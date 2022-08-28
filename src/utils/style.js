@@ -42,5 +42,6 @@ export function createStyleObj(elementState) {
         animationTimingFunction: elementState.animation.timing,
         animationIterationCount: 'infinite',
         animationName: elementState.animation.name,
+        zIndex: elementState.zIndex
     }
 }
