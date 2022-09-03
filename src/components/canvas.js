@@ -9,6 +9,7 @@ import {
 import {useDataStore} from '../store/data'
 import {useUIStore} from '../store/ui'
 import Footer from "./footer";
+import AnimationPanel from "./animation-panel";
 
 function Canvas() {
 
@@ -76,15 +77,7 @@ function Canvas() {
       {id == targetId && <div className="selected-element-cursor"></div>}
     </div>
   })}
-    {/*{showAnimationPanel && <AnimationPanel*/}
-    {/*  animation={currentSelectedElement ? currentSelectedElement.animation : null}*/}
-    {/*  onMetaChange={(key, value) => updateSingleElement(targetId, updateAnimationProperty(currentSelectedElement, key, value))}*/}
-    {/*  onPropertyChange={(name, value) => updateSingleElement(targetId, updateAnimationAnimatedProperties(currentSelectedElement, name, value))}*/}
-    {/*  onSaveStartStatus={() => updateSingleElement(targetId, saveAnimationStartStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}*/}
-    {/*  onSaveEndStatus={() => updateSingleElement(targetId, saveAnimationEndStatus(currentSelectedElement, getStatusByProperties(currentSelectedElement)))}*/}
-    {/*  onPlayAnimation={() => updateSingleElement(targetId, playAnimation(currentSelectedElement))}*/}
-    {/*  onStopAnimation={() => updateSingleElement(targetId, stopAnimation(currentSelectedElement))}*/}
-    {/*></AnimationPanel>}*/}
+    {showAnimationPanel && <AnimationPanel />}
     <Footer></Footer>
   </div>
 }

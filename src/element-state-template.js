@@ -1,4 +1,4 @@
-const stateTemlate = {
+const stateTemplate = {
   width: 200,
   height: 200,
   top: 100,
@@ -89,7 +89,7 @@ const stateTemlate = {
 
 export function getNewState({ height = 200, width = 200, left = 100, top = 100 }) {
   return JSON.parse(JSON.stringify({
-    ...stateTemlate,
+    ...stateTemplate,
     width,
     height,
     left,

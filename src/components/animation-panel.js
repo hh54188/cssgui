@@ -12,6 +12,9 @@ import {
   Checkbox
 } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
+import {useDataStore} from "../store/data";
+import {useUIStore} from "../store/ui";
+import {performanceOptimize} from "./performance-optimize-wrap";
 
 function AnimationPanel({
   animation,
@@ -35,7 +38,7 @@ function AnimationPanel({
               <Button disabled={disabled} icon="play" onClick={onPlayAnimation}>Play</Button>
               <Button disabled={disabled} icon="stop" onClick={onStopAnimation}>Stop</Button>
             </ButtonGroup>
-            <Button disabled={disabled} intent='danger' icon="trash" fill style={{ marginTop: 10 }}>Delete</Button>
+            {/*<Button disabled={disabled} intent='danger' icon="trash" fill style={{ marginTop: 10 }}>Delete</Button>*/}
           </div>
         </div>
         <div className="control-panel-group ">
@@ -124,4 +127,41 @@ function AnimationPanel({
   )
 }
 
-export default AnimationPanel
+const OptimizedAnimationPanel = performanceOptimize(AnimationPanel)(null, function (prevProps, nextProps) {
+  const {animation: oldAnimation} = prevProps;
+  const {animation: newAnimation} = nextProps;
+
+  if (JSON.stringify(oldAnimation) !== JSON.stringify(newAnimation)) {
+    return true;
+  }
+  return false;
+})
+
+function AnimationContainer() {
+  const dataState = useDataStore();
+  const UIState = useUIStore()
+  const {
+    getTargetStyle,
+    updateAnimationProperty,
+    updateAnimationAnimatedProperties,
+    saveAnimationStartStatus,
+    getStatusByProperties,
+    saveAnimationEndStatus,
+    playAnimation,
+    stopAnimation
+  } = dataState;
+  const { targetId } = UIState
+  return (
+    <OptimizedAnimationPanel
+    animation={targetId ? getTargetStyle("animation") : null}
+    onMetaChange={(key, value) => updateAnimationProperty(key, value)}
+    onPropertyChange={(name, value) =>  updateAnimationAnimatedProperties(name, value)}
+    onSaveStartStatus={() => saveAnimationStartStatus(getStatusByProperties())}
+    onSaveEndStatus={() => saveAnimationEndStatus(getStatusByProperties())}
+    onPlayAnimation={() => playAnimation()}
+    onStopAnimation={() => stopAnimation()}
+  ></OptimizedAnimationPanel>
+  )
+}
+
+export default AnimationContainer
