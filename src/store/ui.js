@@ -1,6 +1,7 @@
 import create from 'zustand'
+import {persist} from 'zustand/middleware'
 
-export const useUIStore = create((set) => ({
+export const useUIStore = create(persist((set) => ({
   targetId: null,
   setTargetId: (value) => set({ targetId: value }),
 
@@ -30,4 +31,6 @@ export const useUIStore = create((set) => ({
 
   cloneElementWhenAddMultipleElements: false,
   toggleCloneElementWhenAddMultipleElements: value => set({ cloneElementWhenAddMultipleElements: value }),
+}), {
+  name: "ui"
 }))

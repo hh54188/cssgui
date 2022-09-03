@@ -6,11 +6,6 @@ import {useUIStore} from '../store/ui'
 import {useConfigStore} from '../store/config'
 
 function ActionPanel() {
-
-  const UIState = useUIStore();
-  const dataState = useDataStore();
-  const configState = useConfigStore();
-  const { randomElementCount, setRandomElementCount } = configState
   const {
     targetId,
     setTargetId,
@@ -22,7 +17,7 @@ function ActionPanel() {
     openAddMultipleElementsDialog,
     cloneElementWhenAddMultipleElements,
     toggleCloneElementWhenAddMultipleElements
-  } = UIState;
+  } = useUIStore();
   const {
     elementCollection,
     updateSingleElement,
@@ -31,22 +26,9 @@ function ActionPanel() {
     copyElement,
     deleteElement,
     setElementCollection
-  } = dataState;
-
-  function saveToLocal() {
-    localStorage.setItem('data', JSON.stringify(elementCollection))
-    Toaster.create({ position: 'top' }).show({ message: 'Save Successfully', intent: 'success' })
-  }
-
-  function loadFromLocal() {
-    try {
-      const result = JSON.parse(localStorage.getItem('data'))
-      setElementCollection(result)
-      Toaster.create({ position: 'top' }).show({ message: 'Load Successfully', intent: 'success' })
-    } catch (e) {
-      Toaster.create({ position: 'top' }).show({ message: 'Load Failed', intent: 'danger' })
-    }
-  }
+  } = useDataStore();
+  const configState = useConfigStore();
+  const { randomElementCount, setRandomElementCount } = configState
 
   return <div className="control-panel-actions">
     <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
@@ -63,10 +45,6 @@ function ActionPanel() {
         <Button className='add-multiple-dialog-actions-btn' intent='primary' onClick={() => { generateElements(); toggleAddMultipleElementsDialog(false) }} >Confirm</Button>
       </div>
     </Dialog>
-    <ButtonGroup fill>
-      <Button icon="saved" onClick={saveToLocal}>Save</Button>
-      <Button icon="import" onClick={loadFromLocal}>Load</Button>
-    </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
       <Button onClick={() => addNewElement(setTargetId)} icon="plus">Add Single</Button>
       <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>

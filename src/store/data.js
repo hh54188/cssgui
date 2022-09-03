@@ -1,4 +1,5 @@
 import create from 'zustand'
+import {persist} from 'zustand/middleware'
 import { useUIStore } from './ui'
 import { getNewState } from '../element-state-template'
 import { useConfigStore } from './config'
@@ -7,7 +8,7 @@ import {createBoxShadowString, moveCenterLeft, moveTopCenter, moveTopLeft} from 
 import {v4 as uuidv4} from "uuid";
 
 let idSeed = 0;
-export const useDataStore = create((set, get) => ({
+export const useDataStore = create(persist((set, get) => ({
   elementCollection: {},
   setElementCollection: (value) => set({ elementCollection: value }),
   updateSingleElement: (newState) => {
@@ -512,4 +513,6 @@ export const useDataStore = create((set, get) => ({
     })
     return result;
   }
+}),{
+  name: 'data',
 }))
