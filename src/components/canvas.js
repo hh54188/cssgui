@@ -10,7 +10,6 @@ import {useDataStore} from '../store/data'
 import {useUIStore} from '../store/ui'
 import Footer from "./footer";
 import AnimationPanel from "./animation-panel";
-import NewAnimationPanel from "./new-animation-panel";
 
 function Canvas() {
 
@@ -79,7 +78,6 @@ function Canvas() {
     </div>
   })}
     {showAnimationPanel && <AnimationPanel />}
-    {/*<NewAnimationPanel></NewAnimationPanel>*/}
     <Footer></Footer>
   </div>
 }
