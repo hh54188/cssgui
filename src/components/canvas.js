@@ -13,7 +13,6 @@ function Canvas() {
   const UIState = useUIStore();
   const dataState = useCoreDataStore();
   const {
-    setTargetId,
     dragStartPoint,
     setDragStartPoint,
     dragBegin,
@@ -22,7 +21,7 @@ function Canvas() {
     setDragStartElementPoint,
     showAnimationPanel,
   } = UIState;
-  const { elementCollection, updateSingleElement, targetId } = dataState;
+  const { elementCollection, updateSingleElement, targetId, setTargetId} = dataState;
 
   function recordMouseDownPosition(targetId, event) {
     const { clientX, clientY } = event;

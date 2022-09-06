@@ -1,15 +1,12 @@
 import create from 'zustand'
 import {persist} from 'zustand/middleware'
 
-export const useUIStore = create(persist((set) => ({
-  targetId: null,
-  setTargetId: (value) => set({ targetId: value }),
-
+export const useUIStore = create((set) => ({
   applyToAll: false,
   toggleApplyToAll: (value) => set({ applyToAll: value }),
 
   positionHorizontalValueState: 'Left',
-  setPositionHorizontalValue: (value) => set({ setPositionHorizontalValue: value }),
+  setPositionHorizontalValue: (value) => set({ positionHorizontalValueState: value }),
 
   positionVerticalValueState: 'Top',
   setPositionVerticalValue: (value) => set({ positionVerticalValueState: value }),
@@ -31,6 +28,4 @@ export const useUIStore = create(persist((set) => ({
 
   cloneElementWhenAddMultipleElements: false,
   toggleCloneElementWhenAddMultipleElements: value => set({ cloneElementWhenAddMultipleElements: value }),
-}), {
-  name: "ui"
 }))
