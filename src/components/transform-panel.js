@@ -10,7 +10,7 @@ import {
   Slider
 } from '@blueprintjs/core'
 import { AnglePicker } from 'react-linear-gradient-picker';
-import {useDataStore} from "../store/data";
+import {useCoreDataStore} from "../store/core";
 import {useUIStore} from "../store/ui";
 import { createTransformString } from '../utils/style'
 import {performanceOptimize} from "./performance-optimize-wrap";
@@ -121,7 +121,7 @@ const OptimizedTransformPanelContainer = performanceOptimize(TransformPanel)(nul
 });
 
 function TransformPanelContainer() {
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const UIState = useUIStore()
   const {getTargetStyle, updateTransform, resetTranslate, resetScale, resetSkew} = dataState;
   const { targetId } = UIState

@@ -3,7 +3,7 @@ import {Collapse, ControlGroup, Divider, HTMLSelect, Icon, NumericInput, Switch}
 import {Popover2} from '@blueprintjs/popover2'
 import {SketchPicker} from 'react-color';
 
-import {useDataStore} from '../store/data'
+import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
 import {performanceOptimize} from "./performance-optimize-wrap";
 
@@ -154,7 +154,7 @@ const OptimizedBorderPanelContainer = performanceOptimize(BorderPanel)(null, fun
 });
 
 function BorderPanelContainer() {
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const UIState = useUIStore()
   const {
     elementCollection,

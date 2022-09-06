@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Toaster} from "@blueprintjs/core";
 
-import {useDataStore} from '../store/data'
+import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
 import {useConfigStore} from '../store/config'
 
@@ -19,14 +19,11 @@ function ActionPanel() {
     toggleCloneElementWhenAddMultipleElements
   } = useUIStore();
   const {
-    elementCollection,
-    updateSingleElement,
     generateElements,
     addNewElement,
     copyElement,
     deleteElement,
-    setElementCollection
-  } = useDataStore();
+  } = useCoreDataStore();
   const configState = useConfigStore();
   const { randomElementCount, setRandomElementCount } = configState
 

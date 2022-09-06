@@ -12,7 +12,7 @@ import {
   Checkbox
 } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
-import {useDataStore} from "../store/data";
+import {useCoreDataStore} from "../store/core";
 import {useUIStore} from "../store/ui";
 import {performanceOptimize} from "./performance-optimize-wrap";
 
@@ -138,7 +138,7 @@ const OptimizedAnimationPanel = performanceOptimize(AnimationPanel)(null, functi
 })
 
 function AnimationContainer() {
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const UIState = useUIStore()
   const {
     getTargetStyle,

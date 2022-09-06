@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
-import { useDataStore } from '../store/data'
+import { useCoreDataStore } from '../store/core'
 import { performanceOptimize } from './performance-optimize-wrap'
 
 function BackgroundPanel({ color, onColorChange }) {
@@ -45,7 +45,7 @@ function BackgroundPanel({ color, onColorChange }) {
 const OptimizedBackgroundContainer = performanceOptimize(BackgroundPanel)(['color']);
 
 function BackgroundPanelContainer() {
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const { getTargetStyle, updateTargetStyle } = dataState;
 
   const color = getTargetStyle("backgroundColor") || '#FFFFFF';

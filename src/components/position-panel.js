@@ -9,7 +9,7 @@ import {
   HTMLSelect,
   Collapse,
 } from '@blueprintjs/core'
-import {useDataStore} from "../store/data";
+import {useCoreDataStore} from "../store/core";
 import {useUIStore} from "../store/ui";
 import {performanceOptimize} from "./performance-optimize-wrap";
 function PositionPanel({
@@ -104,7 +104,7 @@ const OptimizedPositionPanelContainer = performanceOptimize(PositionPanel)(
 );
 
 function PositionPanelContainer() {
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const UIState = useUIStore()
   const {
     getTargetStyle,

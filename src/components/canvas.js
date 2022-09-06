@@ -6,7 +6,7 @@ import {
   updateAnimationProperty
 } from "../utils";
 
-import {useDataStore} from '../store/data'
+import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
 import Footer from "./footer";
 import AnimationPanel from "./animation-panel";
@@ -14,7 +14,7 @@ import AnimationPanel from "./animation-panel";
 function Canvas() {
 
   const UIState = useUIStore();
-  const dataState = useDataStore();
+  const dataState = useCoreDataStore();
   const {
     targetId,
     setTargetId,
