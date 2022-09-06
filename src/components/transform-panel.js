@@ -11,7 +11,6 @@ import {
 } from '@blueprintjs/core'
 import { AnglePicker } from 'react-linear-gradient-picker';
 import {useCoreDataStore} from "../store/core";
-import {useUIStore} from "../store/ui";
 import { createTransformString } from '../utils/style'
 import {performanceOptimize} from "./performance-optimize-wrap";
 function TransformPanel({
@@ -122,9 +121,7 @@ const OptimizedTransformPanelContainer = performanceOptimize(TransformPanel)(nul
 
 function TransformPanelContainer() {
   const dataState = useCoreDataStore();
-  const UIState = useUIStore()
-  const {getTargetStyle, updateTransform, resetTranslate, resetScale, resetSkew} = dataState;
-  const { targetId } = UIState
+  const {targetId, getTargetStyle, updateTransform, resetTranslate, resetScale, resetSkew} = dataState;
 
   return <OptimizedTransformPanelContainer
     transform={targetId ? getTargetStyle("transform"): null}

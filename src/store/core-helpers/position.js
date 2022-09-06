@@ -1,23 +1,16 @@
-import { useUIStore } from '../ui'
 import { produce } from 'immer'
 
 export function factory(set, get) {
   return {
     moveTopLeft() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].left = 0;
         state.elementCollection[targetId].top = 0;
       }));
     },
     moveTopCenter() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -28,10 +21,7 @@ export function factory(set, get) {
       }));
     },
     moveTopRight() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -42,10 +32,7 @@ export function factory(set, get) {
       }));
     },
     moveCenterLeft() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -59,10 +46,7 @@ export function factory(set, get) {
       }));
     },
     moveCenterCenter() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -76,10 +60,7 @@ export function factory(set, get) {
       }));
     },
     moveCenterRight() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -93,10 +74,7 @@ export function factory(set, get) {
       }));
     },
     moveBottomLeft() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -110,10 +88,7 @@ export function factory(set, get) {
       }));
     },
     moveBottomCenter() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -127,10 +102,7 @@ export function factory(set, get) {
       }));
     },
     moveBottomRight() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);

@@ -1,11 +1,10 @@
-import { useUIStore } from '../ui'
 import { produce } from 'immer'
 
 export function factory(set, get) {
   return {
     enableBorderAllInOne() {
       set(produce((state) => {
-        const targetId = useUIStore.getState().targetId;
+        const targetId = get().targetId;
         const selectedElementState = get().getTargetElementState()
         const selectedElementStateTopBorder = selectedElementState.border.top;
 
@@ -17,7 +16,7 @@ export function factory(set, get) {
       }));
     },
     disableBorderAllInOne() {
-      const targetId = useUIStore.getState().targetId;
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].borderAllInOne = false;
       }));
@@ -30,7 +29,7 @@ export function factory(set, get) {
       }
     },
     toggleEnableBorder() {
-      const targetId = useUIStore.getState().targetId;
+      const targetId = get().targetId;
       set(produce((state) => {
         if (state.elementCollection[targetId].borderEnabled) {
           state.elementCollection[targetId].borderEnabled = false;
@@ -40,10 +39,7 @@ export function factory(set, get) {
       }));
     },
     updateBorder(name, value, position) {
-        const targetId = useUIStore.getState().targetId;
-        if (!targetId) {
-          return;
-        }
+        const targetId = get().targetId;
         set(produce((state) => {
           if (state.elementCollection[targetId].borderAllInOne) {
             state.elementCollection[targetId].border['top'][name] = value;

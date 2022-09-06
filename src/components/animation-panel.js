@@ -13,7 +13,6 @@ import {
 } from '@blueprintjs/core'
 import { Popover2 } from '@blueprintjs/popover2'
 import {useCoreDataStore} from "../store/core";
-import {useUIStore} from "../store/ui";
 import {performanceOptimize} from "./performance-optimize-wrap";
 
 function AnimationPanel({
@@ -139,8 +138,8 @@ const OptimizedAnimationPanel = performanceOptimize(AnimationPanel)(null, functi
 
 function AnimationContainer() {
   const dataState = useCoreDataStore();
-  const UIState = useUIStore()
   const {
+    targetId,
     getTargetStyle,
     updateAnimationProperty,
     updateAnimationAnimatedProperties,
@@ -150,7 +149,6 @@ function AnimationContainer() {
     playAnimation,
     stopAnimation
   } = dataState;
-  const { targetId } = UIState
   return (
     <OptimizedAnimationPanel
     animation={targetId ? getTargetStyle("animation") : null}

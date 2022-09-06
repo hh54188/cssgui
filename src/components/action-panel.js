@@ -7,7 +7,6 @@ import {useConfigStore} from '../store/config'
 
 function ActionPanel() {
   const {
-    targetId,
     setTargetId,
     applyToAll,
     toggleApplyToAll,
@@ -19,6 +18,7 @@ function ActionPanel() {
     toggleCloneElementWhenAddMultipleElements
   } = useUIStore();
   const {
+    targetId,
     generateElements,
     addNewElement,
     copyElement,

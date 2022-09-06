@@ -11,18 +11,20 @@ import { factory as animationFactory } from './core-helpers/animation'
 import { produce } from 'immer'
 
 let idSeed = 0;
-export const useCoreDataStore = create(persist((set, get) => ({
+export const useCoreDataStore = create((set, get) => ({
   elementCollection: {},
+  targetId: null,
+  setTargetId: (value) => set({ targetId: value }),
   updateSingleElement: (newState) => {
     set(produce((state) => {
-      state.elementCollection[useUIStore.getState().targetId] = newState;
+      state.elementCollection[state.targetId] = newState;
     }));
   },
   addNewElement: () => {
     set(() => {
       const id = ++idSeed;
+      get().setTargetId(id)
 
-      useUIStore.getState().setTargetId(id)
       const canvasPanel = document.querySelector('.canvas-panel');
       const canvasPanelStyle = window.getComputedStyle(canvasPanel);
       const canvasPanelWidth = parseInt(canvasPanelStyle.width, 10);
@@ -38,27 +40,27 @@ export const useCoreDataStore = create(persist((set, get) => ({
     })
   },
   getTargetStyle(name) {
-    const targetId = useUIStore.getState().targetId;
+    const targetId = get().targetId;
     if (!targetId) {
       return 0;
     }
     return get().elementCollection[targetId][name];
   },
   getTargetElementState() {
-    const targetId = useUIStore.getState().targetId;
+    const targetId = get().targetId;
     if (!targetId) {
       return;
     }
     return get().elementCollection[targetId];
   },
   updateTargetStyle(name, value) {
-    const targetId = useUIStore.getState().targetId;
+    const targetId = get().targetId;
     if (!targetId) {
       return;
     }
     set(produce((state) => {
       const originElementCollection = state.elementCollection;
-      const targetId = useUIStore.getState().targetId;
+      const targetId = get().targetId;
       const originTargetElementState = originElementCollection[targetId];
       if (useUIStore.getState().applyToAll) {
         Object.keys(originElementCollection).forEach(id => {
@@ -72,22 +74,22 @@ export const useCoreDataStore = create(persist((set, get) => ({
     }))
   },
   deleteElement() {
-    const targetId = useUIStore.getState().targetId;
-    useUIStore.getState().setTargetId(null);
+    const targetId = get().targetId;
     set(produce((state) => {
+      state.targetId = null;
       delete state.elementCollection[targetId];
     }));
   },
   cloneElement(targetElementState) {
     const id = idSeed++;
-    useUIStore.getState().setTargetId(id);
     get().updateSingleElement(targetElementState)
+    get().setTargetId(id)
   },
   copyElement() {
-    const targetId = useUIStore.getState().targetId;
+    const targetId = get().targetId;
     const targetElementState = get().elementCollection[targetId];
 
-    useUIStore.getState().setTargetId(++idSeed);
+    get().setTargetId(++idSeed)
     get().updateSingleElement({
       ...JSON.parse(JSON.stringify(targetElementState)),
       top: targetElementState.top + 20,
@@ -97,7 +99,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
   generateElements() {
     set(produce((state) => {
       const originElementCollection = state.elementCollection;
-      const targetId = useUIStore.getState().targetId;
+      const targetId = get().targetId;
       const cloneElementWhenAddMultipleElements = useUIStore.getState().cloneElementWhenAddMultipleElements;
       const selectedElementState = originElementCollection[targetId];
       const randomElementCount = useConfigStore.getState().randomElementCount;
@@ -128,6 +130,4 @@ export const useCoreDataStore = create(persist((set, get) => ({
   ...transformFactory(set, get),
   ...positionFactory(set, get),
   ...animationFactory(set, get),
-}),{
-  name: 'data',
 }))

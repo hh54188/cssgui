@@ -4,7 +4,6 @@ import {Popover2} from '@blueprintjs/popover2'
 import {SketchPicker} from 'react-color';
 
 import {useCoreDataStore} from '../store/core'
-import {useUIStore} from '../store/ui'
 import {performanceOptimize} from "./performance-optimize-wrap";
 
 function BorderPanel({
@@ -155,14 +154,13 @@ const OptimizedBorderPanelContainer = performanceOptimize(BorderPanel)(null, fun
 
 function BorderPanelContainer() {
   const dataState = useCoreDataStore();
-  const UIState = useUIStore()
   const {
     elementCollection,
     updateBorder,
     toggleBorderAllInOne,
-    toggleEnableBorder
+    toggleEnableBorder,
+    targetId
   } = dataState;
-  const { targetId } = UIState
   const targetElementState = elementCollection[targetId];
   const borders = targetId ? targetElementState.border : null;
 

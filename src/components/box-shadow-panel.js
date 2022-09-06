@@ -16,7 +16,6 @@ import {
 import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 import { useCoreDataStore } from '../store/core'
-import { useUIStore } from '../store/ui'
 import { createBoxShadowString } from '../utils/style'
 import {performanceOptimize} from "./performance-optimize-wrap";
 
@@ -171,9 +170,7 @@ const OptimizedBoxShadowContainer = performanceOptimize(BoxShadowPanel)(null, fu
 
 function BoxShadowContainer() {
   const dataState = useCoreDataStore();
-  const UIState = useUIStore()
-  const { getTargetStyle, removeShadow, addShadow, updateShadow} = dataState;
-  const { targetId } = UIState
+  const { getTargetStyle, removeShadow, addShadow, updateShadow, targetId} = dataState;
 
   return <OptimizedBoxShadowContainer
     disabled={!targetId}

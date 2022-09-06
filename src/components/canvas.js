@@ -1,9 +1,6 @@
 import React from 'react'
 import {
-  createStyleObj, getStatusByProperties, playAnimation, saveAnimationEndStatus,
-  saveAnimationStartStatus, stopAnimation,
-  updateAnimationAnimatedProperties,
-  updateAnimationProperty
+  createStyleObj
 } from "../utils";
 
 import {useCoreDataStore} from '../store/core'
@@ -16,10 +13,7 @@ function Canvas() {
   const UIState = useUIStore();
   const dataState = useCoreDataStore();
   const {
-    targetId,
     setTargetId,
-    applyToAll,
-    toggleApplyToAll,
     dragStartPoint,
     setDragStartPoint,
     dragBegin,
@@ -27,13 +21,8 @@ function Canvas() {
     dragStartElementPoint,
     setDragStartElementPoint,
     showAnimationPanel,
-    toggleAnimationPanel,
-    openAddMultipleElementsDialog,
-    toggleAddMultipleElementsDialog,
-    cloneElementWhenAddMultipleElements,
-    toggleCloneElementWhenAddMultipleElements
   } = UIState;
-  const { elementCollection, updateSingleElement } = dataState;
+  const { elementCollection, updateSingleElement, targetId } = dataState;
 
   function recordMouseDownPosition(targetId, event) {
     const { clientX, clientY } = event;

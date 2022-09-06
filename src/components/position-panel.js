@@ -117,7 +117,8 @@ function PositionPanelContainer() {
     moveCenterRight,
     moveBottomLeft,
     moveBottomCenter,
-    moveBottomRight
+    moveBottomRight,
+    targetId
   } = dataState;
   const {
     setPositionHorizontalValue,
@@ -125,7 +126,6 @@ function PositionPanelContainer() {
     positionHorizontalValueState,
     positionVerticalValueState,
   } = UIState;
-  const { targetId } = UIState
 
   return <OptimizedPositionPanelContainer
     onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}

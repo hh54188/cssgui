@@ -9,7 +9,6 @@ import {
 } from '@blueprintjs/core'
 
 import { useCoreDataStore } from '../store/core'
-import { useUIStore } from '../store/ui'
 import { performanceOptimize } from './performance-optimize-wrap'
 
 function SizePanel({
@@ -74,9 +73,7 @@ const OptimizedSizePanelContainer = performanceOptimize(SizePanel)(
 
 function SizePanelContainer() {
   const dataState = useCoreDataStore();
-  const UIState = useUIStore()
-  const { getTargetStyle, updateTargetStyle } = dataState;
-  const { targetId } = UIState
+  const { getTargetStyle, updateTargetStyle, targetId } = dataState;
 
   const width = getTargetStyle("width");
   const height = getTargetStyle("height");

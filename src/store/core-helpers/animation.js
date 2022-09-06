@@ -1,4 +1,3 @@
-import { useUIStore } from '../ui'
 import { produce } from 'immer'
 import {v4 as uuidv4} from "uuid";
 import {createBoxShadowString} from "../../utils";
@@ -6,46 +5,31 @@ import {createBoxShadowString} from "../../utils";
 export function factory(set, get) {
   return {
     updateAnimationProperty(key, value) {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].animation[key] = value
       }));
     },
     updateAnimationAnimatedProperties(property, value) {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].animation.animatedProperties[property] = value
       }));
     },
     saveAnimationStartStatus(status) {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].animation.animationTimeline[0] = status
       }));
     },
     saveAnimationEndStatus(status) {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         state.elementCollection[targetId].animation.animationTimeline[1] = status;
       }));
     },
     stopAnimation() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         const { animation: { name } } = state.elementCollection[targetId];
         if (!name) {
@@ -57,10 +41,7 @@ export function factory(set, get) {
       }));
     },
     playAnimation() {
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       set(produce((state) => {
         const { animation: { animationTimeline } } = state.elementCollection[targetId];
         if (!animationTimeline.length) {
@@ -86,10 +67,7 @@ export function factory(set, get) {
     },
     getStatusByProperties() {
       const result = [];
-      const targetId = useUIStore.getState().targetId;
-      if (!targetId) {
-        return;
-      }
+      const targetId = get().targetId;
       const sourceElementState = get().elementCollection[targetId];
       const { animation: { animatedProperties } } = sourceElementState;
       Object.keys(animatedProperties).forEach(property => {
