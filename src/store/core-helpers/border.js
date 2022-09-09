@@ -22,7 +22,7 @@ export function factory(set, get) {
       }));
     },
     toggleBorderAllInOne() {
-      if (get().getTargetStyle("borderEnabled")) {
+      if (get().getTargetStyle("borderAllInOne")) {
         get().disableBorderAllInOne();
       } else {
         get().enableBorderAllInOne();
