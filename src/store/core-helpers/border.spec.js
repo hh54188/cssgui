@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import {extractStyle} from '../../utils/test'
+import {extractStyle} from '../../utils/test-helper'
 import {stateTemplate} from '../../element-state-template'
 import { useCoreDataStore } from '../core'
 
