@@ -82,6 +82,14 @@ describe('Animation Store', () => {
     expect(styleBlockContent.indexOf(startStatus[0]) > -1).toBeTruthy();
     expect(styleBlockContent.indexOf(endStatus[0]) > -1).toBeTruthy();
   })
+  it("should play animation when not timeline exists", () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    act(() => {
+      result.current.addNewElement();
+      result.current.playAnimation();
+    })
+    expect(document.querySelectorAll('head style').length).toBe(0)
+  })
   it("should stop animation", () => {
     const { result } = renderHook(() => useCoreDataStore())
     const startStatus = ['background:white']
@@ -98,6 +106,14 @@ describe('Animation Store', () => {
     })
     expect(document.querySelectorAll('head style').length).toBe(0)
     expect(extractStyle(result, 'animation').name).toBe('')
+  })
+  it("should play animation when not animation name exists", () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    expect(document.querySelectorAll('head style').length).toBe(0)
+    act(() => {
+      result.current.addNewElement();
+      result.current.stopAnimation();
+    })
   })
   it("should generate status by size properties", () => {
     const { result } = renderHook(() => useCoreDataStore())
