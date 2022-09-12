@@ -77,15 +77,15 @@ export function factory(set, get) {
         }
         switch (property) {
           case 'size':
-            result.push(`width:${sourceElementState.width}px;`);
+            result.push(`width:${sourceElementState.width}px`);
             result.push(`height:${sourceElementState.height}px`);
             break;
           case 'position':
-            result.push(`left:${sourceElementState.left}px;`);
+            result.push(`left:${sourceElementState.left}px`);
             result.push(`top:${sourceElementState.top}px`);
             break;
           case 'background':
-            result.push(`background:${sourceElementState.backgroundColor};`);
+            result.push(`background:${sourceElementState.backgroundColor}`);
             break;
           case 'border':
             result.push(`border-top: ${!sourceElementState.borderEnabled ? 'none' : `${sourceElementState.border.top.width}px ${sourceElementState.border.top.style} ${sourceElementState.border.top.color}`}`);
