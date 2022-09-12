@@ -80,11 +80,6 @@ export const useCoreDataStore = create((set, get) => ({
       delete state.elementCollection[targetId];
     }));
   },
-  cloneElement(targetElementState) {
-    const id = idSeed++;
-    get().updateSingleElement(targetElementState)
-    get().setTargetId(id)
-  },
   copyElement() {
     const targetId = get().targetId;
     const targetElementState = get().elementCollection[targetId];
