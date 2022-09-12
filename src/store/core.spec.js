@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import { useCoreDataStore } from './core'
 import { useConfigStore } from './config'
 import { useUIStore } from './ui'
-import {extractStyle, extractLatestElementStyle} from "../utils/test-helper";
+import {extractStyle, extractLatestElementStyle, verifyEveryElementStyle} from "../utils/test-helper";
 
 describe('Core Store', () => {
   beforeEach(() => {
@@ -33,15 +33,15 @@ describe('Core Store', () => {
     })
     expect(targetWidthStyle).toBe(200)
   })
-  // it('should return element style value as zero when no targetId exist', () => {
-  //   const { result } = renderHook(() => useCoreDataStore())
-  //   let targetWidthStyle = null;
-  //   act(() => {
-  //     result.current.setTargetId(null)
-  //     targetWidthStyle = result.current.getTargetStyle('width')
-  //   })
-  //   expect(targetWidthStyle).toBe(0)
-  // })
+  it('should return element style value as zero when no targetId exist', () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    let targetWidthStyle = null;
+    act(() => {
+      result.current.setTargetId(null)
+      targetWidthStyle = result.current.getTargetStyle('width')
+    })
+    expect(targetWidthStyle).toBe(0)
+  })
   it('should able to get target element whole state', () => {
     const { result } = renderHook(() => useCoreDataStore())
     let targetElementState = null;
@@ -54,6 +54,15 @@ describe('Core Store', () => {
     expect(targetElementState.height).toBe(200)
     expect(targetElementState.backgroundColor).toBe('#FFFFFF')
   })
+  it('should return element state as undefined when no targetId exist', () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    let targetElementState = null;
+    act(() => {
+      result.current.setTargetId(null)
+      targetElementState = result.current.getTargetElementState();
+    })
+    expect(targetElementState).toBeUndefined();
+  })
   it('should able to update target style', () => {
     const { result } = renderHook(() => useCoreDataStore())
     act(() => {
@@ -61,6 +70,24 @@ describe('Core Store', () => {
       result.current.updateTargetStyle('width', 250);
     })
     expect(extractStyle(result, 'width')).toBe(250)
+  })
+  it('should not throw exception when update target style with id not exist', () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    act(() => {
+      result.current.addNewElement();
+      result.current.setTargetId(null)
+      result.current.updateTargetStyle('width', 250);
+    })
+  })
+  it('should able to update all elements style when enabled apply to all', () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    const { result: uiResult } = renderHook(() => useUIStore())
+    act(() => {
+      result.current.addNewElement();
+      uiResult.current.toggleApplyToAll(true)
+      result.current.updateTargetStyle('width', 250);
+    })
+    expect(verifyEveryElementStyle(result, 'width', 250)).toBeTruthy();
   })
   it('should able to delete element', () => {
     const { result } = renderHook(() => useCoreDataStore())
