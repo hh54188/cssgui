@@ -165,6 +165,25 @@ describe('Animation Store', () => {
       'border-right: 10px dashed red',
     ])
   })
+  it("should generate border status with none value when border feature disabled", () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    act(() => {
+      result.current.addNewElement();
+      result.current.enableBorderAllInOne();
+      result.current.updateBorder('width', 10);
+      result.current.updateBorder('style', 'dashed');
+      result.current.updateBorder('color', 'red');
+      result.current.updateAnimationAnimatedProperties('border', true)
+      result.current.toggleEnableBorder();
+    })
+    const status = result.current.getStatusByProperties();
+    expect(status).toEqual([
+      'border-top: none',
+      'border-bottom: none',
+      'border-left: none',
+      'border-right: none',
+    ])
+  })
   it("should generate status by boxShadow properties", () => {
     const { result } = renderHook(() => useCoreDataStore())
     act(() => {
