@@ -136,4 +136,19 @@ describe('UI Store', () => {
       expect(result.current.cloneElementWhenAddMultipleElements).toBe(true)
     })
   })
+
+  describe("openCopyStyleCodeDialog", () => {
+    it('should openCopyStyleCodeDialog initialized to false', () => {
+      const { result } = renderHook(() => useUIStore())
+      expect(result.current.openCopyStyleCodeDialog).toBe(false)
+    })
+
+    it('should setOpenCopyStyleCodeDialog can update openCopyStyleCodeDialog value', () => {
+      const { result } = renderHook(() => useUIStore())
+      act(() => {
+        result.current.setOpenCopyStyleCodeDialog(true)
+      })
+      expect(result.current.openCopyStyleCodeDialog).toBe(true)
+    })
+  })
 })
