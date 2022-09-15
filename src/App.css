@@ -262,3 +262,8 @@
     color: lightgray;
     z-index: 1;
 }
+
+.copy-code-style-dialog-footer {
+    margin-top: 10px;
+    margin-bottom: -10px;
+}

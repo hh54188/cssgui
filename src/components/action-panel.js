@@ -1,8 +1,12 @@
-import React from 'react';
-import {Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Toaster} from "@blueprintjs/core";
+import React, {useState} from 'react';
+import hljs from 'highlight.js';
+import reactToCSS from 'react-style-object-to-css'
+import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch } from "@blueprintjs/core";
 
+import {StyleCodeDialog} from '../components/style-code-dialog'
 import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
+import {createStyleObj} from '../utils/style'
 import {useConfigStore} from '../store/config'
 
 function ActionPanel() {
@@ -15,7 +19,9 @@ function ActionPanel() {
     toggleAddMultipleElementsDialog,
     openAddMultipleElementsDialog,
     cloneElementWhenAddMultipleElements,
-    toggleCloneElementWhenAddMultipleElements
+    toggleCloneElementWhenAddMultipleElements,
+    openCopyStyleCodeDialog,
+    setOpenCopyStyleCodeDialog
   } = useUIStore();
   const {
     targetId,
@@ -23,11 +29,30 @@ function ActionPanel() {
     addNewElement,
     copyElement,
     deleteElement,
+    getTargetElementState
   } = useCoreDataStore();
   const configState = useConfigStore();
   const { randomElementCount, setRandomElementCount } = configState
+  const [codeMarkup, setCodeMarkup] = useState('');
+  const [codeText, setCodeText] = useState('');
+
+  function showCopyStyleCodeDialog() {
+    const styleObj = createStyleObj(getTargetElementState());
+    const styleText = reactToCSS(styleObj).replace(/;\s+/g, ';\n');
+    const highlightedCode = hljs.highlight(styleText, {language: 'css'}).value;
+
+    setCodeText(styleText)
+    setCodeMarkup(highlightedCode)
+    setOpenCopyStyleCodeDialog(true);
+  }
 
   return <div className="control-panel-actions">
+    <StyleCodeDialog
+      isOpen={openCopyStyleCodeDialog}
+      onClose={() => setOpenCopyStyleCodeDialog(false)}
+      codeMarkup={codeMarkup}
+      codeText={codeText}
+    />
     <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
       <div className="add-multiple-dialog-content">
         <FormGroup label="Element Count" inline>
@@ -51,6 +76,9 @@ function ActionPanel() {
     </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
       <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete Element</Button>
+    </ButtonGroup>
+    <ButtonGroup fill style={{ marginTop: 10 }}>
+      <Button intent="primary" icon="code" onClick={showCopyStyleCodeDialog} disabled={!targetId}>Copy Style Code</Button>
     </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
       {!showAnimationPanel && <Button icon="drawer-right" onClick={() => toggleAnimationPanel(true)} disabled={!targetId}>Open Animation Panel</Button>}

@@ -28,4 +28,7 @@ export const useUIStore = create((set) => ({
 
   cloneElementWhenAddMultipleElements: false,
   toggleCloneElementWhenAddMultipleElements: value => set({ cloneElementWhenAddMultipleElements: value }),
+
+  openCopyStyleCodeDialog: false,
+  setOpenCopyStyleCodeDialog: value => set({ openCopyStyleCodeDialog: value }),
 }))
