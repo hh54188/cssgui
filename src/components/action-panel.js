@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import hljs from 'highlight.js';
 import reactToCSS from 'react-style-object-to-css'
-import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch } from "@blueprintjs/core";
+import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes } from "@blueprintjs/core";
 
 import {StyleCodeDialog} from '../components/style-code-dialog'
+import {GradientPanel} from '../components/gradient-panel'
 import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
 import {createStyleObj} from '../utils/style'
@@ -47,6 +48,19 @@ function ActionPanel() {
   }
 
   return <div className="control-panel-actions">
+     <Dialog className='copy-code-style-dialog' style={{width: 960}} isOpen={true}>
+      <div className={Classes.DIALOG_HEADER}>
+        Hello
+      </div>
+      <div className={Classes.DIALOG_BODY}>
+        <GradientPanel></GradientPanel>
+      </div>
+      <div className={`${Classes.DIALOG_FOOTER}`}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <Button>Click</Button>
+        </div>
+      </div>
+    </Dialog>
     <StyleCodeDialog
       isOpen={openCopyStyleCodeDialog}
       onClose={() => setOpenCopyStyleCodeDialog(false)}
