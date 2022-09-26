@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Icon, Menu, MenuItem, Position, Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes } from "@blueprintjs/core";
+import { Card, Elevation, Icon, Menu, MenuItem, Position, Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes } from "@blueprintjs/core";
 import { Popover2 } from '@blueprintjs/popover2'
 let idSeed = 0;
 
@@ -19,7 +19,7 @@ export function GradientPanel() {
     setDragStartFlag(true);
     setDragStartOffset(clientX);
     setElementStartOffset(elementOffset[id])
-    setMaxOffset(parseInt(window.getComputedStyle(document.querySelector('.gradient-panel__slider')).width) - 20);
+    setMaxOffset(parseInt(window.getComputedStyle(document.querySelector('.gradient-panel__slider')).width) - 30);
   }
 
   function onMouseMove(event) {
@@ -60,26 +60,25 @@ export function GradientPanel() {
     <div className='gradient-panel'>
       <div className="gradient-panel__slider" onClick={addMarker} onMouseMove={onMouseMove}>
         {Object.keys(elementOffset).map(id => {
-          return <div
-            key={id}
-            style={{ left: elementOffset[id] }}
-            onMouseDown={onMouseDown.bind(this, id)}
-            onMouseUp={onMouseUp}
-            onClick={event => event.stopPropagation()}
-            className="gradient-pane__slider-marker">
-            <Popover2 content={
-              <Menu>
-                <MenuItem icon="duplicate" text="Duplicate" />
-                <MenuItem icon="delete" text="Delete" />
-              </Menu>
-            }
-              interactionKind="click"
-              position={Position.BOTTOM}
-              popoverClassName="gradient-pane__slider-marker__menu"
-              >
-              <Icon className='gradient-pane__slider-marker__menu-trigger' icon="more" iconSize={14} />
-            </Popover2>
-          </div>
+          return <Popover2 key={id} content={
+            <Card interactive={true} elevation={Elevation.TWO}>
+              <h5><a href="#">Card heading</a></h5>
+              <p>Card content {id}</p>
+              <Button>Submit</Button>
+            </Card>
+          }
+            placement="bottom"
+            interactionKind="hover">
+            <div
+              key={id}
+              style={{ left: elementOffset[id] }}
+              onMouseDown={onMouseDown.bind(this, id)}
+              onMouseUp={onMouseUp}
+              onClick={event => event.stopPropagation()}
+              className="gradient-pane__slider-marker">
+              <div className='gradient-pane__slider-marker__color'></div>
+            </div>
+          </Popover2>
         })}
       </div>
     </div>
