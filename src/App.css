@@ -280,21 +280,22 @@
 
 .gradient-panel__slider {
     width: 100%;
-    height: 40px;
-    border-radius: 20px;
+    height: 20px;
+    border-radius: 10px;
     margin: 0 auto;
     position: relative;
     cursor: crosshair;
     background: linear-gradient(to right, orange, skyblue);
     box-shadow: inset 1px 1px 4px grey;
+    margin-bottom: 20px;
 }
-.gradient-pane__slider-marker {
+.gradient-panel__slider-marker {
     position: absolute;
-    height: 60px;
-    width: 60px;
+    height: 30px;
+    width: 30px;
     left: 30px;
-    top: -10px;
-    border-radius: 30px;
+    top: -5px;
+    border-radius: 15px;
     cursor: move;
     /* border: 1px solid black; */
     /* background: linear-gradient(to right bottom, white, rgb(219, 219, 219)); */
@@ -302,30 +303,60 @@
     box-shadow: 0px 2px 6px grey;
 }
 
-.gradient-pane__slider-marker__color {
+.gradient-panel__slider-marker__color {
     position: absolute;
-    height: 46px;
-    width: 46px;
-    left: 7px;
-    top: 7px;
-    border-radius: 24px;
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    top: 4px;
+    border-radius: 11px;
     cursor: move;
     background: #c9c9c9;
-    /* box-shadow: inset 1px 1px 5px grey;
 }
 
-.gradient-pane__slider-marker__menu-trigger {
-    position: absolute;
-    bottom: 4px;
-    /* left: 2px; */
+.gradient-panel__color-item {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradient-panel__color-item__position {
+    width: 60px;
+    display: inline-block;
+}
+
+.gradient-panel__color-item__position__unit {
+    margin-top: 8px;
+    margin-left: 4px;
+    color: gray;
+}
+
+.gradient-panel__color-item__picker {
+    width: 60px;
+    height: 30px;
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+.gradient-panel__color-item__color-text {
+    width: 90px;
+    display: inline-block;
+    margin-left: 10px;
     cursor: pointer;
 }
 
-.gradient-pane__slider-marker__menu {
-    position: relative;
-    top: 45px;
-    left: 10px;
+.gradient-panel__color-item__btn {
+    display: inline-block;
+    margin-left: 14px;
+    cursor: pointer;
 }
+
 
 
 
