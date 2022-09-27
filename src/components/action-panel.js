@@ -49,8 +49,13 @@ function ActionPanel() {
 
   return <div className="control-panel-actions">
      <Dialog className='copy-code-style-dialog' style={{width: 960}} isOpen={true}>
-      <div className={Classes.DIALOG_HEADER}>
+      {/* <div className={Classes.DIALOG_HEADER}>
         Hello
+      </div> */}
+      <div style={{ 
+        height: 160, 
+        background: 'linear-gradient(to right, orange, skyblue)'}}
+      >
       </div>
       <div className={Classes.DIALOG_BODY}>
         <GradientPanel></GradientPanel>

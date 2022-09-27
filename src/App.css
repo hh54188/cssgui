@@ -291,20 +291,21 @@
     border-radius: 30px;
     cursor: move;
     /* border: 1px solid black; */
-    background: linear-gradient(to right bottom, white, rgb(219, 219, 219));
-    box-shadow: 1px 1px 10px grey;
+    /* background: linear-gradient(to right bottom, white, rgb(219, 219, 219)); */
+    background: white;
+    box-shadow: 0px 2px 6px grey;
 }
 
 .gradient-pane__slider-marker__color {
     position: absolute;
-    height: 40px;
-    width: 40px;
-    left: 10px;
-    top: 10px;
-    border-radius: 20px;
+    height: 46px;
+    width: 46px;
+    left: 7px;
+    top: 7px;
+    border-radius: 24px;
     cursor: move;
     background: #c9c9c9;
-    box-shadow: inset 1px 1px 5px grey;
+    /* box-shadow: inset 1px 1px 5px grey;
 }
 
 .gradient-pane__slider-marker__menu-trigger {

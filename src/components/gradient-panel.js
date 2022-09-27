@@ -60,16 +60,7 @@ export function GradientPanel() {
     <div className='gradient-panel'>
       <div className="gradient-panel__slider" onClick={addMarker} onMouseMove={onMouseMove}>
         {Object.keys(elementOffset).map(id => {
-          return <Popover2 key={id} content={
-            <Card interactive={true} elevation={Elevation.TWO}>
-              <h5><a href="#">Card heading</a></h5>
-              <p>Card content {id}</p>
-              <Button>Submit</Button>
-            </Card>
-          }
-            placement="bottom"
-            interactionKind="hover">
-            <div
+          return <div
               key={id}
               style={{ left: elementOffset[id] }}
               onMouseDown={onMouseDown.bind(this, id)}
@@ -78,7 +69,6 @@ export function GradientPanel() {
               className="gradient-pane__slider-marker">
               <div className='gradient-pane__slider-marker__color'></div>
             </div>
-          </Popover2>
         })}
       </div>
     </div>
