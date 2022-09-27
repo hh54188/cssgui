@@ -7,7 +7,8 @@ import {
   FormGroup,
   NumericInput,
   Switch,
-  Classes
+  Classes,
+  Divider
 } from "@blueprintjs/core";
 import { Popover2 } from '@blueprintjs/popover2'
 let idSeed = 0;
@@ -88,11 +89,42 @@ export function GradientPanel() {
             })}
           </div>
           <div>
-            <div style={{ marginTop: 20, width: 200 }}>
-              <div style={{width: 80}}>
+            <div style={{ marginTop: 20, marginBottom: 10, width: '100%', display: 'flex', alignContent: 'center', alignItems: 'center'}}>
+              <div style={{width: 80, display: 'inline-block' }}>
                 <NumericInput value={90} fill large buttonPosition='none' leftIcon="percentage"></NumericInput>
               </div>
+              <div style={{width: 100, display: 'inline-block', marginLeft: 10}}>
+                <div style={{width: '100%', height: 40, backgroundColor: 'white'}}></div>
+              </div>
+              <div style={{width: 120, display: 'inline-block', marginLeft: 10}}>
+                <InputGroup value="#FFFFFF" fill large leftIcon="style" />
+              </div>
+              <div style={{width: 30, display: 'inline-block', marginLeft: 10}}>
+                <Button icon="duplicate"></Button>
+              </div>
+              <div style={{width: 30, display: 'inline-block', marginLeft: 10}}>
+                <Button icon="trash"></Button>
+              </div>
             </div>
+            <Divider></Divider>
+            <div style={{ marginTop: 20, marginBottom: 10, width: '100%', display: 'flex', alignContent: 'center', alignItems: 'center'}}>
+              <div style={{width: 80, display: 'inline-block' }}>
+                <NumericInput value={90} fill large buttonPosition='none' leftIcon="percentage"></NumericInput>
+              </div>
+              <div style={{width: 100, display: 'inline-block', marginLeft: 10}}>
+                <div style={{width: '100%', height: 40, backgroundColor: 'white'}}></div>
+              </div>
+              <div style={{width: 120, display: 'inline-block', marginLeft: 10}}>
+                <InputGroup value="#FFFFFF" fill large leftIcon="style" />
+              </div>
+              <div style={{width: 30, display: 'inline-block', marginLeft: 10}}>
+                <Button icon="duplicate"></Button>
+              </div>
+              <div style={{width: 30, display: 'inline-block', marginLeft: 10}}>
+                <Button icon="trash"></Button>
+              </div>
+            </div>
+            <Divider></Divider>
           </div>
         </div>
       </div>
