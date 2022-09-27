@@ -91,21 +91,137 @@ export function GradientPanel() {
           </div>
           <div>
             <div className='gradient-panel__color-item'>
-              <div className='gradient-panel__color-item__position'>
-                <ControlGroup>
-                  <NumericInput value={90} fill  buttonPosition='none'></NumericInput>
-                  <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={14}></Icon>
-                </ControlGroup>
+              <div className="gradient-panel__color-item__info">
+                <div className='gradient-panel__color-item__position'>
+                  <ControlGroup>
+                    <NumericInput value={90} fill buttonPosition='none'></NumericInput>
+                    <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
+                  </ControlGroup>
+                </div>
+                <div className='gradient-panel__divider'></div>
+                <div className='gradient-panel__color-item__picker'></div>
+                <div className='gradient-panel__color-item__color-text'>
+                  <InputGroup value="#FFFFFF" fill leftIcon="style" />
+                </div>
               </div>
-              <div className='gradient-panel__color-item__picker'></div>
-              <div className='gradient-panel__color-item__color-text'>
-                <InputGroup value="#FFFFFF" fill leftIcon="style" />
+              <div className="gradient-panel__color-item__action">
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="eye-open" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="duplicate" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="trash" size={16}></Icon>
+                </div>
               </div>
-              <div className='gradient-panel__color-item__btn'>
-                <Icon icon="duplicate" size={16}></Icon>
+            </div>
+            <Divider></Divider>
+            <div className='gradient-panel__color-item'>
+              <div className="gradient-panel__color-item__info">
+                <div className='gradient-panel__color-item__position'>
+                  <ControlGroup>
+                    <NumericInput value={90} fill buttonPosition='none'></NumericInput>
+                    <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
+                  </ControlGroup>
+                </div>
+                <div className='gradient-panel__divider'></div>
+                <div className='gradient-panel__color-item__picker'></div>
+                <div className='gradient-panel__color-item__color-text'>
+                  <InputGroup value="#FFFFFF" fill leftIcon="style" />
+                </div>
               </div>
-              <div className='gradient-panel__color-item__btn'>
-                <Icon icon="trash" size={16}></Icon>
+              <div className="gradient-panel__color-item__action">
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="eye-open" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="duplicate" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="trash" size={16}></Icon>
+                </div>
+              </div>
+            </div>
+            <Divider></Divider>
+            <div className='gradient-panel__color-item'>
+              <div className="gradient-panel__color-item__info">
+                <div className='gradient-panel__color-item__position'>
+                  <ControlGroup>
+                    <NumericInput value={90} fill buttonPosition='none'></NumericInput>
+                    <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
+                  </ControlGroup>
+                </div>
+                <div className='gradient-panel__divider'></div>
+                <div className='gradient-panel__color-item__picker'></div>
+                <div className='gradient-panel__color-item__color-text'>
+                  <InputGroup value="#FFFFFF" fill leftIcon="style" />
+                </div>
+              </div>
+              <div className="gradient-panel__color-item__action">
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="eye-open" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="duplicate" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="trash" size={16}></Icon>
+                </div>
+              </div>
+            </div>
+            <Divider></Divider>
+            <div className='gradient-panel__color-item'>
+              <div className="gradient-panel__color-item__info">
+                <div className='gradient-panel__color-item__position'>
+                  <ControlGroup>
+                    <NumericInput value={90} fill buttonPosition='none'></NumericInput>
+                    <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
+                  </ControlGroup>
+                </div>
+                <div className='gradient-panel__divider'></div>
+                <div className='gradient-panel__color-item__picker'></div>
+                <div className='gradient-panel__color-item__color-text'>
+                  <InputGroup value="#FFFFFF" fill leftIcon="style" />
+                </div>
+              </div>
+              <div className="gradient-panel__color-item__action">
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="eye-open" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="duplicate" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="trash" size={16}></Icon>
+                </div>
+              </div>
+            </div>
+            <Divider></Divider>
+            <div className='gradient-panel__color-item'>
+              <div className="gradient-panel__color-item__info">
+                <div className='gradient-panel__color-item__position'>
+                  <ControlGroup>
+                    <NumericInput value={90} fill buttonPosition='none'></NumericInput>
+                    <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
+                  </ControlGroup>
+                </div>
+                <div className='gradient-panel__divider'></div>
+                <div className='gradient-panel__color-item__picker'></div>
+                <div className='gradient-panel__color-item__color-text'>
+                  <InputGroup value="#FFFFFF" fill leftIcon="style" />
+                </div>
+              </div>
+              <div className="gradient-panel__color-item__action">
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="eye-open" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="duplicate" size={16}></Icon>
+                </div>
+                <div className='gradient-panel__color-item__btn'>
+                  <Icon icon="trash" size={16}></Icon>
+                </div>
               </div>
             </div>
             <Divider></Divider>
