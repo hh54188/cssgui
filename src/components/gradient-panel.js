@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
-import { Card, Elevation, Icon, Menu, MenuItem, Position, Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes } from "@blueprintjs/core";
+import {
+  Button,
+  Dialog,
+  ControlGroup,
+  InputGroup,
+  FormGroup,
+  NumericInput,
+  Switch,
+  Classes
+} from "@blueprintjs/core";
 import { Popover2 } from '@blueprintjs/popover2'
 let idSeed = 0;
 
@@ -57,20 +66,41 @@ export function GradientPanel() {
   }
 
   return (
-    <div className='gradient-panel'>
-      <div className="gradient-panel__slider" onClick={addMarker} onMouseMove={onMouseMove}>
-        {Object.keys(elementOffset).map(id => {
-          return <div
-              key={id}
-              style={{ left: elementOffset[id] }}
-              onMouseDown={onMouseDown.bind(this, id)}
-              onMouseUp={onMouseUp}
-              onClick={event => event.stopPropagation()}
-              className="gradient-pane__slider-marker">
-              <div className='gradient-pane__slider-marker__color'></div>
-            </div>
-        })}
+    <Dialog className='gradient-dialog' style={{ width: 960, marginBottom: 20 }} isOpen={true}>
+      <div className='gradient-preview' style={{
+        background: 'linear-gradient(to right, orange, skyblue)'
+      }}
+      >
       </div>
-    </div>
+      <div className={Classes.DIALOG_BODY}>
+        <div className='gradient-panel'>
+          <div className="gradient-panel__slider" onClick={addMarker} onMouseMove={onMouseMove}>
+            {Object.keys(elementOffset).map(id => {
+              return <div
+                key={id}
+                style={{ left: elementOffset[id] }}
+                onMouseDown={onMouseDown.bind(this, id)}
+                onMouseUp={onMouseUp}
+                onClick={event => event.stopPropagation()}
+                className="gradient-pane__slider-marker">
+                <div className='gradient-pane__slider-marker__color'></div>
+              </div>
+            })}
+          </div>
+          <div>
+            <div style={{ marginTop: 20, width: 200 }}>
+              <div style={{width: 80}}>
+                <NumericInput value={90} fill large buttonPosition='none' leftIcon="percentage"></NumericInput>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={`${Classes.DIALOG_FOOTER}`}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <Button>Click</Button>
+        </div>
+      </div>
+    </Dialog>
   )
 }
