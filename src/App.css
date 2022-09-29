@@ -274,8 +274,61 @@
     background:white;
 }
 
-.gradient-panel {
+.gradient-dialog {
+    width: 520px; 
+    margin-bottom: 20px; 
+    z-index: 1
+}
 
+
+.gradient-panel__angle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start
+}
+
+.gradient-panel__angle__label {
+    margin-right: 10px;
+}
+
+.gradient-panel__angle__picker {
+    margin-left: 10px;
+}
+
+.gradient-panel__angle__input {
+    width: 45px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.gradient-panel__meta {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.gradient-panel__presets {
+    display: flex; 
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.gradient-panel__presets__label {
+    font-size: 12px;
+}
+
+.gradient-panel__presets__item {
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgba(17, 20, 24, 0.15);
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.gradient-panel__presets__item:first-of-type{
+    margin-left: 15px;
 }
 
 .gradient-panel__slider {
@@ -285,7 +338,6 @@
     margin: 0 auto;
     position: relative;
     cursor: crosshair;
-    background: linear-gradient(to right, orange, skyblue);
     box-shadow: inset 1px 1px 4px grey;
     margin-bottom: 20px;
 }
@@ -297,8 +349,6 @@
     top: -5px;
     border-radius: 15px;
     cursor: move;
-    /* border: 1px solid black; */
-    /* background: linear-gradient(to right bottom, white, rgb(219, 219, 219)); */
     background: white;
     box-shadow: 0px 2px 6px grey;
 }
@@ -333,7 +383,7 @@
 }
 
 .gradient-panel__color-item__position {
-    width: 60px;
+    width: 65px;
     display: inline-block;
 }
 
@@ -347,9 +397,8 @@
     width: 60px;
     height: 30px;
     display: inline-block;
-    margin-left: 10px;
     cursor: pointer;
-    border: 1px solid lightgray;
+    border: 3px solid white;
     border-radius: 4px;
 }
 
@@ -366,11 +415,27 @@
     cursor: pointer;
 }
 
+.gradient-panel__color-item__btn-disabled {
+    color: lightgrey;
+    cursor: not-allowed;
+}
+
 .gradient-panel__divider {
     width: 0px;
     height: 30px;
     border-left: 1px solid rgba(17, 20, 24, 0.15);
     margin: 0 10px;
+}
+
+.overlay-when-drag {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    cursor: move;
+    /* background: rgba(255, 0, 0, 0.3); */
 }
 
 

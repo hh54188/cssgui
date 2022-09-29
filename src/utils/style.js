@@ -1,3 +1,8 @@
+export function isColor(strColor) {
+    const s = new Option().style;
+    s.color = strColor;
+    return s.color !== '';
+}
 export function createBoxShadowString(boxShadowState) {
     const enabledBoxShadowState = boxShadowState.filter(item => item.enabled);
     let boxShadowStr = ''
@@ -17,6 +22,18 @@ export function createTransformString(transform) {
     const skew3dStr = `skew(${transform.skew.x}deg, ${transform.skew.y}deg)`;
     const rotate3dStr = `rotate3d(${transform.rotate.x}, ${transform.rotate.y}, ${transform.rotate.z})`;
     return `${translate3dStr} ${scale3dStr} ${skew3dStr}`
+}
+
+export function createGradientString(gradientStops, gradientAngle) {
+    const colors = gradientStops
+        .filter(stop => !!stop.visible)
+        .map(({ color, percentage }) => {
+            return `${color} ${percentage}%`
+        }).join(',');
+    
+    return gradientAngle
+        ? `linear-gradient(${gradientAngle}deg, ${colors})`
+        : `linear-gradient(to right, ${colors})`
 }
 
 export function createStyleObj(elementState) {
