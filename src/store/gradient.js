@@ -1,7 +1,8 @@
 import create from 'zustand'
 import { v4 as uuidv4 } from 'uuid';
 import { produce } from 'immer'
-import {isColor} from '../utils/style'
+import { isColor } from '../utils/style'
+import chroma from "chroma-js";
 
 const maxOffset = 490 - 30;
 const minOffset = 0;
@@ -20,6 +21,47 @@ export const useGradientStore = create((set, get) => ({
   setElementStartOffset: value => set({ elementStartOffset: value }),
   gradientAngle: 90,
   setGradientAngle: value => set({ gradientAngle: value }),
+  gradientPresets: [
+    [{
+      id: uuidv4(),
+      offset: 0,
+      color: '#ffa500',
+      percentage: 0,
+      visible: true,
+    }, {
+      id: uuidv4(),
+      offset: maxOffset,
+      color: '#87ceeb',
+      percentage: 100,
+      visible: true,
+    }],
+    [{
+      id: uuidv4(),
+      offset: 0,
+      color: '#3c3b3f',
+      percentage: 0,
+      visible: true,
+    }, {
+      id: uuidv4(),
+      offset: maxOffset,
+      color: '#605c3c',
+      percentage: 100,
+      visible: true,
+    }],
+    [{
+      id: uuidv4(),
+      offset: 0,
+      color: '#ad5389',
+      percentage: 0,
+      visible: true,
+    }, {
+      id: uuidv4(),
+      offset: maxOffset,
+      color: '#3c1053',
+      percentage: 100,
+      visible: true,
+    }],
+  ],
   gradientStops: [{
     id: uuidv4(),
     offset: 0,
@@ -64,7 +106,7 @@ export const useGradientStore = create((set, get) => ({
         state.gradientStops.unshift({
           id: uuidv4(),
           offset,
-          color,
+          color: firstStop.color,
           visible: true,
           percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
         })
@@ -75,21 +117,22 @@ export const useGradientStore = create((set, get) => ({
         state.gradientStops.push({
           id: uuidv4(),
           offset,
-          color,
+          color: lastStop.color,
           visible: true,
           percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
         })
-        return 
+        return
       }
 
       for (let i = 0; i < stops.length - 1; i++) {
         const curStop = stops[i];
         const nextStop = stops[i + 1];
         if (offset > curStop.offset && offset <= nextStop.offset) {
+          const range = chroma.scale([curStop.color, nextStop.color]);
           state.gradientStops.splice(i + 1, 0, {
             id: uuidv4(),
             offset,
-            color,
+            color: range((offset - curStop.offset) / (nextStop.offset - curStop.offset)).hex(),
             visible: true,
             percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
           })
@@ -128,5 +171,10 @@ export const useGradientStore = create((set, get) => ({
     set(produce((state) => {
       state.gradientStops[index].visible = !state.gradientStops[index].visible;
     }));
+  },
+  applyGradientPreset: (index) => {
+    set(produce(state => {
+      state.gradientStops = state.gradientPresets[index]
+    }))
   }
 }))

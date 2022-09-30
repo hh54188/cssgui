@@ -24,8 +24,9 @@ export function GradientPanel() {
     dragStartOffset, setDragStartOffset,
     elementStartOffset, setElementStartOffset,
     gradientAngle, setGradientAngle,
+    gradientPresets,
     gradientStops, setGradientStopOffset, addGradientStop, removeGradientStop, toggleGradientStopVisible,
-    setGradientStopPercentage, copyGradientStop, updateGradientStopColor
+    setGradientStopPercentage, copyGradientStop, updateGradientStopColor, applyGradientPreset
   } = useGradientStore();
   const [moveMarkerEndTime, setMoveMarkerEndTime] = useState(-1);
 
@@ -86,10 +87,14 @@ export function GradientPanel() {
           <div className='gradient-panel__meta'>
             <div className='gradient-panel__presets'>
               <span className='gradient-panel__presets__label'>Presets</span>
-              <div className='gradient-panel__presets__item'></div>
-              <div className='gradient-panel__presets__item'></div>
-              <div className='gradient-panel__presets__item'></div>
-              <div className='gradient-panel__presets__item'></div>
+              {gradientPresets.map((presetStop, index) => {
+                return <div 
+                  key={index}
+                  style={{background: createGradientString(presetStop)}} 
+                  className='gradient-panel__presets__item'
+                  onClick={applyGradientPreset.bind(this, index)}
+                  ></div>
+              })}
             </div>
             <div className='gradient-panel__angle'>
               <span className='gradient-panel__angle__label'>Angle</span>
