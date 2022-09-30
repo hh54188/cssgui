@@ -8,17 +8,12 @@ const maxOffset = 490 - 30;
 const minOffset = 0;
 
 export const useGradientStore = create((set, get) => ({
-  curElementId: 0,
-  setCurElementId: value => set({ curElementId: value }),
   minOffset,
   maxOffset,
-  setMaxOffset: value => set({ maxOffset: value }),
-  dragStartFlag: false,
-  setDragStartFlag: value => set({ dragStartFlag: value }),
-  dragStartOffset: 0,
-  setDragStartOffset: value => set({ dragStartOffset: value }),
-  elementStartOffset: 0,
-  setElementStartOffset: value => set({ elementStartOffset: value }),
+
+  curElementId: 0,
+  setCurElementId: value => set({ curElementId: value }),
+
   gradientAngle: 90,
   setGradientAngle: value => set({ gradientAngle: value }),
   gradientPresets: [

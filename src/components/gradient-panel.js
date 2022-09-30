@@ -16,13 +16,14 @@ import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 
 export function GradientPanel() {
+  const [dragStartFlag, setDragStartFlag] = useState(false);
+  const [dragStartOffset, setDragStartOffset] = useState(0);
+  const [elementStartOffset, setElementStartOffset] = useState(0);
+
   const {
     curElementId, setCurElementId,
     maxOffset,
     minOffset,
-    dragStartFlag, setDragStartFlag,
-    dragStartOffset, setDragStartOffset,
-    elementStartOffset, setElementStartOffset,
     gradientAngle, setGradientAngle,
     gradientPresets,
     gradientStops, setGradientStopOffset, addGradientStop, removeGradientStop, toggleGradientStopVisible,
@@ -76,7 +77,7 @@ export function GradientPanel() {
   const disableDeleteStop = gradientStops.length === 2;
 
   return (
-    <Dialog className='gradient-dialog' style={{ userSelect: dragStartFlag ? 'none' : 'auto' }} isOpen={true}>
+    <Dialog className='gradient-dialog' style={{ userSelect: dragStartFlag ? 'none' : 'text' }} isOpen={true}>
       <div className='gradient-preview' style={{ background: gradientColor }}></div>
       {dragStartFlag && <div className='overlay-when-drag'
         onMouseMove={onMouseMove}
@@ -133,7 +134,7 @@ export function GradientPanel() {
               <div className="gradient-panel__color-item__info">
                 <div className='gradient-panel__color-item__position'>
                   <ControlGroup>
-                    <NumericInput disabled={!visible} onValueChange={(value) => {
+                    <NumericInput min={0} max={100} disabled={!visible} onValueChange={(value) => {
                       setCurElementId(id);
                       setGradientStopPercentage(value);
                     }} value={percentage} fill buttonPosition='none'></NumericInput>
