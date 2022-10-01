@@ -91,9 +91,9 @@ function ActionPanel() {
       {!showAnimationPanel && <Button icon="drawer-right" onClick={() => toggleAnimationPanel(true)} disabled={!targetId}>Open Animation Panel</Button>}
       {showAnimationPanel && <Button icon="drawer-left" onClick={() => toggleAnimationPanel(false)} disabled={!targetId}>Close Animation Panel</Button>}
     </ButtonGroup>
-    <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
+    {/* <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
       <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
-    </FormGroup>
+    </FormGroup> */}
   </div>
 }
 
