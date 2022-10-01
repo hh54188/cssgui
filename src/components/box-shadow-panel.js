@@ -143,7 +143,7 @@ function BoxShadowPanel({
                   ? <Button style={{ float: 'left' }} icon="eye-off" minimal onClick={onDisableShadow.bind(this, index)}></Button>
                   : <Button style={{ float: 'left' }} icon="eye-on" minimal onClick={onEnableShadow.bind(this, index)}></Button>
                 }
-                <Button style={{ float: 'left' }} icon="duplicate" minimal></Button>
+                {/* <Button style={{ float: 'left' }} icon="duplicate" minimal></Button> */}
                 {collapsePanel
                   ? <Button style={{ float: 'left' }} icon="expand-all" minimal onClick={onExpandPanel.bind(this, index)}></Button>
                   : <Button style={{ float: 'left' }} icon="collapse-all" minimal onClick={onHidePanel.bind(this, index)}></Button>}
@@ -162,7 +162,15 @@ const OptimizedBoxShadowContainer = performanceOptimize(BoxShadowPanel)(null, fu
   const { boxShadows: oldBoxShadows} = prevPops;
   const { boxShadows: newBoxShadows} = nextProps;
 
-  if (createBoxShadowString(oldBoxShadows) !== createBoxShadowString(newBoxShadows)) {
+  const oldShadowEnabledStates = oldBoxShadows.map(shadow => shadow.enabled).join(',');
+  const newShadowEnabledStates = newBoxShadows.map(shadow => shadow.enabled).join(',');
+
+  const oldShadowCollapseStates = oldBoxShadows.map(shadow => shadow.collapsePanel).join(',');
+  const newShadowCollapseStates = newBoxShadows.map(shadow => shadow.collapsePanel).join(',');
+
+  if (createBoxShadowString(oldBoxShadows) !== createBoxShadowString(newBoxShadows)
+      || oldShadowEnabledStates !== newShadowEnabledStates
+      || oldShadowCollapseStates !== newShadowCollapseStates) {
     return true
   }
   return false;
