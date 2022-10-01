@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import {maxOffset, minOffset} from './store/gradient'
 const stateTemplate = {
   width: 200,
   height: 200,
@@ -11,13 +12,13 @@ const stateTemplate = {
   backgroundGradientAngle: 90,
   backgroundGradientStops: [{
     id: uuidv4(),
-    offset: 0,
+    offset: minOffset,
     color: '#ffa500',
     percentage: 0,
     visible: true,
   }, {
     id: uuidv4(),
-    offset: 460,
+    offset: maxOffset,
     color: '#87ceeb',
     percentage: 100,
     visible: true,

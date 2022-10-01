@@ -150,5 +150,20 @@ describe('UI Store', () => {
       })
       expect(result.current.openCopyStyleCodeDialog).toBe(true)
     })
+
+  describe("openGradientPickerDialog", () => {
+    it('should openGradientPickerDialog initialized to false', () => {
+      const { result } = renderHook(() => useUIStore())
+      expect(result.current.openGradientPickerDialog).toBe(false)
+    })
+
+    it('should setOpenGradientPickerDialog can update openGradientPickerDialog value', () => {
+      const { result } = renderHook(() => useUIStore())
+      act(() => {
+        result.current.setOpenGradientPickerDialog(true)
+      })
+      expect(result.current.openGradientPickerDialog).toBe(true)
+    })
+  })
   })
 })

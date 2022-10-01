@@ -4,8 +4,12 @@ import { produce } from 'immer'
 import { isColor } from '../utils/style'
 import chroma from "chroma-js";
 
-const maxOffset = 490 - 30;
-const minOffset = 0;
+export const maxOffset = 490 - 30;
+export const minOffset = 0;
+
+export function computePercentage(offset) {
+  return parseInt((parseFloat(offset / maxOffset) * 100))
+}
 
 export const useGradientStore = create((set, get) => ({
   minOffset,
@@ -75,7 +79,7 @@ export const useGradientStore = create((set, get) => ({
     set(produce((state) => {
       const index = state.gradientStops.findIndex(stop => stop.id === state.curElementId)
       state.gradientStops[index].offset = offset;
-      state.gradientStops[index].percentage = parseInt((parseFloat(offset / state.maxOffset) * 100));
+      state.gradientStops[index].percentage = computePercentage(offset);
       state.gradientStops.sort((stopA, stopB) => stopA.offset - stopB.offset)
     }));
   },
@@ -85,16 +89,20 @@ export const useGradientStore = create((set, get) => ({
       state.gradientStops[index].offset = percentage < 0
         ? 0
         : percentage > 100
-          ? 100
+          ? maxOffset
           : parseInt((percentage / 100) * maxOffset)
-      state.gradientStops[index].percentage = percentage
+      state.gradientStops[index].percentage = percentage < 0
+        ? 0
+        : percentage > 100
+          ? 100
+          : percentage
       state.gradientStops.sort((stopA, stopB) => stopA.offset - stopB.offset)
     }));
   },
-  addGradientStop: (offset, color) => {
+  addGradientStop: (offset) => {
     set(produce((state) => {
       const stops = state.gradientStops;
-      const maxOffset = state.maxOffset;
+      const maxOffset = maxOffset;
       const firstStop = stops[0];
       const lastStop = stops[stops.length - 1];
 
@@ -104,7 +112,7 @@ export const useGradientStore = create((set, get) => ({
           offset,
           color: firstStop.color,
           visible: true,
-          percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
+          percentage: computePercentage(offset)
         })
         return;
       }
@@ -115,7 +123,7 @@ export const useGradientStore = create((set, get) => ({
           offset,
           color: lastStop.color,
           visible: true,
-          percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
+          percentage: computePercentage(offset)
         })
         return
       }
@@ -130,7 +138,7 @@ export const useGradientStore = create((set, get) => ({
             offset,
             color: range((offset - curStop.offset) / (nextStop.offset - curStop.offset)).hex(),
             visible: true,
-            percentage: parseInt((parseFloat(offset / state.maxOffset) * 100))
+            percentage: computePercentage(offset)
           })
           return
         }
