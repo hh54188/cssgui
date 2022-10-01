@@ -39,7 +39,12 @@ export function createGradientString(gradientStops, gradientAngle) {
 export function createStyleObj(elementState) {
     const border = elementState.border;
     return {
-        background: elementState.backgroundColor,
+        background: elementState.enableGradientBackground 
+            ? createGradientString(
+                elementState.backgroundGradientStops, 
+                elementState.backgroundGradientAngle
+            )
+            : elementState.backgroundColor,
         width: elementState.width,
         height: elementState.height,
         top: elementState.top,

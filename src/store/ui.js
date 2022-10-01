@@ -31,4 +31,7 @@ export const useUIStore = create((set) => ({
 
   openCopyStyleCodeDialog: false,
   setOpenCopyStyleCodeDialog: value => set({ openCopyStyleCodeDialog: value }),
+
+  openGradientPickerDialog: false,
+  setOpenGradientPickerDialog: value => set({ openGradientPickerDialog: value }),
 }))

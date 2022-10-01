@@ -10,10 +10,12 @@ import { factory as positionFactory } from './core-helpers/position'
 import { factory as animationFactory } from './core-helpers/animation'
 import { produce } from 'immer'
 
-let idSeed = 0;
+let idSeed = 1;
 export const useCoreDataStore = create((set, get) => ({
-  elementCollection: {},
-  targetId: null,
+  elementCollection: {
+    [idSeed]: getNewState({ width: 200, height: 200, left: 300, top: 200 })
+  },
+  targetId: idSeed,
   setTargetId: (value) => set({ targetId: value }),
   updateSingleElement: (newState) => {
     set(produce((state) => {

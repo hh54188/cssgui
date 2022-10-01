@@ -22,7 +22,9 @@ function ActionPanel() {
     cloneElementWhenAddMultipleElements,
     toggleCloneElementWhenAddMultipleElements,
     openCopyStyleCodeDialog,
-    setOpenCopyStyleCodeDialog
+    setOpenCopyStyleCodeDialog,
+    openGradientPickerDialog,
+    setOpenGradientPickerDialog,
   } = useUIStore();
   const {
     targetId,
@@ -48,7 +50,10 @@ function ActionPanel() {
   }
 
   return <div className="control-panel-actions">
-    <GradientPanel></GradientPanel> 
+    <GradientPanel
+      isOpen={openGradientPickerDialog}
+      onClose={() => setOpenGradientPickerDialog(false)}
+    />
     <StyleCodeDialog
       isOpen={openCopyStyleCodeDialog}
       onClose={() => setOpenCopyStyleCodeDialog(false)}

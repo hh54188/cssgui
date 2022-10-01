@@ -55,14 +55,16 @@
 }
 
 .color-indicator {
+    cursor: pointer;
     width: 80px;
+    height: 30px;
     margin-right: 5px;
     border: 1px solid #9e9e9e;
     background-color: white;
 }
 
 .color-indicator-content {
-    width: 83%;
+    width: 90%;
     height: 70%;
     margin: 0 auto;
     margin-top: 4px;
@@ -436,6 +438,10 @@
     height: 100%;
     cursor: move;
     /* background: rgba(255, 0, 0, 0.3); */
+}
+
+.background-gradient-switch {
+    margin: 10px 0 0 0;
 }
 
 

@@ -70,6 +70,7 @@ export const useGradientStore = create((set, get) => ({
     percentage: 100,
     visible: true,
   }],
+  setGradientStops: value => set({ gradientStops: value }),
   setGradientStopOffset: (offset) => {
     set(produce((state) => {
       const index = state.gradientStops.findIndex(stop => stop.id === state.curElementId)

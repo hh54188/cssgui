@@ -15,7 +15,11 @@ import { createGradientString } from '../utils/style'
 import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 
-export function GradientPanel() {
+export function GradientPanel({
+  isOpen = false,
+  onCancel,
+  onSave
+}) {
   const [dragStartFlag, setDragStartFlag] = useState(false);
   const [dragStartOffset, setDragStartOffset] = useState(0);
   const [elementStartOffset, setElementStartOffset] = useState(0);
@@ -26,7 +30,7 @@ export function GradientPanel() {
     minOffset,
     gradientAngle, setGradientAngle,
     gradientPresets,
-    gradientStops, setGradientStopOffset, addGradientStop, removeGradientStop, toggleGradientStopVisible,
+    gradientStops, setGradientStops, setGradientStopOffset, addGradientStop, removeGradientStop, toggleGradientStopVisible,
     setGradientStopPercentage, copyGradientStop, updateGradientStopColor, applyGradientPreset
   } = useGradientStore();
   const [moveMarkerEndTime, setMoveMarkerEndTime] = useState(-1);
@@ -77,7 +81,7 @@ export function GradientPanel() {
   const disableDeleteStop = gradientStops.length === 2;
 
   return (
-    <Dialog className='gradient-dialog' style={{ userSelect: dragStartFlag ? 'none' : 'text' }} isOpen={true}>
+    <Dialog className='gradient-dialog' style={{ userSelect: dragStartFlag ? 'none' : 'text' }} isOpen={isOpen}>
       <div className='gradient-preview' style={{ background: gradientColor }}></div>
       {dragStartFlag && <div className='overlay-when-drag'
         onMouseMove={onMouseMove}
@@ -182,8 +186,8 @@ export function GradientPanel() {
       </div>
       <div className={`${Classes.DIALOG_FOOTER}`}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button intent='primary'>Save</Button>
-          <Button>Cancel</Button>
+          <Button intent='primary' onClick={onSave ? onSave.bind(this, gradientStops.filter(stop => stop.visible)) : null}>Save</Button>
+          <Button onClick={onCancel}>Cancel</Button>
         </div>
       </div>
     </Dialog>

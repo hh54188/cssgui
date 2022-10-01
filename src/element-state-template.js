@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 const stateTemplate = {
   width: 200,
   height: 200,
@@ -5,7 +6,22 @@ const stateTemplate = {
   bottom: 0,
   left: 100,
   right: 0,
+  enableGradientBackground: false,
   backgroundColor: '#FFFFFF',
+  backgroundGradientAngle: 90,
+  backgroundGradientStops: [{
+    id: uuidv4(),
+    offset: 0,
+    color: '#ffa500',
+    percentage: 0,
+    visible: true,
+  }, {
+    id: uuidv4(),
+    offset: 460,
+    color: '#87ceeb',
+    percentage: 100,
+    visible: true,
+  }],
   zIndex: 2,
 
   borderEnabled: true,
