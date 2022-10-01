@@ -18,11 +18,11 @@ function App() {
         <div className="control-panel-content">
           <ActionPanel></ActionPanel>
           <SizePanel />
-          <PositionPanel></PositionPanel>
           <BackgroundPanel />
+          <BoxShadowPanel></BoxShadowPanel>
+          <PositionPanel></PositionPanel>
           <TransformPanel ></TransformPanel>
           <BorderPanel></BorderPanel>
-          <BoxShadowPanel></BoxShadowPanel>
         </div>
       </div>
     </div >

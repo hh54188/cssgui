@@ -148,4 +148,12 @@ describe('Core Store', () => {
     expect(Object.keys(coreResult.current.elementCollection).length).toBe(elementCountBeforeDelete + 10)
     expect(extractLatestElementStyle(coreResult, 'backgroundColor')).toBe('orange')
   })
+  it('should able to delete all elements', () => {
+    const { result } = renderHook(() => useCoreDataStore())
+    expect(Object.keys(result.current.elementCollection).length).not.toBe(0)
+    act(() => {
+      result.current.deleteAllElement();
+    })
+    expect(Object.keys(result.current.elementCollection).length).toBe(0)
+  })
 })

@@ -82,6 +82,12 @@ export const useCoreDataStore = create((set, get) => ({
       delete state.elementCollection[targetId];
     }));
   },
+  deleteAllElement() {
+    set(produce((state) => {
+      state.targetId = null;
+      state.elementCollection = {}; 
+    }));
+  },
   copyElement() {
     const targetId = get().targetId;
     const targetElementState = get().elementCollection[targetId];

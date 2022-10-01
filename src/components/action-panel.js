@@ -32,6 +32,7 @@ function ActionPanel() {
     addNewElement,
     copyElement,
     deleteElement,
+    deleteAllElement,
     getTargetElementState
   } = useCoreDataStore();
   const configState = useConfigStore();
@@ -75,14 +76,13 @@ function ActionPanel() {
       </div>
     </Dialog>
     <ButtonGroup fill style={{ marginTop: 10 }}>
-      <Button onClick={() => addNewElement(setTargetId)} icon="plus">Add Single</Button>
-      <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Add Multiple</Button>
+      <Button onClick={() => addNewElement(setTargetId)} icon="plus">New</Button>
+      <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Multiple</Button>
+      <Button onClick={copyElement} disabled={!targetId} icon="duplicate">Clone</Button>
     </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
-      <Button icon="copy" onClick={copyElement} disabled={!targetId}>Copy Element</Button>
-    </ButtonGroup>
-    <ButtonGroup fill style={{ marginTop: 10 }}>
-      <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete Element</Button>
+      <Button intent="danger" icon="delete" onClick={deleteElement} disabled={!targetId}>Delete</Button>
+      <Button intent="danger" icon="clean" onClick={deleteAllElement} disabled={!targetId}>Clear</Button>
     </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
       <Button intent="primary" icon="code" onClick={showCopyStyleCodeDialog} disabled={!targetId}>Copy Style Code</Button>
