@@ -37,6 +37,10 @@
     overflow: auto;
 }
 
+.control-panel-title {
+    cursor: pointer;
+}
+
 .control-panel-group {
     margin-bottom: 15px;
 }

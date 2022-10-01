@@ -23,7 +23,7 @@ function SizePanel({
     <div className="control-panel-group">
       {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
       {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-      <strong>SIZE</strong>
+      <strong  onClick={() => setIsOpen(!isOpen)} className='control-panel-title'>SIZE</strong>
       <Divider></Divider>
       <Collapse isOpen={isOpen}>
         <div className="control-panel-horizontal-layout">

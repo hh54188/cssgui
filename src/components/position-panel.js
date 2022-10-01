@@ -35,7 +35,7 @@ function PositionPanel({
     <div className="control-panel-group position-control-group">
       {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
       {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-      <strong>POSITION</strong>
+      <strong  onClick={() => setIsOpen(!isOpen)} className='control-panel-title'>POSITION</strong>
       <Divider></Divider>
       <Collapse isOpen={isOpen}>
         <ControlGroup className='position-control' fill={true} vertical={false}>

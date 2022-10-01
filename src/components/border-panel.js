@@ -24,7 +24,7 @@ function BorderPanel({
     <div className="control-panel-group">
       {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
       {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-      <strong>BORDER</strong>
+      <strong  onClick={() => setIsOpen(!isOpen)} className='control-panel-title'>BORDER</strong>
       <Divider></Divider>
       <Collapse isOpen={isOpen}>
         <div className="control-panel-horizontal-layout border-group-toggles">

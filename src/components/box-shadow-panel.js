@@ -42,7 +42,7 @@ function BoxShadowPanel({
         <strong>
           {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
           {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-          <span>BOX-SHADOW</span>
+          <span  onClick={() => setIsOpen(!isOpen)}  className='control-panel-title'>BOX-SHADOW</span>
         </strong>
         <div className="control-panel-group-title-action-group">
           <Popover2 content={

@@ -31,7 +31,7 @@ function BackgroundPanel({
     <div className="control-panel-group">
       {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
       {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-      <strong>BACKGROUND COLOR</strong>
+      <strong onClick={() => setIsOpen(!isOpen)} className='control-panel-title'>BACKGROUND COLOR</strong>
       <Divider></Divider>
       <Collapse isOpen={isOpen}>
         <Switch onChange={onEnableGradientChange} className='background-gradient-switch' checked={enableGradient} label="Gradient" />
