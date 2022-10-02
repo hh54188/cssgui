@@ -13,12 +13,12 @@ describe('Core Store', () => {
   })
   it('should able to update targetId', () => {
     const { result } = renderHook(() => useCoreDataStore())
-    expect(result.current.targetId).toBe(1)
+    expect(result.current.targetId).toBeNull()
     act(() => {
       result.current.addNewElement();
       result.current.addNewElement();
     })
-    expect(result.current.targetId).toBe(3)
+    expect(result.current.targetId).not.toBeNull()
     act(() => {
       result.current.setTargetId(1);
     })

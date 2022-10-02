@@ -9,13 +9,11 @@ import { factory as transformFactory } from './core-helpers/transform'
 import { factory as positionFactory } from './core-helpers/position'
 import { factory as animationFactory } from './core-helpers/animation'
 import { produce } from 'immer'
+import { v4 as uuidv4 } from 'uuid';
 
-let idSeed = 1;
 export const useCoreDataStore = create(persist((set, get) => ({
-  elementCollection: {
-    [idSeed]: getNewState({ width: 200, height: 200, left: 300, top: 200 })
-  },
-  targetId: idSeed,
+  elementCollection: {},
+  targetId: null,
   setTargetId: (value) => set({ targetId: value }),
   updateSingleElement: (newState) => {
     set(produce((state) => {
@@ -24,7 +22,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
   },
   addNewElement: () => {
     set(() => {
-      const id = ++idSeed;
+      const id = uuidv4();
       get().setTargetId(id)
 
       const canvasPanel = document.querySelector('.canvas-panel');
@@ -92,7 +90,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
     const targetId = get().targetId;
     const targetElementState = get().elementCollection[targetId];
 
-    get().setTargetId(++idSeed)
+    get().setTargetId(uuidv4())
     get().updateSingleElement({
       ...JSON.parse(JSON.stringify(targetElementState)),
       top: targetElementState.top + 20,
@@ -120,7 +118,7 @@ export const useCoreDataStore = create(persist((set, get) => ({
           ? selectedElementState
           : getNewState({ left, top });
 
-        state.elementCollection[++idSeed] = {
+        state.elementCollection[uuidv4()] = {
           ...sourceState,
           left,
           top
