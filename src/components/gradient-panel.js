@@ -5,10 +5,10 @@ import {
   Icon,
   ControlGroup,
   InputGroup,
-  NumericInput,
   Classes,
   Divider
 } from "@blueprintjs/core";
+import { NumericInput } from './numeric-input'
 import { AnglePicker } from 'react-linear-gradient-picker';
 import { useGradientStore } from '../store/gradient'
 import { createGradientString } from '../utils/style'
@@ -93,12 +93,12 @@ export function GradientPanel({
             <div className='gradient-panel__presets'>
               <span className='gradient-panel__presets__label'>Presets</span>
               {gradientPresets.map((presetStop, index) => {
-                return <div 
+                return <div
                   key={index}
-                  style={{background: createGradientString(presetStop)}} 
+                  style={{ background: createGradientString(presetStop) }}
                   className='gradient-panel__presets__item'
                   onClick={applyGradientPreset.bind(this, index)}
-                  ></div>
+                ></div>
               })}
             </div>
             <div className='gradient-panel__angle'>
@@ -138,22 +138,29 @@ export function GradientPanel({
               <div className="gradient-panel__color-item__info">
                 <div className='gradient-panel__color-item__position'>
                   <ControlGroup>
-                    <NumericInput min={0} max={100} disabled={!visible} onValueChange={(value) => {
-                      setCurElementId(id);
-                      setGradientStopPercentage(value);
-                    }} value={percentage} fill buttonPosition='none'></NumericInput>
+                    <NumericInput
+                      min={0}
+                      max={100}
+                      disabled={!visible}
+                      forceSync={dragStartFlag}
+                      onValueChange={(value) => {
+                        setCurElementId(id);
+                        setGradientStopPercentage(value);
+                      }}
+                      value={percentage}
+                      fill ></NumericInput>
                     <Icon className='gradient-panel__color-item__position__unit' icon="percentage" size={13}></Icon>
                   </ControlGroup>
                 </div>
                 <div className='gradient-panel__divider'></div>
                 <Popover2 content={
-                  <SketchPicker 
-                    color={color} 
+                  <SketchPicker
+                    color={color}
                     onChange={updateGradientStopColor.bind(this, index)}
                   ></SketchPicker>
                 }
                   interactionKind="click">
-                <div className='gradient-panel__color-item__picker' style={{ backgroundColor: color }}></div>
+                  <div className='gradient-panel__color-item__picker' style={{ backgroundColor: color }}></div>
                 </Popover2>
                 {/* <div className='gradient-panel__color-item__color-text'>
                   <InputGroup

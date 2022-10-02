@@ -2,13 +2,13 @@ import React from 'react';
 import { useState } from 'react'
 import {
   FormGroup,
-  NumericInput,
   Divider,
   Icon,
   Button,
   Collapse,
   Slider
 } from '@blueprintjs/core'
+import {NumericInput} from './numeric-input'
 import { AnglePicker } from 'react-linear-gradient-picker';
 import {useCoreDataStore} from "../store/core";
 import { createTransformString } from '../utils/style'
@@ -43,9 +43,6 @@ function TransformPanel({
                   disabled={disabled}
                   onValueChange={value => onValueChange(value, 'translate', coordinate)}
                   fill={true}
-                  stepSize={1}
-                  buttonPosition="right"
-                  min={-9999}
                   value={transform.translate[coordinate]}
                 />
               </FormGroup>

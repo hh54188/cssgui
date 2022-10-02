@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Collapse, ControlGroup, Divider, HTMLSelect, Icon, NumericInput, Switch} from '@blueprintjs/core'
+import {Collapse, ControlGroup, Divider, HTMLSelect, Icon, Switch} from '@blueprintjs/core'
+import {NumericInput} from './numeric-input'
 import {Popover2} from '@blueprintjs/popover2'
 import {SketchPicker} from 'react-color';
 
@@ -52,8 +53,6 @@ function BorderPanel({
               <div className="control-panel-border-layout-width-item">
                 <NumericInput
                   fill={true}
-                  stepSize={1}
-                  buttonPosition="right"
                   min={0}
                   value={borders.top.width}
                   onValueChange={onAllWidthChange}
@@ -93,8 +92,6 @@ function BorderPanel({
                   <div className="control-panel-border-layout-width-item">
                     <NumericInput
                       fill={true}
-                      stepSize={1}
-                      buttonPosition="right"
                       min={0}
                       value={width}
                       disabled={!enabled}

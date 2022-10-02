@@ -3,7 +3,6 @@ import { useState } from 'react'
 import {
   FormGroup,
   InputGroup,
-  NumericInput,
   Divider,
   Switch,
   Icon,
@@ -13,6 +12,7 @@ import {
   MenuItem,
   Collapse,
 } from '@blueprintjs/core'
+import {NumericInput} from './numeric-input'
 import { Popover2 } from '@blueprintjs/popover2'
 import { SketchPicker } from 'react-color';
 import { useCoreDataStore } from '../store/core'
@@ -66,9 +66,6 @@ function BoxShadowPanel({
                     <FormGroup label="Offset X">
                       <NumericInput
                         fill={true}
-                        stepSize={1}
-                        buttonPosition="right"
-                        min={-9999}
                         value={offsetX}
                         onValueChange={onOffsetXChange.bind(this, index)}
                       />
@@ -78,9 +75,6 @@ function BoxShadowPanel({
                     <FormGroup label="Offset Y">
                       <NumericInput
                         fill={true}
-                        stepSize={1}
-                        buttonPosition="right"
-                        min={-9999}
                         value={offsetY}
                         onValueChange={onOffsetYChange.bind(this, index)} />
                     </FormGroup>
@@ -91,9 +85,6 @@ function BoxShadowPanel({
                     <FormGroup label="Blur Radius">
                       <NumericInput
                         fill={true}
-                        stepSize={1}
-                        buttonPosition="right"
-                        min={-9999}
                         value={blurRadius}
                         onValueChange={onBlurRadiusChange.bind(this, index)}
                       />
@@ -103,9 +94,6 @@ function BoxShadowPanel({
                     <FormGroup label="Spread Radius">
                       <NumericInput
                         fill={true}
-                        stepSize={1}
-                        buttonPosition="right"
-                        min={-9999}
                         value={spreadRadius}
                         onValueChange={onSpreadRadiusChange.bind(this, index)}
                       />

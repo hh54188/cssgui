@@ -2,11 +2,11 @@ import React from 'react';
 import { useState } from 'react'
 import {
   FormGroup,
-  NumericInput,
   Divider,
   Icon,
   Collapse,
 } from '@blueprintjs/core'
+import {NumericInput} from './numeric-input'
 
 import { useCoreDataStore } from '../store/core'
 import { performanceOptimize } from './performance-optimize-wrap'
@@ -36,9 +36,7 @@ function SizePanel({
                 disabled={disabled}
                 onValueChange={onWidthChange}
                 fill={true}
-                stepSize={1}
-                buttonPosition="right"
-                min={-9999}
+                min={0}
                 value={widthValue}
                 id="width-input"
               />
@@ -53,9 +51,7 @@ function SizePanel({
                 disabled={disabled}
                 onValueChange={onHeightChange}
                 fill={true}
-                stepSize={1}
-                buttonPosition="right"
-                min={-9999}
+                min={0}
                 value={heightValue}
                 id="height-input"
               />

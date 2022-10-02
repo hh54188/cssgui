@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react'
 import {
-  NumericInput,
   Divider,
   Icon,
   Button,
@@ -9,10 +8,12 @@ import {
   HTMLSelect,
   Collapse,
 } from '@blueprintjs/core'
+import {NumericInput} from './numeric-input'
 import {useCoreDataStore} from "../store/core";
 import {useUIStore} from "../store/ui";
 import {performanceOptimize} from "./performance-optimize-wrap";
 function PositionPanel({
+  forceSync = false,
   onHorizontalTypeChange,
   onVerticalTypeChange,
   horizontalValue,
@@ -46,11 +47,9 @@ function PositionPanel({
             value={"Left"}
             options={['Right', 'Left']} />
           <NumericInput
+            forceSync={forceSync}
             disabled={disabled}
             fill={true}
-            stepSize={1}
-            buttonPosition="right"
-            min={-9999}
             onValueChange={onHorizontalValueChange}
             value={horizontalValue}
             id="position-horizaontal-value-input"
@@ -65,11 +64,9 @@ function PositionPanel({
             options={['Top', 'Bottom']}
           />
           <NumericInput
+            forceSync={forceSync}
             disabled={disabled}
             fill={true}
-            stepSize={1}
-            buttonPosition="right"
-            min={-9999}
             onValueChange={onVerticalValueChange}
             value={verticalValue}
             id="position-vertical-value-input"
@@ -100,12 +97,13 @@ function PositionPanel({
 }
 
 const OptimizedPositionPanelContainer = performanceOptimize(PositionPanel)(
-  ['horizontalValue', 'verticalValue']
+  ['horizontalValue', 'verticalValue', 'forceSync']
 );
 
 function PositionPanelContainer() {
   const dataState = useCoreDataStore();
   const UIState = useUIStore()
+  const [force, setForce] = useState(false)
   const {
     getTargetStyle,
     updateTargetStyle,
@@ -125,9 +123,11 @@ function PositionPanelContainer() {
     setPositionVerticalValue,
     positionHorizontalValueState,
     positionVerticalValueState,
+    dragBegin
   } = UIState;
 
   return <OptimizedPositionPanelContainer
+    forceSync={dragBegin || force}
     onHorizontalTypeChange={event => setPositionHorizontalValue(event.currentTarget.value)}
     onVerticalTypeChange={event => setPositionVerticalValue(event.currentTarget.value)}
     horizontalValue={positionHorizontalValueState == "Right" ? getTargetStyle('right') : getTargetStyle('left')}
