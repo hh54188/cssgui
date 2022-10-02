@@ -1,7 +1,7 @@
 import create from 'zustand'
 import {persist} from 'zustand/middleware'
 
-export const useUIStore = create((set) => ({
+export const useUIStore = create(persist((set) => ({
   applyToAll: false,
   toggleApplyToAll: (value) => set({ applyToAll: value }),
 
@@ -34,4 +34,6 @@ export const useUIStore = create((set) => ({
 
   openGradientPickerDialog: false,
   setOpenGradientPickerDialog: value => set({ openGradientPickerDialog: value }),
-}))
+})), {
+  name: 'ui-storage'
+})

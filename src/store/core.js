@@ -11,7 +11,7 @@ import { factory as animationFactory } from './core-helpers/animation'
 import { produce } from 'immer'
 
 let idSeed = 1;
-export const useCoreDataStore = create((set, get) => ({
+export const useCoreDataStore = create(persist((set, get) => ({
   elementCollection: {
     [idSeed]: getNewState({ width: 200, height: 200, left: 300, top: 200 })
   },
@@ -133,4 +133,6 @@ export const useCoreDataStore = create((set, get) => ({
   ...transformFactory(set, get),
   ...positionFactory(set, get),
   ...animationFactory(set, get),
-}))
+})), {
+  name: 'core-storage'
+})

@@ -1,4 +1,5 @@
 import create from 'zustand'
+import {persist} from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid';
 import { produce } from 'immer'
 import { isColor } from '../utils/style'
@@ -11,7 +12,7 @@ export function computePercentage(offset) {
   return parseInt((parseFloat(offset / maxOffset) * 100))
 }
 
-export const useGradientStore = create((set, get) => ({
+export const useGradientStore = create(persist((set, get) => ({
   minOffset,
   maxOffset,
 
@@ -181,4 +182,6 @@ export const useGradientStore = create((set, get) => ({
       state.gradientStops = state.gradientPresets[index]
     }))
   }
-}))
+})), {
+  name: 'gradient-storage'
+})
