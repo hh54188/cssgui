@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import hljs from 'highlight.js';
 import reactToCSS from 'react-style-object-to-css'
-import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes } from "@blueprintjs/core";
+import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes, Callout, Icon } from "@blueprintjs/core";
 
 import {StyleCodeDialog} from '../components/style-code-dialog'
 import {GradientPanel} from '../components/gradient-panel'
@@ -94,6 +94,9 @@ function ActionPanel() {
     {/* <FormGroup className='apply-to-all-switch' label="Apply To All" inline>
       <Switch value={applyToAll} onChange={event => toggleApplyToAll(event.target.checked)} />
     </FormGroup> */}
+    <Callout className='tips' intent='primary' icon="info-sign">
+      Tips: Using <Icon icon='arrow-up'></Icon> or <Icon icon='arrow-down'></Icon> key to change the value by one step (+/- 1).
+    </Callout>
   </div>
 }
 
