@@ -17,9 +17,6 @@ export function createBoxShadowString(boxShadowState) {
 }
 
 export function createTransformString(transform) {
-    if (!transform) {
-        debugger
-    }
     const translate3dStr = `translate3d(${transform.translate.x}px, ${transform.translate.y}px, ${transform.translate.z}px)`;
     const scale3dStr = `scale3d(${transform.scale.x}, ${transform.scale.y}, ${transform.scale.z})`;
     const skew3dStr = `skew(${transform.skew.x}deg, ${transform.skew.y}deg)`;
