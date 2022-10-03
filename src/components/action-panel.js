@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import hljs from 'highlight.js';
 import reactToCSS from 'react-style-object-to-css'
-import { Button, ButtonGroup, Dialog, FormGroup, NumericInput, Switch, Classes, Callout, Icon } from "@blueprintjs/core";
+import { Button, ButtonGroup, Dialog, FormGroup, Classes, Callout, Icon, Switch } from "@blueprintjs/core";
 
 import {StyleCodeDialog} from '../components/style-code-dialog'
 import {GradientPanel} from '../components/gradient-panel'
+import { NumericInput } from '../components/numeric-input'
 import {useCoreDataStore} from '../store/core'
 import {useUIStore} from '../store/ui'
 import {createStyleObj} from '../utils/style'
@@ -62,9 +63,16 @@ function ActionPanel() {
       codeText={codeText}
     />
     <Dialog className='add-multiple-dialog' isOpen={openAddMultipleElementsDialog}>
+      <div className={Classes.DIALOG_HEADER}>
+        Clone Selected Element
+      </div>
       <div className="add-multiple-dialog-content">
-        <FormGroup label="Element Count" inline>
-          <NumericInput value={randomElementCount} onValueChange={value => setRandomElementCount(value)} />
+        <FormGroup label="Random Element Count" inline>
+          <NumericInput 
+            min={1}
+            value={randomElementCount} 
+            onValueChange={value => setRandomElementCount(value)} 
+          />
         </FormGroup>
         <FormGroup label="Apply Selected Element Style To All Elements" inline>
           <Switch disabled={!targetId} value={cloneElementWhenAddMultipleElements} onChange={event => toggleCloneElementWhenAddMultipleElements(event.target.checked)} />
@@ -77,7 +85,7 @@ function ActionPanel() {
     </Dialog>
     <ButtonGroup fill style={{ marginTop: 10 }}>
       <Button onClick={() => addNewElement(setTargetId)} icon="plus">New</Button>
-      <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object">Multiple</Button>
+      {/* <Button onClick={() => toggleAddMultipleElementsDialog(true)} icon="new-object"  disabled={!targetId}>Random</Button> */}
       <Button onClick={copyElement} disabled={!targetId} icon="duplicate">Clone</Button>
     </ButtonGroup>
     <ButtonGroup fill style={{ marginTop: 10 }}>
