@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run smoking test
+        run: npm run test:smoking
+        
       - name: Run unit test
-        run: npm run test
+        run: npm run test:unit
 

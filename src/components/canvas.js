@@ -56,6 +56,7 @@ function Canvas() {
   return <div className="canvas-panel" onMouseMove={mouseMoveOnCanvas} >{Object.keys(elementCollection).map(id => {
     const elementState = elementCollection[id];
     return <div
+      className='canvas-item'
       onMouseDown={recordMouseDownPosition.bind(this, id)}
       onMouseUp={recordMouseUpPosition}
       onClick={() => setTargetId(id)}
