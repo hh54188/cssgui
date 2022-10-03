@@ -103,13 +103,16 @@ export function GradientPanel({
             </div>
             <div className='gradient-panel__angle'>
               <span className='gradient-panel__angle__label'>Angle</span>
-              <AnglePicker setAngle={value => setGradientAngle(value)} angle={gradientAngle} />
+              <AnglePicker setAngle={value => {
+                setGradientAngle(value)
+              }} angle={gradientAngle} />
               <NumericInput
+                forceSync
+                disabled
                 max={360}
                 min={0}
                 value={gradientAngle}
                 onValueChange={value => setGradientAngle(value)} className='gradient-panel__angle__input'
-                buttonPosition='none'
               ></NumericInput>
             </div>
           </div>
@@ -193,7 +196,7 @@ export function GradientPanel({
       </div>
       <div className={`${Classes.DIALOG_FOOTER}`}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button intent='primary' onClick={onSave ? onSave.bind(this, gradientStops.filter(stop => stop.visible)) : null}>Save</Button>
+          <Button intent='primary' onClick={onSave ? onSave.bind(this, gradientStops.filter(stop => stop.visible), gradientAngle) : null}>Save</Button>
           <Button onClick={onCancel}>Cancel</Button>
         </div>
       </div>

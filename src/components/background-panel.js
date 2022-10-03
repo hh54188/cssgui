@@ -20,6 +20,7 @@ import { performanceOptimize } from './performance-optimize-wrap'
 import { GradientPanel } from './gradient-panel'
 
 function BackgroundPanel({
+  disabled,
   color,
   enableGradient,
   onColorChange,
@@ -34,8 +35,8 @@ function BackgroundPanel({
       <strong onClick={() => setIsOpen(!isOpen)} className='control-panel-title'>BACKGROUND COLOR</strong>
       <Divider></Divider>
       <Collapse isOpen={isOpen}>
-        <Switch onChange={onEnableGradientChange} className='background-gradient-switch' checked={enableGradient} label="Gradient" />
-        <div className="control-panel-horizontal-layout">
+        {!disabled && <Switch onChange={onEnableGradientChange} className='background-gradient-switch' checked={enableGradient} label="Gradient" />}
+        {!disabled && <div className="control-panel-horizontal-layout">
           <FormGroup>
             <Popover2 disabled={enableGradient} content={
               <SketchPicker color={color} onChange={onColorChange}></SketchPicker>
@@ -49,17 +50,17 @@ function BackgroundPanel({
               </ControlGroup>
             </Popover2>
           </FormGroup>
-        </div>
+        </div>}
       </Collapse>
     </div>
   )
 };
 
-const OptimizedBackgroundContainer = performanceOptimize(BackgroundPanel)(['color', 'enableGradient']);
+const OptimizedBackgroundContainer = performanceOptimize(BackgroundPanel)(['color', 'enableGradient', 'disabled']);
 
 function BackgroundPanelContainer() {
-  const { getTargetStyle, updateTargetStyle } = useCoreDataStore();
-  const { setGradientStops } = useGradientStore();
+  const { getTargetStyle, updateTargetStyle, targetId } = useCoreDataStore();
+  const { setGradientStops, setGradientAngle } = useGradientStore();
   const { openGradientPickerDialog, setOpenGradientPickerDialog } = useUIStore();
 
   const enableGradient = getTargetStyle('enableGradientBackground');
@@ -73,13 +74,15 @@ function BackgroundPanelContainer() {
   const onEnableGradientChange = event => updateTargetStyle('enableGradientBackground', event.target.checked);
   const onGradientDialogBegin = () => {
     setGradientStops(getTargetStyle("backgroundGradientStops"))
+    setGradientAngle(getTargetStyle("backgroundGradientAngle"))
     setOpenGradientPickerDialog(true)
   };
   const onGradientDialogCancel = () => {
     setOpenGradientPickerDialog(false)
   };
-  const onGradientDialogSave = (newGradientStops) => {
+  const onGradientDialogSave = (newGradientStops, gradientAngle) => {
     updateTargetStyle('backgroundGradientStops', newGradientStops)
+    updateTargetStyle('backgroundGradientAngle', gradientAngle)
     setOpenGradientPickerDialog(false)
   }
 
@@ -90,6 +93,7 @@ function BackgroundPanelContainer() {
       onSave={onGradientDialogSave}
     ></GradientPanel>}
     <OptimizedBackgroundContainer
+      disabled={!targetId}
       color={color}
       enableGradient={enableGradient}
       onEnableGradientChange={onEnableGradientChange}
