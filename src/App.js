@@ -1,4 +1,5 @@
 import React from 'react';
+import {Helmet} from "react-helmet";
 import './App.css';
 import 'react-linear-gradient-picker/dist/index.css';
 import SizePanel from './components/size-panel';
@@ -13,6 +14,9 @@ import Canvas from './components/canvas';
 function App() {
   return (
     <div className="App">
+      <Helmet>
+        <title>CSS GUI</title>
+      </Helmet>
       <Canvas></Canvas>
       <div className="control-panel">
         <div className="control-panel-content">

@@ -14,6 +14,7 @@
     "react": "^18.0.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.0.0",
+    "react-helmet": "^6.1.0",
     "react-linear-gradient-picker": "^2.0.3",
     "react-style-object-to-css": "^1.1.2",
     "uuid": "^8.3.2",
