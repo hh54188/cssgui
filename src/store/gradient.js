@@ -182,6 +182,6 @@ export const useGradientStore = create(persist((set, get) => ({
       state.gradientStops = state.gradientPresets[index]
     }))
   }
-})), {
+}), {
   name: 'gradient-storage'
-})
+}))

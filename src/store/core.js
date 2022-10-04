@@ -131,6 +131,6 @@ export const useCoreDataStore = create(persist((set, get) => ({
   ...transformFactory(set, get),
   ...positionFactory(set, get),
   ...animationFactory(set, get),
-})), {
+}), {
   name: 'core-storage'
-})
+}))

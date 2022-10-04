@@ -34,6 +34,6 @@ export const useUIStore = create(persist((set) => ({
 
   openGradientPickerDialog: false,
   setOpenGradientPickerDialog: value => set({ openGradientPickerDialog: value }),
-})), {
+}), {
   name: 'ui-storage'
-})
+}))
