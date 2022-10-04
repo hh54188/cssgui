@@ -78,6 +78,7 @@ function SizePanelContainer() {
   const onHeightChange = value => updateTargetStyle('height', value);
 
   return <OptimizedSizePanelContainer
+      key={targetId}
       widthValue={width}
       heightValue={height}
       onWidthChange={onWidthChange}

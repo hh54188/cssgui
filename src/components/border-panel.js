@@ -162,6 +162,7 @@ function BorderPanelContainer() {
   const borders = targetId ? targetElementState.border : null;
 
   return <OptimizedBorderPanelContainer
+    key={targetId}
     enabled={targetId ? targetElementState.borderEnabled : false}
     onToggleEnabled={toggleEnableBorder}
     borderAllInOne={targetId ? targetElementState.borderAllInOne : false}

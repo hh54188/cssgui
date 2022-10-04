@@ -121,6 +121,7 @@ function TransformPanelContainer() {
   const {targetId, getTargetStyle, updateTransform, resetTranslate, resetScale, resetSkew} = dataState;
 
   return <OptimizedTransformPanelContainer
+    key={targetId}
     transform={targetId ? getTargetStyle("transform"): null}
     disabled={!targetId}
     onValueChange={(value, type, coordinate) => updateTransform(type, coordinate, value)}

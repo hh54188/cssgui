@@ -169,6 +169,7 @@ function BoxShadowContainer() {
   const { getTargetStyle, removeShadow, addShadow, updateShadow, targetId} = dataState;
 
   return <OptimizedBoxShadowContainer
+    key={targetId}
     disabled={!targetId}
     boxShadows={targetId ? getTargetStyle("boxShadow") : []}
     onAdd={addShadow}
