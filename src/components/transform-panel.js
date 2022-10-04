@@ -28,7 +28,7 @@ function TransformPanel({
     <div className="control-panel-group">
       {isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-up" onClick={() => setIsOpen(false)}></Icon>}
       {!isOpen && <Icon className='control-panel-group-title-collapse-icon' icon="chevron-down" onClick={() => setIsOpen(true)}></Icon>}
-      <strong>TRANSFORM</strong>
+      <strong  onClick={() => setIsOpen(!isOpen)} className='control-panel-title' >TRANSFORM</strong>
       <Divider></Divider>
       {transform && <Collapse isOpen={isOpen}>
         <div className="control-panel-horizontal-layout">
